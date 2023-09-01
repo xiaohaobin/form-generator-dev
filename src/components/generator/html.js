@@ -129,6 +129,20 @@ const tags = {
     if (child) child = `\n${child}\n` // 换行
     return `<${tag} ${type} ${icon} ${round} ${size} ${plain} ${disabled} ${circle}>${child}</${tag}>`
   },
+  'el-link': el => {
+    const {
+      tag
+    } = attrBuilder(el)
+    const type = el.type ? `type="${el.type}"` : ''
+    const underline = `:underline="${el.underline}"`
+    const cursor = el.__config__.isText ? ';cursor: initial;' : ''
+    const FontWeightBold = el['__config__']['isFontWeightBold'] ? `bold` : `normal`
+    let style = `style="font-weight:${FontWeightBold} ${cursor}"`
+    let child = buildElLinkChild(el)
+
+    if (child) child = `\n${child}\n` // 换行
+    return `<${tag} ${type} ${underline} ${style}>${child}</${tag}>`
+  },
   'el-input': el => {
     const {
       tag, disabled, vModel, clearable, placeholder, width
@@ -324,6 +338,17 @@ function buildElInputChild(scheme) {
   if (slot && slot.append) {
     children.push(`<template slot="append">${slot.append}</template>`)
   }
+  return children.join('\n')
+}
+
+//el-link 子集
+function buildElLinkChild(scheme) {
+  const children = []
+  const slot = scheme.__slot__
+  if (slot && slot.text) {
+    children.push(`${scheme.__slot__.text}`)
+  }
+  
   return children.join('\n')
 }
 

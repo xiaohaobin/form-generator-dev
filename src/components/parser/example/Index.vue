@@ -2,8 +2,12 @@
   <div class="test-form">
     <parser :form-conf="formConf" @submit="sumbitForm1" />
     <parser :key="key2" :form-conf="formConf" @submit="sumbitForm2" />
+
+    <h2>在home页面创建的模板</h2>
+    <parser :key="key3" :form-conf="formConf3" @submit="sumbitForm3" />
+
     <el-button @click="change">
-      change
+      改变表单组件数据模型
     </el-button>
   </div>
 </template>
@@ -11,9 +15,11 @@
 <script>
 import Parser from '../Parser'
 
+let testFormConf = localStorage.getItem("drawingItems");
+testFormConf = JSON.parse(testFormConf) || [];
 // 若parser是通过安装npm方式集成到项目中的，使用此行引入
 // import Parser from 'form-gen-parser'
-
+console.log(testFormConf,"testFormConf")
 export default {
   components: {
     Parser
@@ -22,6 +28,7 @@ export default {
   data() {
     return {
       key2: +new Date(),
+      key3: (+new Date()) + 1000,
       formConf: {
         fields: [
           {
@@ -193,7 +200,7 @@ export default {
         fields: [
           {
             __config__: {
-              label: '单行文本',
+              label: '手机号',
               labelWidth: null,
               showLabel: true,
               changeTag: true,
@@ -271,6 +278,34 @@ export default {
         span: 24,
         formBtns: true,
         unFocusedComponentBorder: false
+      },
+
+      formConf3: {
+        fields: testFormConf,
+        __methods__: {
+          clickTestButton1() {
+            console.log(
+              `%c【测试按钮3】点击事件里可以访问当前表单：
+                1) formModel='formData', 所以this.formData可以拿到当前表单的model
+                2) formRef='elForm', 所以this.$refs.elForm可以拿到当前表单的ref(vue组件)
+              `,
+              'color:#409EFF;font-size: 15px'
+            )
+            console.log('表单的Model：', this.formData)
+            console.log('表单的ref：', this.$refs.elForm)
+          }
+        },
+        formRef: 'elForm',
+        formModel: 'formData',
+        size: 'small',
+        labelPosition: 'right',
+        labelWidth: 100,
+        formRules: 'rules',
+        gutter: 15,
+        disabled: false,
+        span: 24,
+        formBtns: true,
+        unFocusedComponentBorder: false
       }
     }
   },
@@ -300,6 +335,7 @@ export default {
       })
     },
     change() {
+      //修改组件绑定的key值，在修改组件绑定的数据模型，重新渲染组件
       this.key2 = +new Date()
       const t = this.formConf
       this.formConf = this.formConf2
@@ -310,6 +346,9 @@ export default {
     },
     sumbitForm2(data) {
       console.log('sumbitForm2提交数据：', data)
+    },
+    sumbitForm3(data) {
+      console.log('sumbitForm3提交数据：', data)
     }
   }
 }

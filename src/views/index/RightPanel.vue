@@ -37,9 +37,16 @@
           <el-form-item v-if="activeData.__config__.componentName!==undefined" label="组件名">
             {{ activeData.__config__.componentName }}
           </el-form-item>
-          <el-form-item v-if="activeData.__config__.label!==undefined" label="标题">
+          <el-form-item v-if="activeData.__config__.label!==undefined && activeData.__diyComponentsName__ != 'diy-text'" label="标题">
             <el-input v-model="activeData.__config__.label" placeholder="请输入标题" @input="changeRenderKey" />
           </el-form-item>
+
+           <!-- 针对组件配置  __diyComponentsName__ 为 'diy-text' sss-->
+           <el-form-item v-if="activeData.__diyComponentsName__ == 'diy-text' " label="文本内容">
+             <el-input v-model="activeData.__slot__.text" />
+          </el-form-item>
+           <!-- 针对组件配置  __diyComponentsName__ 为 'diy-text' eee-->
+
           <el-form-item v-if="activeData.placeholder!==undefined" label="占位提示">
             <el-input v-model="activeData.placeholder" placeholder="请输入占位提示" @input="changeRenderKey" />
           </el-form-item>
@@ -99,6 +106,24 @@
               @input="$set(activeData, 'min', $event?$event:undefined)"
             />
           </el-form-item>
+         
+
+          <el-form-item v-if="activeData.__config__.isShowColorSelect && activeData.__config__.colorSelect" label="颜色选择">
+            <el-select v-model="activeData.type" :style="{width: '100%'}">
+              <el-option
+                v-for="(item, index) in activeData.__config__.colorSelect"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item v-if="activeData.__config__.isFontWeightBold !== undefined" label="字体加粗">
+              <el-switch v-model="activeData.__config__.isFontWeightBold"></el-switch>
+          </el-form-item>
+       
+
           <el-form-item v-if="activeData.__config__.tag==='el-checkbox-group'" label="最多可选">
             <el-input-number
               :value="activeData.max"

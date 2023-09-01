@@ -11,6 +11,11 @@ export const formConf = {
     span: 24,
     formBtns: true
 }
+/**
+ * 其中__config__和__slot__是本项目自定义的属性，自定义属性的格式均为__XXX__；
+    其余属性与element ui组件属性对应；
+ * 
+*/
 
 // 输入型组件 【左面板】
 export const inputComponents = [
@@ -547,27 +552,30 @@ export const layoutComponents = [
         disabled: false
     },
     {
+        __diyComponentsName__: 'diy-text',//自定义组件名
 	    __config__: {
 	        label: '纯文本',
-	        showLabel: true,
-	        changeTag: false,
-	        labelWidth: null,
-	        tag: 'div',
-	        tagIcon: 'div',
+	        showLabel: false,
+	        // changeTag: false,
+	        // labelWidth: null,
+	        tag: 'el-link',
+            tagIcon: 'input',
 	        span: 24,
-	        layout: 'colFormItem'
-	        // document: 'https://element.eleme.cn/#/zh-CN/component/button'
+	        layout: 'colFormItem',
+	        document: 'https://element.eleme.cn/#/zh-CN/component/link',
+            isShowColorSelect: true,//是否显示颜色选择下拉框
+            colorSelect: ['primary','success','warning','danger','info'],
+            isFontWeightBold: true, //是否加粗
+            noCursorPointer: true,//没有手指鼠标
+            isText: true,//是否纯文本
 	    },
 	    __slot__: {
-	        default: '纯文本标题'
-	    }
-	    // type: 'primary',
-	    // icon: 'el-icon-search',
-	    // round: false,
-	    // size: 'medium',
-	    // plain: false,
-	    // circle: false,
-	    // disabled: false
+	        // default: '随便输入什么2.0',
+            text: '随便输入什么'
+	    },        
+	    type: 'danger',
+	    underline: false,
+        
     },
     {
         __config__: {

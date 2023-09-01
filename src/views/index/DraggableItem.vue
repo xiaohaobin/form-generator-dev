@@ -109,6 +109,13 @@ export default {
     'formConf'
   ],
   render(h) {
+    /**
+     * 定义组件类型
+     * itemBtns 工具组件（复制删除）
+     * colFormItem 单元基础组件
+     * rowFormItem 行容器组件
+     * raw 表格单元列组件
+     */
     const layout = layouts[this.currentItem.__config__.layout]
 
     if (layout) {

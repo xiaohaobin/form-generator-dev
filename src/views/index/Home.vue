@@ -374,18 +374,22 @@ export default {
             this.generateConf = data
             func && func(data)
         },
+        //运行
         execRun(data) {
             this.AssembleFormData()
             this.drawerVisible = true
         },
+        //导出
         execDownload(data) {
             const codeStr = this.generateCode()
             const blob = new Blob([codeStr], { type: 'text/plain;charset=utf-8' })
             saveAs(blob, data.fileName)
         },
+        //复制
         execCopy(data) {
             document.getElementById('copyNode').click()
         },
+        //清空
         empty() {
             this.$confirm('确定要清空所有组件吗？', '提示', { type: 'warning' }).then(
                 () => {

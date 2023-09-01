@@ -44,7 +44,7 @@ module.exports = {
 	"no-mixed-spaces-and-tabs": 1,//禁止混用tab和空格
 	"no-trailing-spaces": 0,//一行结束后面不要有空格
 	"spaced-comment": 0,//注释风格要不要有空格什么的
-	"indent": [1, 4],//缩进风格
+	"indent": [0, 4],//缩进风格
   
   // "no-alert": 0,//禁止使用alert confirm prompt
   // "no-array-constructor": 2,//禁止使用数组构造器
@@ -97,7 +97,7 @@ module.exports = {
   // "linebreak-style": [0, "windows"],//换行风格
   // "no-multi-spaces": 1,//不能用多余的空格
   // "no-multi-str": 2,//字符串不能用\换行
-  // "no-multiple-empty-lines": [1, {"max": 2}],//空行最多不能超过2行
+  "no-multiple-empty-lines": [0, {"max": 2}],//空行最多不能超过2行
   // "no-native-reassign": 2,//不能重写native对象
   // "no-negated-in-lhs": 2,//in 操作符的左边不能有!
   // "no-nested-ternary": 0,//禁止使用嵌套的三目运算
