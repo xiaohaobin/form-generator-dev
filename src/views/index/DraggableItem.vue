@@ -19,6 +19,22 @@ const components = {
     ]
   }
 }
+
+//前置字段判断方法
+const showByPrependFieldFn = function(list,config){
+  let showStyle = 'display:block;';
+  if(config.showByPrependField !== undefined && config.showByPrependField.length){
+    let b = false;
+    list.forEach((item)=>{
+      if(item.__vModel__ === config.showByPrependField){
+        b = true;
+      }
+    });
+    showStyle = b ? 'display:block;' : 'display:none;'
+  }
+  return showStyle;
+}
+
 const layouts = {
   colFormItem(h, currentItem, index, list) {
     const { activeItem } = this.$listeners
@@ -28,11 +44,37 @@ const layouts = {
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
+    // return (
+    //   <el-col span={config.span} class={className}
+    //     nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
+    //     <el-form-item label-width={labelWidth}
+    //       label={config.showLabel ? config.label : ''} required={config.required}>
+    //       <render key={config.renderKey} conf={currentItem} onInput={ event => {
+    //         this.$set(config, 'defaultValue', event)
+    //       }}>
+    //         {child}
+    //       </render>
+    //     </el-form-item>
+    //     {components.itemBtns.apply(this, arguments)}
+    //   </el-col>
+    // )
+    
+    /**字段说明部分属性配置***/
+    const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
+
+    /*前值字段判断*/
+
     return (
-      <el-col span={config.span} class={className}
+      <el-col span={config.span} class={className} style={showByPrependFieldFn(list, config)}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
         <el-form-item label-width={labelWidth}
           label={config.showLabel ? config.label : ''} required={config.required}>
+          <span slot={'label'}>
+            <span class={'mr-5'}>{config.label}</span>
+            <el-tooltip content={config.fieldDescription} placement={'right'} >
+                <i class={'el-icon-warning-outline'} style={fieldDescriptionStyle}></i>
+            </el-tooltip>
+          </span>
           <render key={config.renderKey} conf={currentItem} onInput={ event => {
             this.$set(config, 'defaultValue', event)
           }}>

@@ -7,6 +7,6 @@ export default {
   // }
   text(h, conf, key) {
     let c = conf.__config__.isText ? ';cursor: initial;' : ''
-    return (<el-link underline={conf.underline} type={conf.type} style={'fontWeight:'+ (conf.__config__.isFontWeightBold? 'bold': 'normal') + c}>{conf.__slot__.text}</el-link>)
+    return (<el-link underline={conf.underline} type={conf.type} style={'fontWeight:' + (conf.__config__.isFontWeightBold ? 'bold': 'normal') + c}>{conf.__slot__.text}</el-link>)
   }
 }

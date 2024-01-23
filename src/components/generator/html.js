@@ -78,8 +78,24 @@ function colWrapper(scheme, str) {
   return str
 }
 
+//前置字段判断方法
+function showByPrependFieldFn(list,config){
+  let showStyle = 'display:block;';
+  if(config.showByPrependField !== undefined && config.showByPrependField.length){
+    let b = false;
+    list.forEach((item)=>{
+      if(item.__vModel__ === config.showByPrependField){
+        b = true;
+      }
+    });
+    showStyle = b ? 'display:block;' : 'display:none;'
+  }
+  return showStyle;
+}
+
+
 const layouts = {
-  colFormItem(scheme) {
+  colFormItem(scheme, fieldsList) {
     const config = scheme.__config__
     let labelWidth = ''
     let label = `label="${config.label}"`
@@ -92,13 +108,25 @@ const layouts = {
     }
     const required = !ruleTrigger[config.tag] && config.required ? 'required' : ''
     const tagDom = tags[config.tag] ? tags[config.tag](scheme) : null
-    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required}>
+
+    /**字段说明提示组件ssssss***/    
+    let fieldDescriptionLabelDom = `<span ${`slot="label"`} v-if="${config.fieldDescription !== undefined && config.fieldDescription.length > 0}">
+                        <span class="mr-5">${config.label}</span>
+                        <el-tooltip content="${config.fieldDescription}" placement="right">
+                            <i class="el-icon-warning-outline" ></i>
+                        </el-tooltip>
+                      </span>`;
+     /**字段说明eeee***/
+
+   
+    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required} style="${showByPrependFieldFn(fieldsList, config)}">
+        ${fieldDescriptionLabelDom}
         ${tagDom}
       </el-form-item>`
     str = colWrapper(scheme, str)
     return str
   },
-  rowFormItem(scheme) {
+  rowFormItem(scheme, fieldsList) {
     const config = scheme.__config__
     const type = scheme.type === 'default' ? '' : `type="${scheme.type}"`
     const justify = scheme.type === 'default' ? '' : `justify="${scheme.justify}"`
@@ -410,7 +438,7 @@ export function makeUpHtml(formConfig, type) {
   someSpanIsNot24 = formConfig.fields.some(item => item.__config__.span !== 24)
   // 遍历渲染每个组件成html
   formConfig.fields.forEach(el => {
-    htmlList.push(layouts[el.__config__.layout](el))
+    htmlList.push(layouts[el.__config__.layout](el, formConfig.fields))
   })
   const htmlStr = htmlList.join('\n')
   // 将组件代码放进form标签

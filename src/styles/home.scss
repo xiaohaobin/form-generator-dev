@@ -35,7 +35,7 @@ $lighterBlue: #409EFF;
   padding: 8px 10px;
   background: $selectedColor;
   font-size: 12px;
-  cursor: move;
+  cursor: grab;
   border: 1px dashed $selectedColor;
   border-radius: 3px;
   .svg-icon{
@@ -43,10 +43,11 @@ $lighterBlue: #409EFF;
     font-size: 15px;
   }
   &:hover {
-    border: 1px dashed #787be8;
-    color: #787be8;
+    border: 1px dashed #8BC750;
+    background-color: #8BC750;
+    color: #fff;
     .svg-icon {
-      color: #787be8;
+      color: #fff;
     }
   }
 }
@@ -269,3 +270,10 @@ $lighterBlue: #409EFF;
     }
   }
 }
+// .el-select{
+//   .el-input.is-disabled{
+//     .el-input__inner{
+//       color:#606266;
+//     }
+//   }
+// }

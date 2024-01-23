@@ -1,7 +1,7 @@
 export default [
   {
     __config__: {
-      label: '单行文本',
+      label: '手机号码',
       labelWidth: null,
       showLabel: true,
       changeTag: true,
@@ -10,6 +10,7 @@ export default [
       defaultValue: undefined,
       required: true,
       layout: 'colFormItem',
+      fieldDescription:'',//字段说明
       span: 24,
       document: 'https://element.eleme.cn/#/zh-CN/component/input',
       // 正则校验规则

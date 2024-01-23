@@ -14,17 +14,42 @@ const ruleTrigger = {
   'el-rate': 'change'
 }
 
+//前置字段判断方法
+const showByPrependFieldFn = function(list,config){
+  let showStyle = 'display:block;';
+  if(config.showByPrependField !== undefined && config.showByPrependField.length){
+    let b = false;
+    list.forEach((item)=>{
+      if(item.__vModel__ === config.showByPrependField){
+        b = true;
+      }
+    });
+    showStyle = b ? 'display:block;' : 'display:none;'
+  }
+  return showStyle;
+}
+
 const layouts = {
-  colFormItem(h, scheme) {
+  colFormItem(h, scheme, list) {
     const config = scheme.__config__
     const listeners = buildListeners.call(this, scheme)
 
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
+
+    /*字段说明组件部分属性配置*/  
+    const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
+    
     return (
-      <el-col span={config.span}>
+      <el-col span={config.span} style={showByPrependFieldFn(list, config)}>
         <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
           label={config.showLabel ? config.label : ''}>
+          <span slot={'label'}>
+            <span class={'mr-5'}>{config.label}</span>
+            <el-tooltip content={config.fieldDescription} placement={'right'} >
+                <i class={'el-icon-warning-outline'} style={fieldDescriptionStyle}></i>
+            </el-tooltip>
+          </span>
           <render conf={scheme} on={listeners} />
         </el-form-item>
       </el-col>
@@ -84,7 +109,7 @@ function renderFormItem(h, elementList) {
     const layout = layouts[config.layout]
 
     if (layout) {
-      return layout.call(this, h, scheme)
+      return layout.call(this, h, scheme, elementList)
     }
     throw new Error(`没有与${config.layout}匹配的layout`)
   })
@@ -127,6 +152,9 @@ export default {
     }
   },
   data() {
+    // 在data里对数据进行拦截,针对el-upload组件处理
+    this.bindUploadSuccess(this.formConf.fields, this.formConf.formModel)
+
     const data = {
       formConfCopy: deepClone(this.formConf),
       [this.formConf.formModel]: {},
@@ -177,7 +205,21 @@ export default {
         this.$emit('submit', this[this.formConf.formModel])
         return true
       })
+    },
+    // 为el-upload绑定一个on-success事件，并将返回值返回给表单
+    bindUploadSuccess(fields, target) {
+      fields.map((item) => {
+        if (item.action) {
+          item['on-success'] = (res, file, fileList) => {
+            this._data[target][item.__vModel__] = fileList
+            console.error(this._data[target][item.__vModel__])
+          }
+        }
+        
+        return item
+      })
     }
+
   },
   render(h) {
     return renderFrom.call(this, h)

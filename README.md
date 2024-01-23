@@ -77,14 +77,25 @@ npm run build
 
 PS:
 表单设计器使用：
-    1、关键编码文件和目录：src/components/generator/config.js（配置组件json）；src\components\render\slots\（配置组件的插槽，自定义组件）；src\views\index\DraggableItem.vue（拖拽布局组件全局定义）；src\views\index\RightPanel.vue（自定义组件的属性相关配置）
+    1、关键编码文件和目录：
+        a. src/components/generator/config.js（配置组件json）；
+        b. src\components\render\slots\（配置组件的插槽，自定义组件）；
+        c. src\views\index\DraggableItem.vue（拖拽布局组件全局定义）；
+        d. src\views\index\RightPanel.vue（自定义组件的属性相关配置）
 
 预览器使用：
     1、前提：表单设计器可以设计出组件
-    2、关键编码文件和目录：src/components/generator/config.js（配置组件json）；src\components\render\slots\（配置组件的插槽，自定义组件）；src\components\generator\html.js（配置预览页面组件的html文件，css和js分别是css.js和js.js）
+    2、关键编码文件和目录：
+        a. src/components/generator/config.js（配置组件json）；
+        b. src\components\render\slots\（配置组件的插槽，自定义组件）；
+        c. src\components\generator\html.js（配置预览页面组件的html文件，css和js分别是css.js和js.js）
 
 PS:
     1、国际化配置，服务器代理配置，vuex配置，路由配置
 
 表单解析器使用：
     1、参考页面：src\components\parser\example\Index.vue  （路由：域名或ip端口/parser）
+    2、解析配置转成DOM的：src\components\parser\Parser.vue
+
+   
+    

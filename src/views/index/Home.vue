@@ -2,13 +2,11 @@
   <div class="container">
     <!-- 左边模块sss --> 
     <div class="left-board">
-      <div class="logo-wrapper">
-        <!-- <div class="logo">
-          <img :src="logo" alt="logo"> Form Generator
-          <a class="github" href="https://github.com/JakHuang/form-generator" target="_blank">
-            <img src="https://github.githubassets.com/pinned-octocat.svg" alt>
-          </a>
-        </div> -->
+      <div class="logo-wrapper" style="display: flex;">
+       
+        <el-link @click="jumpPreview" :title="$t('preview')" class="el-icon-view"></el-link>
+        <language></language>
+        <el-link @click="toIndex" title="返回首页" class="el-icon-s-home"></el-link>
       </div>
       <el-scrollbar class="left-scrollbar">
         <div class="components-list">
@@ -33,8 +31,14 @@
                 @click="addComponent(element)"
               >
                 <div class="components-body">
-                  <svg-icon :icon-class="element.__config__.tagIcon" />
-                  {{ element.__config__.label }}
+                    <div class="flex-center">
+                        <svg-icon :icon-class="element.__config__.tagIcon" />
+                    </div>
+                    <div class="flex-center mt-5">
+                        {{ element.__config__.label }}
+                    </div>
+                  
+                  
                 </div>
               </div>
             </draggable>
@@ -102,6 +106,7 @@
       :show-field="!!drawingList.length"
       @tag-change="tagChange"
       @fetch-data="fetchData"
+      :key="rightPanelDOMKey"
     />
     <!-- 右边模块eee --> 
 	
@@ -156,6 +161,8 @@ import {
 } from '@/utils/db'
 import loadBeautifier from '@/utils/loadBeautifier'
 
+import language from '@/components/language.vue'
+
 let beautifier
 const emptyActiveData = { style: {}, autosize: {} }
 let oldActiveId
@@ -172,7 +179,8 @@ export default {
         JsonDrawer,
         RightPanel,
         CodeTypeDialog,
-        DraggableItem
+        DraggableItem,
+        language
     },
     data() {
         return {
@@ -208,7 +216,8 @@ export default {
                     title: '布局型组件',
                     list: layoutComponents
                 }
-            ]
+            ],
+            rightPanelDOMKey:+new Date() + '_right_panel',
         }
     },
     computed: {
@@ -245,7 +254,15 @@ export default {
             immediate: true
         }
     },
+    created() {
+        console.log('....333',process.env.NODE_ENV,this.$route.params.id)
+        // console.log( this.$t('validate.format', {attr:'邮箱'} ))
+        // console.log( this.$t('prompt.info', {handle:"国际化拼接 "} ))
+        
+    },
     mounted() {
+        // console.log(this.$store.getters.getCurrTempInfo.tempName,"当前所选模板信息",this.$com.localStorage.getItem('currTempInfo'))
+
         if (Array.isArray(drawingListInDB) && drawingListInDB.length > 0) {
             this.drawingList = drawingListInDB
         } else {
@@ -409,7 +426,9 @@ export default {
             this.$nextTick(() => {
                 const len = this.drawingList.length
                 if (len) {
-                    this.activeFormItem(this.drawingList[len - 1])
+                    this.activeFormItem(this.drawingList[len - 1]);
+                    //删除组件，更新右边面板属性
+                    this.rightPanelDOMKey = +new Date() + '_right_panel';
                 }
             })
         },
@@ -474,7 +493,18 @@ export default {
             this.drawingList = deepClone(data.fields)
             delete data.fields
             this.formConf = data
+        },
+        jumpPreview(){
+            this.$router.replace({ name: "parser2" });
+        },
+        toIndex(){
+            this.$store.commit('setCurrTempInfo', {});
+            // this.$com.localStorage.removeItem('currTempInfo')
+            this.$router.push({ 
+                path: '/index'
+            })
         }
+
     }
 }
 </script>
