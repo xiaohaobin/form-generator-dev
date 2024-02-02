@@ -218,6 +218,7 @@
 <script>
   import OSSWorldData from '@/utils/OSSWorldData.js'  
   import xhbCountrySelect from '@/components/xhb/xhb-country-select.vue'
+  import {getTemplateListApiByPage, delTemplate, addTemplate, updateTemplate} from '@/utils/api.js'
 
   console.log(OSSWorldData,"OSSWorldData")
 
@@ -454,11 +455,7 @@
         const requestData = { ...defaultData, ...param, ...this.formInline, ...countryObj};
         console.log(requestData,"requestData")
 
-        this.$requestLocal({
-          data:this.$com.resetDataType(requestData),
-          url: 'template/list.json',
-          method:"get"
-        }).then(res => {
+        getTemplateListApiByPage( this.$com.resetDataType(requestData) ).then(res => {
             console.log(res,"res")
             if(res.result*1 === 0){
               this.tableList = res.obj.datas;
@@ -467,6 +464,20 @@
         }, err => {
           console.log(err)
         });
+
+        // this.$requestLocal({
+        //   data:this.$com.resetDataType(requestData),
+        //   url: 'template/list.json',
+        //   method:"get"
+        // }).then(res => {
+        //     console.log(res,"res")
+        //     if(res.result*1 === 0){
+        //       this.tableList = res.obj.datas;
+        //       this.pageConfig.total = res.obj.total;
+        //     }
+        // }, err => {
+        //   console.log(err)
+        // });
       },
     }
   }

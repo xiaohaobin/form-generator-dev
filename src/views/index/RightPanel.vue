@@ -5,9 +5,7 @@
       <el-tab-pane label="表单属性" name="form" />
     </el-tabs>
     <div class="field-box">
-      <!-- <a class="document-link" target="_blank" :href="documentLink" title="查看组件文档">
-        <i class="el-icon-link" />
-      </a> -->
+     
       <el-scrollbar class="right-scrollbar">
         <!-- 组件属性 -->
         <el-form v-show="currentTab==='field' && showField" size="small" label-width="90px"
@@ -39,9 +37,9 @@
             <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）" />
           </el-form-item>          -->
 
-          <el-form-item label="字段选择">
-            <el-select v-model="activeData.__vModel__" placeholder="请选择" filterable :style="{width: '100%'}" @focus="tableFieldFocus" @blur="tableFieldBlur" @change="tableFieldChange">
-              <el-option v-for="(item, index) in tableFieldOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
+          <el-form-item label="字段选择">            
+            <el-select v-model="activeData.__vModel__" placeholder="请选择" filterable :style="{width: '100%'}" @focus="tableFieldFocus" @change="tableFieldChange">
+              <el-option v-for="(item, index) in tableFieldOptions" :key="index" :label="item.label" :value="item.value" :disabled="hasSelectedFieldList.includes(item.value)"></el-option>
             </el-select>
           </el-form-item>
 
@@ -53,12 +51,18 @@
             <el-input v-model="activeData.placeholder" placeholder="请输入内容" @input="changeRenderKey" />
           </el-form-item>          
 
-          <el-form-item v-if="activeData.__vModel__!==undefined" label="默认值">
-            <el-input
+          <el-form-item v-if="isShowDefaultValueByTypeCode()" label="默认值">
+            <el-input v-if="activeData.__config__.typeCode !== 4"
               :value="setDefaultValue(activeData.__config__.defaultValue)"
               placeholder="请输入默认值"
               @input="onDefaultValueInput"
             />
+            <!-- 是否选择的自定义组件类型才有的 -->
+            <template v-else>
+              <el-radio-group v-model="activeData.__config__.defaultValue" @input="onDefaultValueInput">
+                <el-radio :label="item.value" v-for="(item,index) in trueOrFalseList" :key="index">{{ item.label }}</el-radio>
+              </el-radio-group>
+            </template>
           </el-form-item>
 
           <el-form-item v-if="activeData.__config__.fieldDescription!==undefined" label="字段说明">
@@ -67,7 +71,7 @@
 
           <el-form-item label="前置字段">
             <el-select v-model="activeData.__config__.showByPrependField" placeholder="请选择" filterable clearable :style="{width: '100%'}" @change="showByPrependFieldChangeEvent">
-              <el-option v-for="(item, index) in tableFieldOptions2" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
+              <el-option v-for="(item, index) in tableFieldOptions2" :key="index" :label="item.label" :value="item.value" ></el-option>
             </el-select>
           </el-form-item>
 
@@ -78,11 +82,11 @@
             </div>           
           </el-form-item>
 
-          <el-form-item v-if="activeData.style&&activeData.style.width!==undefined" label="组件宽度">
+          <!-- <el-form-item v-if="activeData.style&&activeData.style.width!==undefined" label="组件宽度">
             <el-input v-model="activeData.style.width" placeholder="请输入组件宽度" clearable />
-          </el-form-item>
+          </el-form-item> -->
 
-          <el-form-item v-if="activeData.maxlength !== undefined" label="最多输入">
+          <el-form-item v-if="activeData.maxlength !== undefined" label="最多输入字符数">
             <el-input v-model="activeData.maxlength" placeholder="请输入字符长度">
               <template slot="append">
                 个字符
@@ -90,18 +94,44 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
-            <el-switch v-model="activeData.__config__.required" />
-          </el-form-item>
-
-          <el-form-item v-if="activeData.clearable !== undefined" label="能否清空">
-            <el-switch v-model="activeData.clearable" />
-          </el-form-item>
-
-          <el-form-item v-if="activeData.readonly !== undefined" label="是否只读">
-            <el-switch v-model="activeData.readonly" />
-          </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
+                <el-switch v-model="activeData.__config__.required" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">              
+              <el-form-item v-if="activeData.clearable !== undefined" label="能否清空">
+                <el-switch v-model="activeData.clearable" />
+              </el-form-item>
+            </el-col>
+          </el-row>
           
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item v-if="activeData.readonly !== undefined" label="是否只读">
+                <el-switch v-model="activeData.readonly" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item v-if="activeData['show-word-limit'] !== undefined" label="输入统计">
+                <el-switch v-model="activeData['show-word-limit']" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item v-if="activeData.__config__.tag === 'el-select'" label="能否搜索">
+                <el-switch v-model="activeData.filterable" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item v-if="activeData.__config__.tag === 'el-select'" label="是否多选">
+                <el-switch v-model="activeData.multiple" @change="multipleChange" />
+              </el-form-item>
+            </el-col>
+          </el-row>
 
            <!-- 针对组件配置  __diyComponentsName__ 为 'diy-text' sss-->
            <el-form-item v-if="activeData.__diyComponentsName__ == 'diy-text' " label="文本内容">
@@ -109,52 +139,63 @@
           </el-form-item>
            <!-- 针对组件配置  __diyComponentsName__ 为 'diy-text' eee-->
 
-           <div v-if="Array.isArray(activeData.__config__.regList)" class="web-reg-box scroll-effect">
-            <el-divider>正则校验</el-divider>
-            
-            <el-form-item label="选择输入正则">
+           <el-form-item v-if="activeData.__config__.groupNum !== undefined && activeData.__config__.typeCode === 2" label="组串个数">
+            <el-input-number v-model="activeData.__config__.groupNum" placeholder="请输入组串个数" :min="2" :max="100" :step="1" :precision="0"/>
+          </el-form-item>
+
+           <div v-if="isShowRegListByTypeCode()">
+            <el-divider>正则校验</el-divider>            
+
+            <el-form-item>
+              <div class="flex-space-between">
+                <span slot="label">输入校验（前端）</span>
+                <el-button icon="el-icon-circle-plus-outline" type="text" @click="addReg">添加正则</el-button>
+              </div>
+
               <el-select v-model="activeData.__config__.regVal" placeholder="请选择" filterable :style="{width: '100%'}" 
               @change="regValChangeEvent">
                 <el-option v-for="(item, index) in regList" :key="index" :label="item.regularName" :value="item.id" :disabled="item.disabled"></el-option>
               </el-select>
             </el-form-item>
 
-            <div
-              v-for="(item, index) in activeData.__config__.regList"
-              :key="index"
-              :class="item.active ? 'reg-item-active reg-item' : 'reg-item' "
-              @click="clickRegItem(item, index)"
-            >
-              <span class="close-btn" @click="delRegItem(item, index)">
-                <i class="el-icon-close" />
-              </span>
-              
-              <!-- <el-form-item label="错误提示" style="margin-bottom:0">
-                <el-autocomplete v-model="item.message" placeholder="请输入错误提示" :fetch-suggestions="regQuerySearch" :style="{width: '100%'}"  @select="regHandleSelect">
-                </el-autocomplete>
-              </el-form-item>
-              <el-form-item label="表达式">
-                <el-input v-model="item.pattern" placeholder="请输入正则" />
-              </el-form-item> -->
+            <div class="web-reg-box scroll-effect" ref="webRegBox">
+              <div
+                v-for="(item, index) in activeData.__config__.regList"
+                :key="index"
+                :class="item.active ? 'reg-item-active reg-item' : 'reg-item' "
+                @click="clickRegItem(item, index)"
+              >
+                <span class="close-btn" @click="delRegItem(item, index)">
+                  <i class="el-icon-close" />
+                </span>              
 
-              <el-form-item label="表达式">
-                <el-input v-model="item.pattern" placeholder="请输入正则" />
-              </el-form-item>
-              <el-form-item label="错误提示" style="margin-bottom:0">
-                <el-input v-model="item.message" placeholder="请输入错误提示" />
-              </el-form-item>
+                <el-form-item class="flex-flex-start" style="margin-bottom:0" size="mini">
+                  <span slot="label" class="reg-item-diy-label">表达式</span>
+                  <el-input v-model="item.pattern" placeholder="请输入正则" />
+                </el-form-item>
+                <el-form-item style="margin-bottom:0" class="flex-flex-start" size="mini">
+                  <span slot="label" class="reg-item-diy-label">错误提示</span>
+                  <el-input v-model="item.message" placeholder="请输入错误提示" />
+                </el-form-item>
+              </div>
+            </div>
 
-            </div>
-            <div style="margin-left: 20px">
-              <el-button icon="el-icon-circle-plus-outline" type="text" @click="addReg">
-                添加规则
-              </el-button>
-            </div>
+            <el-form-item label="数据校验（后端）">              
+              <el-select v-model="activeData.serverRegMethod" placeholder="请选择" filterable :style="{width: '100%'}">
+                <el-option v-for="(item, index) in serverRegMethodList" :key="index" :label="item.label" :value="item.id" :disabled="item.disabled"></el-option>
+              </el-select>
+            </el-form-item>
+
           </div>
 
           
             
           <!-- 以下组件属性为原本系统所给，可以规避.................................................................................... -->
+          <!-- <el-form-item v-if="activeData.__config__.showLabel !== undefined
+            && activeData.__config__.labelWidth !== undefined" label="显示标签"
+          >
+            <el-switch v-model="activeData.__config__.showLabel" />
+          </el-form-item> -->
           <el-form-item v-if="activeData.__config__.componentName!==undefined" label="组件名">
             {{ activeData.__config__.componentName }}
           </el-form-item>
@@ -420,25 +461,45 @@
               placeholder="请输入时间段"
             />
           </el-form-item>
-          <el-form-item v-if="activeData.format !== undefined" label="时间格式">
+
+          <el-form-item v-if="[5,6].includes( activeData.__config__.typeCode )" label="选择类型">
+            <el-select v-model="activeData['is-range']" :style="{ width: '100%' }" v-if="activeData.__config__.typeCode === 6" @change="dateTypeIsRangeOptionsEvent">
+              <el-option :label="item.label" :value="item.value" v-for="(item,index) in dateTypeIsRangeOptions" :key="index"/>
+            </el-select>
+            <el-select v-model="activeData['is-range']" :style="{ width: '100%' }" v-else>
+              <el-option :label="item.label" :value="item.value" v-for="(item,index) in timeTypeIsRangeOptions" :key="index"/>
+            </el-select>
+          </el-form-item>
+
+          <!-- <el-form-item v-if="[6].includes( activeData.__config__.typeCode )" label="选择时间日期纬度">
+            <el-select v-model="activeData['type']" :style="{ width: '100%' }" v-if="activeData.is-range === true">
+              <el-option :label="item.label" :value="item.value" v-for="(item,index) in dateRangeTypeOptions" :key="index"/>
+            </el-select>
+            <el-select v-model="activeData['type']" :style="{ width: '100%' }" v-else-if="activeData.is-range === false">
+              <el-option :label="item.label" :value="item.value" v-for="(item,index) in dateTypeOptions" :key="index"/>
+            </el-select>
+          </el-form-item> -->
+
+          <el-form-item v-if="activeData.format !== undefined" label="选择纬度">
             <el-input
               :value="activeData.format"
               placeholder="请输入时间格式"
               @input="setTimeValue($event)"
             />
           </el-form-item>
-          <template v-if="['el-checkbox-group', 'el-radio-group', 'el-select'].indexOf(activeData.__config__.tag) > -1">
+
+          <template v-if="isShowOptionsByTypeCode()">
             <el-divider>选项</el-divider>
 
             <el-form-item label="数据来源">
-              <el-select v-model="dataSources" :style="{ width: '100%' }">
+              <el-select v-model="activeData.dataSources" :style="{ width: '100%' }">
                 <el-option v-for="(item,index) in dataSourcesOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled" />
               </el-select>
             </el-form-item>
 
-            <el-form-item label="数据选择" v-if="dataSources == '2'">
-              <el-select v-model="serverFunction" :style="{ width: '100%' }">
-                <el-option v-for="(item,index) in serverFunctionOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled" />
+            <el-form-item label="数据接口选择" v-if="activeData.dataSources == '2'">
+              <el-select v-model="activeData.serverFunction" :style="{ width: '100%' }" @change="serverFunctionOptionsEvent" clearable @clear="serverFunctionOptionsClearEvent">
+                <el-option v-for="(item,index) in serverFunctionOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"  />
               </el-select>
             </el-form-item>
 
@@ -452,8 +513,8 @@
                 class="select-option-draggable-box scroll-effect"
               >
                 <div v-for="(item, index) in activeData.__slot__.options" :key="index" class="select-item">
-                  <div class="select-line-icon option-drag">
-                    <i class="el-icon-s-operation" />
+                  <div class="close-btn select-line-icon" @click="activeData.__slot__.options.splice(index, 1)">
+                    <i class="el-icon-remove-outline" />
                   </div>
                   <el-input v-model="item.label" placeholder="选项名" size="small" />
                   <el-input
@@ -461,9 +522,9 @@
                     size="small"
                     :value="item.value"
                     @input="setOptionValue(item, $event)"
-                  />
-                  <div class="close-btn select-line-icon" @click="activeData.__slot__.options.splice(index, 1)">
-                    <i class="el-icon-remove-outline" />
+                  />                  
+                  <div class="select-line-icon option-drag">
+                    <i class="el-icon-s-operation" />
                   </div>
                 </div>
               </draggable>
@@ -476,7 +537,23 @@
                 >
                   添加选项
                 </el-button>
-                <el-button type="text" style="padding-bottom: 0">通过Excel方式上传</el-button>
+
+                <div>
+                  <el-button type="text" style="padding-bottom: 0" @click="clickExcelHandler">
+                      通过Excel方式上传
+                  </el-button>
+
+                  <el-tooltip placement="left">
+                    <div slot="content">
+                      <h3>模板格式请参考图片内容</h3><br/>
+                      <img src="../../assets/image/excelTemp.png" alt="" class="excelTemp">
+                    </div>      
+                    <span class="el-icon-warning-outline ml-5"></span>            
+                  </el-tooltip>                  
+                </div>
+                
+                
+                <input ref="excelUpload" hidden type="file" class="hide" @change="importExcelHandler" />
               </div>
             </div>
             <!-- 下拉框，单选框，复选框操作子项组件ee -->
@@ -579,11 +656,7 @@
             <el-color-picker v-model="activeData['inactive-color']" />
           </el-form-item>
 
-          <!-- <el-form-item v-if="activeData.__config__.showLabel !== undefined
-            && activeData.__config__.labelWidth !== undefined" label="显示标签"
-          >
-            <el-switch v-model="activeData.__config__.showLabel" />
-          </el-form-item> -->
+          
           <el-form-item v-if="activeData.branding !== undefined" label="品牌烙印">
             <el-switch v-model="activeData.branding" @input="changeRenderKey" />
           </el-form-item>
@@ -602,12 +675,12 @@
           <el-form-item v-if="activeData.range !== undefined" label="范围选择">
             <el-switch v-model="activeData.range" @change="rangeChange" />
           </el-form-item>
-          <el-form-item
+          <!-- <el-form-item
             v-if="activeData.__config__.border !== undefined && activeData.__config__.optionType === 'default'"
             label="是否带边框"
           >
             <el-switch v-model="activeData.__config__.border" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item v-if="activeData.__config__.tag === 'el-color-picker'" label="颜色格式">
             <el-select
               v-model="activeData['color-format']"
@@ -644,9 +717,7 @@
               </el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item v-if="activeData['show-word-limit'] !== undefined" label="输入统计">
-            <el-switch v-model="activeData['show-word-limit']" />
-          </el-form-item>
+          
           <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="严格步数">
             <el-switch v-model="activeData['step-strictly']" />
           </el-form-item>
@@ -676,12 +747,7 @@
           <!-- <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
             <el-switch v-model="activeData.disabled" />
           </el-form-item> -->
-          <el-form-item v-if="activeData.__config__.tag === 'el-select'" label="能否搜索">
-            <el-switch v-model="activeData.filterable" />
-          </el-form-item>
-          <el-form-item v-if="activeData.__config__.tag === 'el-select'" label="是否多选">
-            <el-switch v-model="activeData.multiple" @change="multipleChange" />
-          </el-form-item>
+          
          
 
           <template v-if="activeData.__config__.layoutTree">
@@ -766,7 +832,8 @@
 </template>
 
 <script>
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+import XLSX from "xlsx";   //引入
 import { isArray } from 'util'
 import TreeNodeDialog from '@/views/index/TreeNodeDialog'
 import { isNumberStr } from '@/utils/index'
@@ -775,22 +842,7 @@ import {
   inputComponents, selectComponents, layoutComponents
 } from '@/components/generator/config'
 import { getDrawingList, saveFormConf } from '@/utils/db'
-
-//字段表
-const _tableFieldOptions = [
-  {label:'用户名称',value:'userName', disabled:false},
-  {label:'设备sn',value:'sn', disabled:false},
-  {label:'手机号',value:'phone', disabled:false},
-  {label:'设备类型',value:'deviceType', disabled:false},
-]
-
-//正则规则表
-const _regList = [
-  {pattern: "/^1(3|4|5|7|8|9)\\d{9}$/",message: "手机号格式错误",regularName:'验证手机输入是否有误',id:1},
-  {pattern: "/^[a-zA-Z0-9_.]{1,200}$/",message: "不能输入特殊字符(点和下划线除外),最多200个字符",regularName:'一般输入框',id:2},
-  {pattern: "/^[0-9]*$/",message: "只能输入数字",regularName:'数字输入验证',id:3},
-  
-]
+import {getCountryListApi, getCityListApi} from '@/utils/api.js'
 
 const dateTimeFormat = {
   date: 'yyyy-MM-dd',
@@ -813,6 +865,11 @@ export default {
   },
   props: ['showField', 'activeData', 'formConf'],
   data() {
+    // console.log("字段列表",this.$store.getters.getFieldList)
+    
+    const _tableFieldOptions = this.$store.getters.getFieldList;//字段表
+    const _regList = this.$store.getters.getRegList;//正则表
+
     return {
       currentTab: 'field',
       currentNode: null,
@@ -821,39 +878,63 @@ export default {
       currentIconModel: null,
       dateTypeOptions: [
         {
-          label: '日(date)',
-          value: 'date'
+          label: '年月日(date)',
+          value: 'date',
+          "format": "yyyy-MM-dd",
+          "value-format": "yyyy-MM-dd",
         },
         {
-          label: '周(week)',
-          value: 'week'
+          label: '年周(week)',
+          value: 'week',
+          "format": "yyyy 第 WW 周",
+          "value-format": "yyyy-MM-dd",
         },
         {
-          label: '月(month)',
-          value: 'month'
+          label: '年月(month)',
+          value: 'month',
+          "format": "yyyy-MM",
+          "value-format": "yyyy-MM",
         },
         {
           label: '年(year)',
-          value: 'year'
+          value: 'year',
+          "format": "yyyy",
+          "value-format": "yyyy",
         },
         {
-          label: '日期时间(datetime)',
-          value: 'datetime'
+          label: '年月日时分秒(datetime)',
+          value: 'datetime',
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "value-format": "yyyy-MM-dd HH:mm:ss",
         }
       ],
       dateRangeTypeOptions: [
         {
           label: '日期范围(daterange)',
-          value: 'daterange'
+          value: 'daterange',
+          "format": "yyyy-MM-dd",
+          "value-format": "yyyy-MM-dd",
         },
         {
           label: '月范围(monthrange)',
-          value: 'monthrange'
-        },
+          value: 'monthrange',
+          "format": "yyyy-MM",
+          "value-format": "yyyy-MM",
+        },        
         {
           label: '日期时间范围(datetimerange)',
-          value: 'datetimerange'
+          value: 'datetimerange',
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "value-format": "yyyy-MM-dd HH:mm:ss",
         }
+      ],
+      dateTypeIsRangeOptions:[//日期类型，单个日期，范围日期
+        {label:'单个日期',value:false},
+        {label:'范围日期',value:true},
+      ],
+      timeTypeIsRangeOptions:[//时间类型，
+        {label:'单个时间',value:false},
+        {label:'范围时间',value:true},
       ],
       colorFormatOptions: [
         {
@@ -911,8 +992,9 @@ export default {
         12: '', 
         18: ''
       },
-      tableFieldOptions:_tableFieldOptions,//表字段数据
-      tableFieldOptions2:JSON.parse(JSON.stringify(_tableFieldOptions)),
+      tableFieldOptions:JSON.parse(JSON.stringify(_tableFieldOptions)),//表字段数据
+      hasSelectedFieldList:[],//已选字段池，元素为字段名
+      tableFieldOptions2:JSON.parse(JSON.stringify(_tableFieldOptions)),//前置字段表
       dataSources:undefined,//数据来源
       dataSourcesOptions:[
         {label:'自行录入',value:'1', disabled:false},
@@ -920,10 +1002,19 @@ export default {
       ],
       serverFunction:undefined,//获取数据方法体
       serverFunctionOptions:[
-        {label:'国家列表数据',value:'1', disabled:false, requestType:'get', requestUrl:'', param:{}, method:'getCountryList'},
-        {label:'设备类型列表数据',value:'2', disabled:false, requestType:'get', requestUrl:'', param:{}, method:'getDeviceTypeList'},
+        {label:'国家列表数据',value:'getCountryList', disabled:false, requestType:'get', requestUrl:'', param:{}, },
+        {label:'城市列表数据',value:'getCityList', disabled:false, requestType:'get', requestUrl:'', param:{},},
       ],
       regList:_regList,//正则验证表
+      serverRegMethodList:[//后端验证字段方法列表
+        {label:'验证账号输入正确性',value:'methods_1',id:1},
+        {label:'验证手机号',value:'methods_2',id:2},
+      ],
+      trueOrFalseList:[//是否选择组列表
+        {label: '是', value: 1},
+        {label: '否', value: 0},
+        {label: '无默认值', value: undefined},
+      ],
     }
   },
   computed: {
@@ -938,10 +1029,15 @@ export default {
         this.activeData.type !== undefined
         && this.activeData.__config__.tag === 'el-date-picker'
       ) {
-        if (this.activeData['start-placeholder'] === undefined) {
-          return this.dateTypeOptions
+        if(this.activeData.__config__.typeCode === 6 ){//换机模板组件
+          return this.activeData['is-range'] ? this.dateRangeTypeOptions : this.dateTypeOptions
+        }else{
+          if (this.activeData['start-placeholder'] === undefined) {
+            return this.dateTypeOptions
+          }
+          return this.dateRangeTypeOptions
         }
-        return this.dateRangeTypeOptions
+        
       }
       return []
     },
@@ -976,27 +1072,17 @@ export default {
         saveFormConf(val)
       },
       deep: true
-    }
+    },    
   },
   created(){
-    //请求规则列表
-    this.getRegularList();
+    console.log("正则列表",this.$store.getters.getRegList)
+    console.log("字段列表",this.$store.getters.getFieldList)
   },
   mounted(){
     
     
   },
   methods: {
-    addReg() {
-      this.activeData.__config__.regList.forEach((item)=>{
-        item.active = false;
-      });
-      this.activeData.__config__.regList.push({
-        pattern: '',
-        message: '',
-        active: true
-      })
-    },
     addSelectItem() {
       this.activeData.__slot__.options.push({
         label: '',
@@ -1138,54 +1224,35 @@ export default {
       if (needRerenderList.includes(this.activeData.__config__.tag)) {
         this.activeData.__config__.renderKey = +new Date()
       }
-    },
-    tableFieldFocus(){
-      //初始化页面的时候判断组件字段是否已在字段表范围中，如是，则字段表中对应字段为禁用
-      this.setDisabledWhenInitPage();
-    },
-    tableFieldBlur(){
-      //初始化页面的时候判断组件字段是否已在字段表范围中，如是，则字段表中对应字段为禁用
-      this.$nextTick(()=>{
-        setTimeout(()=>{
-          const drawingListInDB = getDrawingList()
-          this.setDisabledWhenInitPage(true);
-        },500)
-        
-      });
-      
-    },    
-    /**
-     * 初始化页面的时候判断组件字段是否已在字段表范围中，如是，则字段表中对应字段为禁用
-     * @param {Any} 是否先清除tableFieldOptions子项目所有禁用状态
-     * 
-    */
-    setDisabledWhenInitPage(clear){
-      const drawingListInDB = getDrawingList();
-      if(clear){
-        this.tableFieldOptions.forEach((option)=>{
-          option.disabled = false;
-        });
-      }
-      drawingListInDB.forEach((item)=>{
-        this.tableFieldOptions.forEach((option)=>{
-          if(option.value == item.__vModel__) option.disabled = true;
-        });
-      });   
-    },
-    //返回组件类型文本
+    },   
+     //返回组件类型文本
     getTxtByCurrCom(){
       let list = this.tagList;
       let txt = '';
       list.forEach((item)=>{
         item.options.forEach((option)=>{
-            if(option.__config__.tagIcon == this.activeData.__config__.tagIcon) txt = option.__config__.label;
+            // if(option.__config__.tagIcon == this.activeData.__config__.tagIcon) txt = option.__config__.label;
+            if(option.__config__.typeCode == this.activeData.__config__.typeCode) txt = option.__config__.label;
         });
       });
       return txt;
     },
-    //字段变化清空前置字段
-    tableFieldChange(){
-      this.activeData.__config__.showByPrependField = undefined;
+    /****************************************************************************字段属性处理 ssss************************************************ */
+    tableFieldFocus(){
+      //初始化页面的时候判断组件字段是否已在字段表范围中，如是，则字段表中对应字段为禁用
+      //根据存储数据，更新字段池内容
+       this.updateHasSelectedFieldListByLocalDB()
+    },         
+    //字段变化
+    async tableFieldChange(){
+      this.activeData.__config__.showByPrependField = undefined;//字段变化清空前置字段
+      // console.log("字段变化.........")
+      await setTimeout(()=>{
+        //根据存储数据，更新字段池内容
+        this.updateHasSelectedFieldListByLocalDB()
+      },460)
+      //根据存储数据，更新字段池内容
+      // await this.updateHasSelectedFieldListByLocalDB()
     },
     //前置字段发生变化
     showByPrependFieldChangeEvent(){
@@ -1197,29 +1264,70 @@ export default {
         this.activeData.__config__.showByPrependField = undefined;
       }
     },
-    //请求规则列表
-    getRegularList(){                 
-      this.$requestLocal({
-        data:this.$com.resetDataType({}),
-        url: 'regular/allList.json',
-        method:"get"
-      }).then(res => {
-          console.log(res,"res")
-         
-      }, err => {
-        console.log(err)
+    //根据字段池设置字段列表disabled状态
+    async setTableFieldOptionStatusByHasSelectedFieldList(){
+      this.$nextTick(()=>{
+        this.tableFieldOptions.forEach((item)=>{
+          item.disabled = this.hasSelectedFieldList.includes(item.value);
+        })
+      });
+      
+    },
+    //根据存储数据，更新字段池内容
+    async updateHasSelectedFieldListByLocalDB(){
+      this.$nextTick(()=>{
+        let resetHasSelectedFieldLis = [];
+        const drawingListInDB = getDrawingList();
+        drawingListInDB.forEach((item)=>{
+          if(item.__config__.layout == "rowFormItem" && item.__config__.typeCode === 2){//组串类组件
+            resetHasSelectedFieldLis.push( item.__config__.children[0].__vModel__ )
+          }
+          if(item.__config__.layout == "colFormItem" && item.__config__.typeCode !== 2){
+            resetHasSelectedFieldLis.push( item.__vModel__ )
+          }
+        });
+        this.hasSelectedFieldList = resetHasSelectedFieldLis;
       });
     },
+    /****************************************************************************字段属性处理 eee************************************************ */
+
+    /****************************************************************************正则属性处理 ssss************************************************ */
+    //添加规则初始化
+    async addReg() {     
+     this.activeData.__config__.regList.push({
+       pattern: '',
+       message: '',
+       active: false
+     });
+     let len = this.activeData.__config__.regList.length-1;
+     this.clickRegItem(this.activeData.__config__.regList[len], len);
+     this.$nextTick(()=>{
+       //删除之后滚动条拉到底部
+       let h = this.$refs.webRegBox.offsetHeight
+       this.$refs.webRegBox.scrollTop = h;
+     })
+   },   
     //正则下拉表变化
-    regValChangeEvent(){
-      let item = this.$xhb.getItemByProp(this.regList,'id', this.activeData.__config__.regVal);
-      // console.log(item,"iii")
-      this.activeData.__config__.regList.forEach((o,i)=>{
-        if(o.active){
-          o.message = item.message;
-          o.pattern = item.pattern;
-        }
-      });
+    async regValChangeEvent(){
+      if(this.activeData.__config__.regList.length === 0){
+        this.$message({
+          message: '请先点击“添加正则” ，才能回写正则 ',
+          type: 'warning'
+        });
+        this.activeData.__config__.regVal = undefined;
+        return;
+      }
+      this.$nextTick(()=>{
+        let item = this.$xhb.getItemByProp(this.regList,'id', this.activeData.__config__.regVal);
+        // console.log(item,"iii")
+        this.activeData.__config__.regList.forEach((o,i)=>{
+          if(o.active){
+            o.message = item.message;
+            o.pattern = item.pattern;
+          }
+        });
+      })
+      
     },
     delRegItem(item,index){
       this.activeData.__config__.regList.splice(index, 1);
@@ -1227,8 +1335,7 @@ export default {
         this.clickRegItem(this.activeData.__config__.regList[0], 0);
       }else{
         this.activeData.__config__.regVal = undefined;
-      }
-      
+      }      
     },
     //点击选择正则item
     clickRegItem(item,index){
@@ -1242,26 +1349,125 @@ export default {
       });
       
     },
-    //-----------------输入正则提示，自动完成sss------------------------------
-    //输入后匹配输入建议
-    regQuerySearch(queryString, cb){
-      //必须设置属性value
-      this.regList.map((item)=>{
-        item.value = item.message;
-        return item
-      })
-      this.$com.elAutocompleteFn.querySearchInit(queryString, cb, this.regList, 'message')
-    },
-    regHandleSelect(item,a,b) {
-      console.log(item,a,b,".............");
-      let list = this.activeData.__config__.regList;
-      list.forEach((o,index)=>{
-        if(o.message === item.message){
-          o.pattern = item.pattern
+    /****************************************************************************正则属性处理 eee************************************************ */
+    /****************************************************************下拉框动态数据接口处理sss*********************************** ***************************************/
+    //获取公共接口国家数据====定义函数名字：getCountryList
+    async getCountryList(){
+      const typeCodeList = [7];//需要使用动态数据进行引入到slot 的option中的组件类型码      
+      if(typeCodeList.includes(this.activeData.__config__.typeCode)){
+        let _countryList = this.$store.getters.getCountryList;
+        if(_countryList.length === 0){          
+          try {
+            _countryList = await getCountryListApi();//直接接受一个对象，是传递json格式
+            // console.log(_countryList,"国家数据");
+            this.$store.commit('updateCountryList', _countryList);
+           
+          } catch (error) {
+            console.warn("错误请求:" + error)
+          }
         }
-      });
+        let selectOptionData = this.$com.countryListTranslate(_countryList);
+        this.activeData.__slot__.options = selectOptionData
+      }      
     },
-    //-----------------输入正则提示，自动完成eee------------------------------
+    //获取公共接口城市数据====定义函数名字：getCityList
+    async getCityList(){     
+      const typeCodeList = [7];//需要使用动态数据进行引入到slot 的option中的组件类型码      
+      if(typeCodeList.includes(this.activeData.__config__.typeCode)){
+        let _cityList = this.$store.getters.getCityList;
+        if(_cityList.length === 0){          
+          try {
+            _cityList = await getCityListApi();//直接接受一个对象，是传递json格式
+            // console.log(_cityList,"城市数据");
+            this.$store.commit('updateCityList', _cityList);            
+          } catch (error) {
+            console.warn("错误请求:" + error)
+          }
+        }
+        let selectOptionData = this.$com.cityListTranslate(_cityList);
+        this.activeData.__slot__.options = selectOptionData
+      }
+    },
+      //切换选择数据接口事件
+    serverFunctionOptionsEvent(){
+      console.log(this.activeData.serverFunction,"this.activeData.serverFunction")
+      if(this.activeData.serverFunction){
+        let apiName = this.activeData.serverFunction;
+        this[apiName]()
+      }
+    },
+    //下拉组件获取动态数据接口选项清空数据事件
+    serverFunctionOptionsClearEvent(){
+      this.activeData.__slot__.options = [];
+    },
+    //点击导入Excel
+    clickExcelHandler(){
+      this.$refs.excelUpload.click()
+    },
+    //导入excel
+    importExcelHandler(e){      
+        //表格导入
+      const that = this;
+      const {files} = e.target;
+      const fileReader = new FileReader();
+      fileReader.onload = ev => {
+        try {
+          const data = ev.target.result;
+          const workbook = XLSX.read(data, {
+            type: "binary"
+          });
+          const wsname = workbook.SheetNames[0]; //取第一张表
+          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); //生成json表格内容
+          //表格需带有label ,value  两列
+          console.log(ws, "ws");
+
+          if(ws[0].label === undefined || ws[0].value === undefined){
+            return this.$message({
+              message: '表格没有lable或者value数据，请参考模板图片内容设置表格',
+              type: 'warning'
+            });
+          }
+          that.activeData.__slot__.options = ws;
+          that.activeData.serverFunction = undefined;//清空数据选择值
+          
+        // eslint-disable-next-line no-shadow
+        } catch (e) {
+          console.log(e, "提取文件内容错误");
+          return false;
+        }
+      };
+      fileReader.readAsBinaryString(files[0]);
+    },
+    /****************************************************************下拉框动态数据接口处理eee*********************************** ***************************************/
+    /****************************************************************************部分属性开启禁用条件，--针对换机模板组件，部分属性屏蔽sss*******************************************/
+    //是否展示默认值
+    isShowDefaultValueByTypeCode(){
+      const noPropTypeCode = [2,5,6];//不需要默认值的组件类型:2、多输入框组件;5,时间选择组件；6，日期选择组件
+      if(this.activeData.__vModel__!==undefined && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
+      return false;
+    },
+    //是否展示正则规则
+    isShowRegListByTypeCode(){      
+      const noPropTypeCode = [7, 4,5,6];//不需要默认值的组件类型：7、下拉框;4,是否选择；5,时间选择组件；6，日期选择组件
+      if(Array.isArray(this.activeData.__config__.regList) && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
+      return false;
+    },
+    //是否展示选项
+    isShowOptionsByTypeCode(){      
+      const noPropTypeCode = [4];//不需要默认值的组件类型：4,是否选择；
+      if(['el-checkbox-group', 'el-radio-group', 'el-select'].indexOf(this.activeData.__config__.tag) > -1 && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
+      return false;
+    },
+     /****************************************************************************部分属性开启禁用条件，--针对换机模板组件，部分属性屏蔽eee*******************************************/
+    /**********************************************日期时间选择器处理sss************************************************************************************************/
+    //换机模板组件--日期选择器切换类型（单个或者范围）
+    dateTypeIsRangeOptionsEvent(){
+      let dateOptions = this.activeData['is-range'] ? this.dateRangeTypeOptions : this.dateTypeOptions;
+      
+      this.activeData.type = dateOptions[0].value;
+      this.activeData.format = dateOptions[0].format;
+      this.activeData['value-format'] = dateOptions[0]['value-format'];
+    },
   }
 }
 </script>
@@ -1355,15 +1561,12 @@ export default {
 .right-board .el-form-item--small.el-form-item{
   margin-bottom: 8px;
 }
-.right-board label.el-form-item__label {
-    padding-bottom: 0px !important;
-}
-.right-board .el-form--label-top .el-form-item__label{
+.right-board .el-form-item__label{
   padding-bottom: 0px !important;
 }
 .web-reg-box{
   height:auto;
-  max-height:370px;
+  max-height:250px;
   overflow: auto;
   overflow-x: hidden;
 }
@@ -1373,5 +1576,13 @@ export default {
 div.reg-item .close-btn{
   right: 3px;
   top: 3px;
+}
+.reg-item-diy-label{
+  display:inline-block;
+  width:65px;
+  margin-right:5px;
+}
+.right-board .reg-item + .reg-item{
+  margin-top: 10px;
 }
 </style>

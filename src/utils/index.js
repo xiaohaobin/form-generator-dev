@@ -157,3 +157,169 @@ export function isObjectUnde(t) {
 }
 
 
+/*==================================================================针对换机申请模板需求进行设计的函数-----------------------------------------------------------------------*/
+/**
+ * 根据是否组串类组件，是否显示子元素的工具
+ * @param {Object} currentItem 当前active 组件配置对象
+ * @returns {String}
+*/
+export function showToolByCurrentItem(currentItem){  
+  let toolShowStyle = 'display: initial;';
+  if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "colFormItem"){
+    toolShowStyle = 'display: none;';
+  }
+  return toolShowStyle
+}
+
+/**
+ * 前置字段判断方法
+ * @param {Array} list 组件配置数组列表数据
+ * @param {Object} config 当前active 组件配置对象的__config__对象
+ * @param {Object} currentItem 当前active 组件配置对象
+ * @returns {String}
+*/
+export function showByPrependFieldFn(list,config,currentItem){
+  let showStyle = 'display:block;';
+  if(config.showByPrependField !== undefined && config.showByPrependField.length){
+    let b = false;
+    if(list === undefined) {
+      return {
+        show: true,
+        style: 'display:block;'
+      };
+    }
+    list.forEach((item)=>{
+      let itemParam = get__vModel__And_showByPrependField(item);
+
+      //大部分组件
+      if(config.typeCode !== 2 && config.layout === "colFormItem"){
+        if(itemParam.__vModel__ === config.showByPrependField) b = true;        
+      }
+      //组串类父组件
+      if(config.typeCode === 2 && config.layout == "rowFormItem"){
+        if(itemParam.__vModel__ === config.children[0].__config__.showByPrependField) b = true;
+      }
+      
+       //组串类子组件(默认展示)
+      if(config.typeCode === 2 && config.layout === "colFormItem") {
+        b = true;
+        // console.log(itemParam, config,"组串类子组件(默认展示)")
+      }
+    });
+    showStyle = b ? 'display:block;' : 'display:none;'
+  }
+
+  //根据是否组串类子组件（第五个之后），设置其margin-top=0
+  // showStyle += getMaginStyleByTypeCodeTo2(currentItem);
+  return {
+    style: showStyle,
+    show: showStyle === 'display:block;'
+  };
+}
+
+//根据组件配置，获取对应的字段名和前置，对象返回
+function get__vModel__And_showByPrependField(item){
+  //组串类父组件
+  if(item.__config__.layout == "rowFormItem" && item.__config__.typeCode === 2){
+    let currItem = item.__config__.children[0]
+    return {
+      __vModel__: currItem.__vModel__,
+      showByPrependField: currItem.__config__.showByPrependField
+    }
+  }
+  //组串类子组件
+  if(item.__config__.layout == "colFormItem" && item.__config__.typeCode === 2){
+    let lastSort = -1;
+    lastSort = item.__vModel__.lastIndexOf('__');
+
+    return {
+      __vModel__: lastSort===-1 ? item.__vModel__ : (item.__vModel__.slice(0,lastSort)),//组串类子组件（非第一个）特殊处理
+      // __vModel__: item.__vModel__,
+      showByPrependField: item.__config__.showByPrependField
+    }
+  }
+  //其他组件
+  if(item.__config__.layout == "colFormItem" && item.__config__.typeCode !== 2){
+    return {
+      __vModel__: item.__vModel__,
+      showByPrependField: item.__config__.showByPrependField
+    }
+  }
+
+}
+
+/**
+ * 判断是否组串类，设置active态【为了服务表单设计器】
+ * @param {Object} currentItem 当前active 组件配置对象
+ * @param {Array} list 组件配置数组列表数据
+ * @param {String} activeId 当前选中active id
+ * @param {String} className 要拼接输入的className 
+ * @returns {String}
+*/
+export function setActiveByTypeCodeTo2(currentItem, list, activeId, className) {
+  // console.log(list,"lll")
+  const config = currentItem.__config__
+  if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "colFormItem"){
+    if(activeId !== config.formId){//当前组串非active
+      list.forEach((item)=>{
+        if(item.__config__.typeCode === 2 && item.__config__.layout == "colFormItem"){//其他子组串组件
+          if(activeId === item.__config__.formId) className = 'drawing-item active-from-item  type-code-2-children'          
+        }
+      });
+    }
+    if(currentItem.__config__.showLabel === false) className += ' type-code-2-children'
+  }
+  return className
+}
+
+/**
+ * 判断是否组串类父级组件，设置特殊标识class
+ * @param {Object} currentItem 当前active 组件配置对象
+ * @returns {String}
+*/
+export function setStringClassByTypeCodeTo2(currentItem) {
+  const config = currentItem.__config__
+  let className = '';
+  if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){
+    className = ' type-code-2 scroll-effect'
+  }
+  return className
+}
+
+export function setStringWrapperClassByTypeCodeTo2(currentItem) {
+  const config = currentItem.__config__
+  let className = '';
+  if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){
+    className = ' type-code-2-wrapper'
+  }
+  return className
+}
+
+ //根据是否组串类子组件（第五个之后），设置其margin-top=0
+export function getMaginStyleByTypeCodeTo2(currentItem){
+  let s = '';
+  const config = currentItem.__config__
+  let lastIndex = currentItem.__vModel__.lastIndexOf('__');
+  if(config.typeCode === 2 && config.layout === 'colFormItem' && lastIndex > 0){
+    let num = currentItem.__vModel__.slice(lastIndex+2);
+    if(num*1 > 3) s = 'margin-top:0px;'
+  }
+  return s
+}
+
+/**
+ * 根据是否组串类组件，返回组串类组件父元素和子元素的 对应的className
+ * @param {Object} currentItem 当前active 组件配置对象
+ * @returns {String}
+*/
+export function setClassNameForTypeCode2(currentItem){  
+  let className = '';
+  if(currentItem.__config__.typeCode === 2){
+    if(currentItem.__config__.layout == "colFormItem" && currentItem.__config__.showLabel === false){
+      className = ' type-code-2-children ';
+    }else if(currentItem.__config__.layout == "rowFormItem"){
+      className = ' type-code-2 scroll-effect';
+    }    
+  }
+  return className
+}

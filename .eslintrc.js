@@ -44,7 +44,7 @@ module.exports = {
     'prefer-rest-params': 0,
     'vue/require-prop-types': 0,
     'no-restricted-globals': 0,
-	"no-mixed-spaces-and-tabs": 1,//禁止混用tab和空格
+	"no-mixed-spaces-and-tabs": 0,//禁止混用tab和空格
 	"no-trailing-spaces": 0,//一行结束后面不要有空格
 	"spaced-comment": 0,//注释风格要不要有空格什么的
 	"indent": [0, 4],//缩进风格
@@ -70,7 +70,8 @@ module.exports = {
   // "no-dupe-keys": 2,//在创建对象字面量时不允许键重复 {a:1,a:1}
   // "no-dupe-args": 2,//函数参数不能重复
   // "no-duplicate-case": 2,//switch中的case标签不能重复
-  // "no-else-return": 2,//如果if语句里面有return,后面不能跟else语句
+  "no-else-return": 0,//如果if语句里面有return,后面不能跟else语句
+  "array-callback-return":0,
   // "no-empty": 2,//块语句中的内容不能为空
   // "no-empty-character-class": 2,//正则表达式中的[]内容不能为空
   // "no-empty-label": 2,//禁止使用空label
@@ -143,14 +144,14 @@ module.exports = {
   // "no-unexpected-multiline": 2,//避免多行表达式
   // "no-underscore-dangle": 1,//标识符不能以_开头或结尾
   // "no-unneeded-ternary": 2,//禁止不必要的嵌套 var isYes = answer === 1 ? true : false;
-  // "no-unreachable": 2,//不能有无法执行的代码
+  "no-unreachable": 0,//不能有无法执行的代码
   // "no-unused-expressions": 2,//禁止无用的表达式
   // "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],//不能有声明后未被使用的变量或参数
   // "no-use-before-define": 2,//未定义前不能使用
   // "no-useless-call": 2,//禁止不必要的call和apply
   "no-useless-escape":0,
   "no-useless-return":0,
-  // "no-void": 2,//禁用void操作符
+  "no-void": 0,//禁用void操作符
   // "no-var": 0,//禁用var，用let和const代替
   // "no-warning-comments": [1, { "terms": ["todo", "fixme", "xxx"], "location": "start" }],//不能有警告备注
   // "no-with": 2,//禁用with
@@ -160,7 +161,9 @@ module.exports = {
   // "arrow-spacing": 0,//=>的前/后括号
   // "accessor-pairs": 0,//在对象中使用getter/setter
   // "block-scoped-var": 0,//块语句中使用var
-  // "brace-style": [1, "1tbs"],//大括号风格
+  "prefer-object-spread": 0,
+  "one-var-declaration-per-line": 0,
+  "brace-style": 0,//大括号风格
   // "callback-return": 1,//避免多次调用回调什么的
   "camelcase": 0,//强制驼峰法命名
   // "comma-dangle": [2, "never"],//对象字面量项尾不能有逗号
@@ -177,7 +180,7 @@ module.exports = {
   "dot-notation": [0, { "allowKeywords": true }],//避免不必要的方括号
   "eol-last": 0,//文件以单一的换行符结束
   "eqeqeq": 0,//必须使用全等
-  // "func-names": 0,//函数表达式必须有名字
+  "func-names": 0,//函数表达式必须有名字
   // "func-style": [0, "declaration"],//函数风格，规定只能使用函数声明/函数表达式
   // "generator-star-spacing": 0,//生成器函数*的前后空格
   // "guard-for-in": 0,//for in循环要用if语句过滤
@@ -196,13 +199,14 @@ module.exports = {
   // "new-parens": 2,//new时必须加小括号
   // "newline-after-var": 2,//变量声明后是否需要空一行
   "object-curly-spacing": 0,//大括号内是否允许不必要的空格
-  // "object-shorthand": 0,//强制对象字面量缩写语法
-  // "one-var": 1,//连续声明
-  // "operator-assignment": [0, "always"],//赋值运算符 += -=什么的
-  // "operator-linebreak": [2, "after"],//换行时运算符在行尾还是行首
+  "object-shorthand": 0,//强制对象字面量缩写语法
+  "one-var": 0,//连续声明
+  "operator-assignment": [0, "always"],//赋值运算符 += -=什么的
+  "operator-linebreak": [0, "after"],//换行时运算符在行尾还是行首
   "padded-blocks": 0,//块语句内行首行尾是否要空行
   "prefer-const": 0,//首选const
   "block-spacing":0,
+  "nonblock-statement-body-position":0,
   // "prefer-spread": 0,//首选展开运算
   // "prefer-reflect": 0,//首选Reflect的方法
   // "quotes": [1, "single"],//引号类型 `` "" ''
@@ -212,7 +216,7 @@ module.exports = {
   // "id-match": 0,//命名检测
   // "require-yield": 0,//生成器函数必须有yield
   "semi": 0,//语句强制分号结尾
-  // "semi-spacing": [0, {"before": false, "after": true}],//分号前后空格
+  "semi-spacing": 0,//分号前后空格
   // "sort-vars": 0,//变量声明时排序
   // "space-after-keywords": [0, "always"],//关键字后面是否要空一格
   "space-before-blocks": 0,//不以新行开始的块{前面要不要有空格
@@ -227,11 +231,12 @@ module.exports = {
   // "valid-jsdoc": 0,//jsdoc规则
   // "valid-typeof": 2,//必须使用合法的typeof的值
   // "vars-on-top": 2,//var必须放在作用域顶部
-  // "wrap-iife": [2, "inside"],//立即执行函数表达式的小括号风格
+  "wrap-iife": 0,//立即执行函数表达式的小括号风格
   // "wrap-regex": 0,//正则表达式字面量用小括号包起来
   // "yoda": [2, "never"]//禁止尤达条件
   "arrow-body-style":0,
   "vue/require-valid-default-prop":0,
+  "prefer-arrow-callback":0,
   },
   parserOptions: {
     parser: 'babel-eslint'

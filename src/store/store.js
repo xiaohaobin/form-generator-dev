@@ -1,6 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import i18n from '@/i18n'
+import com from '@/utils/common.js'
+import {
+  requestLocal, requestSelf, requestRoot,request3
+  } from '@/utils/request.js';
 
 //i18n.messages,i18n.locale
 Vue.use(Vuex);
@@ -75,6 +79,16 @@ const store = new Vuex.Store({
         }],
         //选中模板的信息
         currTempInfo:{},
+        //web正则表
+        regList: [
+          // {pattern: "/^1(3|4|5|7|8|9)\\d{9}$/",message: "手机号格式错误",regularName:'验证手机输入是否有误',id:1}
+        ],
+        //字段表
+        fieldList:[
+          // {label:'用户名称',value:'userName', disabled:false},
+        ],
+        countryList:[],//国家列表
+        cityList:[],//城市列表
     },
 
     // // 2. getters
@@ -140,7 +154,21 @@ const store = new Vuex.Store({
         },
         getCurrTempInfo(state){
           return state.currTempInfo
-        }
+        },
+        getRegList(state){
+          return state.regList
+        },
+        getFieldList(state){
+          return state.fieldList
+        },
+        //返回国家列表
+        getCountryList(state){
+          return state.countryList
+        },
+        //返回城市列表
+        getCityList(state){
+          return state.cityList
+        },
     },
     // 3. actions
     // 通常跟api接口打交道
@@ -238,7 +266,52 @@ const store = new Vuex.Store({
         setCurrTempInfo(state,currTempInfo){
           state.currTempInfo = currTempInfo;
         },
-
+        /**
+         * 更新正则表
+         * @param {Object} state 
+         * @param {Object} serverData 服务器正则数据列表 []
+         * 
+        */
+        updateRegList(state, serverData){          
+          serverData.forEach((item)=>{
+            item.pattern = item.webRegular;
+            item.message = item.remark;
+          })
+          state.regList = serverData;
+        },
+        /**
+         * 更新字段表
+         * @param {Object} state 
+         * @param {Object} serverData 服务器字段数据列表 []
+         * 
+        */
+        updateFieldList(state, serverData){ 
+          //{label:'用户名称',value:'userName', disabled:false},         
+          serverData.forEach((item)=>{
+            item.label = item.fieldAlias;
+            item.value = item.tableField;
+            item.disabled = false
+          })
+          state.fieldList = serverData;
+        },
+        /**
+         * 更新国家列表表
+         * @param {Object} state 
+         * @param {Object} serverData 服务器字段数据列表 []
+         * 
+        */
+        updateCountryList(state, serverData){ 
+          state.countryList = serverData;
+        },
+        /**
+         * 更新城市列表表
+         * @param {Object} state 
+         * @param {Object} serverData 服务器字段数据列表 []
+         * 
+        */
+        updateCityList(state, serverData){ 
+          state.cityList = serverData;
+        },
     },
 
 });

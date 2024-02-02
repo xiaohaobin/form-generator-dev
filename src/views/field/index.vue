@@ -165,7 +165,7 @@
 </template>
 
 <script>
-  
+  import {getFieldListApiByPage, delField, addField, updateField, getDatabaseTableList} from '@/utils/api.js'
 
   export default {
     name: "field",
@@ -339,11 +339,7 @@
         const requestData = { ...defaultData, ...param, ...this.formInline};
         console.log(requestData,"requestData")
 
-        this.$requestLocal({
-          data:this.$com.resetDataType(requestData),
-          url: 'field/list.json',
-          method:"get"
-        }).then(res => {
+        getFieldListApiByPage( this.$com.resetDataType(requestData) ).then(res => {
             console.log(res,"res")
             if(res.result*1 === 0){
               this.tableList = res.obj.datas;
@@ -352,14 +348,24 @@
         }, err => {
           console.log(err)
         });
+
+        // this.$requestLocal({
+        //   data:this.$com.resetDataType(requestData),
+        //   url: 'field/list.json',
+        //   method:"get"
+        // }).then(res => {
+        //     console.log(res,"res")
+        //     if(res.result*1 === 0){
+        //       this.tableList = res.obj.datas;
+        //       this.pageConfig.total = res.obj.total;
+        //     }
+        // }, err => {
+        //   console.log(err)
+        // });
       },
       //请求所有数据库表列表数据
       getDataBaseTableList(){
-        this.$requestLocal({
-          data:this.$com.resetDataType({}),
-          url: 'field/databaseTableList.json',
-          method:"get"
-        }).then(res => {
+        getDatabaseTableList( this.$com.resetDataType({}) ).then(res => {
             console.log(res,"res")
             if(res.result*1 === 0){
               res.obj.forEach((item)=>{
@@ -370,6 +376,22 @@
         }, err => {
           console.log(err)
         });
+
+        // this.$requestLocal({
+        //   data:this.$com.resetDataType({}),
+        //   url: 'field/databaseTableList.json',
+        //   method:"get"
+        // }).then(res => {
+        //     console.log(res,"res")
+        //     if(res.result*1 === 0){
+        //       res.obj.forEach((item)=>{
+        //         item.value = item.name;
+        //       });
+        //       this.tableNameOptions = res.obj;
+        //     }
+        // }, err => {
+        //   console.log(err)
+        // });
       },
       tableNameChange(){
         this.addFieldForm.tableField = undefined;

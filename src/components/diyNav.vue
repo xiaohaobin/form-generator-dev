@@ -7,7 +7,7 @@
       @close="handleClose"
       background-color="#213145"
       text-color="#fff"
-      active-text-color="#0ec439">  
+      active-text-color="#6FBA2C">  
       <el-menu-item :index="item.index" v-for="(item,i) in routerLinkData" :key="i">        
         <router-link :to="item.path" active-class="_active" slot="title" class="router-link-ele">
           <i :class="item.iconClass"></i> {{ item.txt }}

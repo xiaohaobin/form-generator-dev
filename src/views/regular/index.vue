@@ -178,7 +178,7 @@
 </template>
 
 <script>
-  
+  import {getRegularListApiByPage, delRegular, addRegular, updateRegular} from '@/utils/api.js'
 
   export default {
     name: "regular",
@@ -350,11 +350,7 @@
         const requestData = { ...defaultData, ...param, ...this.formInline};
         console.log(requestData,"requestData")
 
-        this.$requestLocal({
-          data:this.$com.resetDataType(requestData),
-          url: 'regular/list.json',
-          method:"get"
-        }).then(res => {
+        getRegularListApiByPage( this.$com.resetDataType(requestData) ).then(res => {
             console.log(res,"res")
             if(res.result*1 === 0){
               this.tableList = res.obj.datas;
@@ -363,6 +359,20 @@
         }, err => {
           console.log(err)
         });
+
+        // this.$requestLocal({
+        //   data:this.$com.resetDataType(requestData),
+        //   url: 'regular/list.json',
+        //   method:"get"
+        // }).then(res => {
+        //     console.log(res,"res")
+        //     if(res.result*1 === 0){
+        //       this.tableList = res.obj.datas;
+        //       this.pageConfig.total = res.obj.total;
+        //     }
+        // }, err => {
+        //   console.log(err)
+        // });
       }
       
     }

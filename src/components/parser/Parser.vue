@@ -1,5 +1,7 @@
 <script>
-import { deepClone } from '@/utils/index'
+import {
+  deepClone, setClassNameForTypeCode2, showByPrependFieldFn
+} from '@/utils/index'
 import render from '@/components/render/render.js'
 
 const ruleTrigger = {
@@ -14,24 +16,20 @@ const ruleTrigger = {
   'el-rate': 'change'
 }
 
-//前置字段判断方法
-const showByPrependFieldFn = function(list,config){
-  let showStyle = 'display:block;';
-  if(config.showByPrependField !== undefined && config.showByPrependField.length){
-    let b = false;
-    list.forEach((item)=>{
-      if(item.__vModel__ === config.showByPrependField){
-        b = true;
-      }
-    });
-    showStyle = b ? 'display:block;' : 'display:none;'
-  }
-  return showStyle;
-}
+
 
 const layouts = {
   colFormItem(h, scheme, list) {
     const config = scheme.__config__
+
+    //根据前置字段是否显示
+    const showByPrependField = showByPrependFieldFn(list, config, scheme);
+    if(!showByPrependField.show){
+      return (
+        <el-col></el-col>
+      )
+    } 
+
     const listeners = buildListeners.call(this, scheme)
 
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
@@ -41,13 +39,13 @@ const layouts = {
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
     
     return (
-      <el-col span={config.span} style={showByPrependFieldFn(list, config)}>
+      <el-col span={config.span} class={setClassNameForTypeCode2(scheme)}>
         <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
           label={config.showLabel ? config.label : ''}>
           <span slot={'label'}>
-            <span class={'mr-5'}>{config.label}</span>
-            <el-tooltip content={config.fieldDescription} placement={'right'} >
-                <i class={'el-icon-warning-outline'} style={fieldDescriptionStyle}></i>
+            <span class={'mr-5'}>{config.showLabel ? config.label : ''}</span>
+            <el-tooltip content={config.fieldDescription} placement={'right'} style={fieldDescriptionStyle}>
+                <i class={'el-icon-warning-outline'}></i>
             </el-tooltip>
           </span>
           <render conf={scheme} on={listeners} />
@@ -55,16 +53,23 @@ const layouts = {
       </el-col>
     )
   },
-  rowFormItem(h, scheme) {
+  rowFormItem(h, scheme, list) {
+    //根据前置字段是否显示
+    const showByPrependField = showByPrependFieldFn(list, scheme.__config__, scheme);
+    if(!showByPrependField.show){
+      return (
+        <el-col></el-col>
+      )
+    } 
     let child = renderChildren.apply(this, arguments)
     if (scheme.type === 'flex') {
-      child = <el-row type={scheme.type} justify={scheme.justify} align={scheme.align}>
+      child = <el-row type={scheme.type} justify={scheme.justify} align={scheme.align} >
               {child}
             </el-row>
     }
     return (
       <el-col span={scheme.span}>
-        <el-row gutter={scheme.gutter}>
+        <el-row gutter={scheme.gutter} class={setClassNameForTypeCode2(scheme)}>
           {child}
         </el-row>
       </el-col>
@@ -226,3 +231,10 @@ export default {
   }
 }
 </script>
+
+<style lang='scss'>
+/* .type-code-2-children .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before{display: none;} */
+
+//==================针对换机申请模板部分需求设置的样式========================================
+@import '@/styles/render';
+</style>

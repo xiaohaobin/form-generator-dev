@@ -9,6 +9,18 @@ import i18n from '@/i18n'
 let t = i18n.messages[i18n.locale];//語言配置
 
 
+function premiseFn(fn){
+  return new Promise((resolve, reject)=>{
+    let obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    // Axios
+    fn(obj).then((res)=>{  
+      resolve(res);
+    }).err((err)=>{
+      reject(err);
+    })
+  }) 
+}
+
 const getLanguageFn = function (){
   let lang = Cookies.get('language') || 'zh-CN';
   if(lang == 'zh-CN'){
@@ -150,6 +162,7 @@ const getLanguageFn = function (){
    })
  }
  */
+// eslint-disable-next-line func-names
 let errorMessageLayer = function (){
   Message({
     type:"error",
@@ -160,6 +173,7 @@ let errorMessageLayer = function (){
 }
 
 //请求失败错误处理
+// eslint-disable-next-line func-names
 let requestErrorTodo = function (aaa){
   if(aaa.data.result == "1"){//失败
     if(aaa.data.hint_txt){
@@ -202,7 +216,7 @@ let loadingOption = {
   };
 
  //请求地址： “/api” 映射菜鸟地址的 “https://www.runoob.com/”
-export function request(config) {
+export async function request(config) {
 
   let instance = axios.create({
     baseURL: '/api', // 通过config/index.js文件中proxyTable配置映射代理
@@ -232,8 +246,9 @@ export function request(config) {
     loading.close();
     console.log(err);
   })
+  const lastRes = await instance(config)
   // 直接返回
-  return instance(config)
+  return lastRes
 }
 
 
@@ -280,7 +295,7 @@ export function request3(config,noLoading) {
   instance.interceptors.response.use(aaa => {
     if(noLoading === undefined) loading.close();
     aaa.data = JSON.parse( JSON.stringify( aaa.data) );    
-    requestErrorTodo(aaa);
+    if(config.noVerify === undefined)  requestErrorTodo(aaa);
     return aaa.data;
   }, err => {
     if(noLoading === undefined) loading.close();    
@@ -292,7 +307,7 @@ export function request3(config,noLoading) {
 }
 
 //请求本地cgi-bin下的文件
-export function requestLocal(config,noLoading) {
+export async function requestLocal(config,noLoading) {
   let instance = axios.create({
     // baseURL: 'cgi-bin',
     baseURL: '/local',//项目外边的cgi-bin
@@ -317,19 +332,22 @@ export function requestLocal(config,noLoading) {
   instance.interceptors.response.use(aaa => {    
     if(noLoading === undefined) loading.close();
     aaa.data = JSON.parse( JSON.stringify( aaa.data) );    
-    requestErrorTodo(aaa);
+    if(config.noVerify === undefined)  requestErrorTodo(aaa);
     return aaa.data;
+    
   }, err => {
      if(noLoading === undefined) loading.close();
      errorMessageLayer();
   });
-
+  
+  const lastRes = await instance(config)
   // 直接返回
-  return instance(config)
+  return lastRes
 }
 
 
-export function requestRoot(config,noLoading) {
+
+export async function requestRoot(config,noLoading) {
   let instance = axios.create({
     baseURL: '/root',
     // baseURL: '../cgi-bin',//项目外边的cgi-bin
@@ -354,7 +372,7 @@ export function requestRoot(config,noLoading) {
   instance.interceptors.response.use(aaa => {
     if(noLoading === undefined) loading.close();
     aaa.data = JSON.parse( JSON.stringify( aaa.data) );
-    requestErrorTodo(aaa);
+    if(config.noVerify === undefined)  requestErrorTodo(aaa);
     return aaa.data;
   }, err => {
      if(noLoading === undefined) loading.close();
@@ -362,11 +380,13 @@ export function requestRoot(config,noLoading) {
   });
 
   // 直接返回
-  return instance(config)
+  const lastRes = await instance(config)
+  // 直接返回
+  return lastRes
 }
 
 //请求改项目内的
-export function requestSelf(config,noLoading) {
+export async function requestSelf(config,noLoading) {
   let instance = axios.create({
     baseURL: '',
     // baseURL: '../cgi-bin',//项目外边的cgi-bin
@@ -391,21 +411,22 @@ export function requestSelf(config,noLoading) {
   instance.interceptors.response.use(aaa => {
     if(noLoading === undefined) loading.close();
     aaa.data = JSON.parse( JSON.stringify( aaa.data) );
-    requestErrorTodo(aaa);
+    if(config.noVerify === undefined)  requestErrorTodo(aaa);
     return aaa.data;
   }, err => {
      if(noLoading === undefined) loading.close();
      errorMessageLayer();
   });
 
+  const lastRes = await instance(config)
   // 直接返回
-  return instance(config)
+  return lastRes
 }
 
 
 
 //请求本地自主拼接下的文件
-export function request_local2(config) {
+export async function request_local2(config) {
   let instance = axios.create({
     // baseURL: '/cgi-bin',
     baseURL: '',
@@ -432,12 +453,13 @@ export function request_local2(config) {
 
 
     loading.close();
-    requestErrorTodo(aaa);
+    if(config.noVerify === undefined)  requestErrorTodo(aaa);
     return aaa.data
   }, err => {
     loading.close();
     errorMessageLayer();
   })
+  const lastRes = await instance(config)
   // 直接返回
-  return instance(config)
+  return lastRes
 }

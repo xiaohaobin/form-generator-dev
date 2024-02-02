@@ -1,0 +1,27 @@
+// 该样式表是为了服务换机申请模板需求
+.type-code-2-children{
+  .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before{
+    display: none;
+  }
+}
+// .type-code-2-children .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before{display: none;}
+
+// 重定义组串类子组件部分样式:
+.type-code-2 .el-col-6.type-code-2-children:nth-child(4) ~ .el-col-6.type-code-2-children{margin-top:0px;}
+.type-code-2 .el-col-6.type-code-2-children:nth-child(4) ~ .el-col-6.type-code-2-children label.el-form-item__label{line-height: 0;}
+
+.type-code-2 .el-col-12.type-code-2-children:nth-child(2) ~ .el-col-12.type-code-2-children{margin-top:0px;}
+.type-code-2 .el-col-12.type-code-2-children:nth-child(2) ~ .el-col-12.type-code-2-children label.el-form-item__label{line-height: 0;}
+
+.type-code-2 .el-col-18:first-child ~ .el-col-18.type-code-2-children{margin-top:0px;}
+.type-code-2 .el-col-18:first-child ~ .el-col-18.type-code-2-children label.el-form-item__label{line-height: 0;}
+
+.type-code-2 .el-col-24:first-child ~ .el-col-24.type-code-2-children{margin-top:0px;}
+.type-code-2 .el-col-24:first-child ~ .el-col-24.type-code-2-children label.el-form-item__label{line-height: 0;}
+.type-code-2{
+  height: auto;
+  overflow: auto;
+  max-height: 300px;  
+}
+.type-code-2 > .drawing-item-delete{top:0;}
+.type-code-2 > .drawing-item-copy{top:0;}

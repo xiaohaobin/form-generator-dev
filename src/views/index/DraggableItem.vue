@@ -1,17 +1,22 @@
 <script>
 import draggable from 'vuedraggable'
 import render from '@/components/render/render'
+import {
+  showToolByCurrentItem, showByPrependFieldFn, setActiveByTypeCodeTo2, setStringClassByTypeCodeTo2,setStringWrapperClassByTypeCodeTo2
+} from '@/utils/index'
 
 const components = {
   itemBtns(h, currentItem, index, list) {
+    // console.log("currentItem, index",currentItem, index)
     const { copyItem, deleteItem } = this.$listeners
+
     return [
-      <span class="drawing-item-copy" title="复制" onClick={event => {
+      <span class="drawing-item-copy" title="复制" style={showToolByCurrentItem(currentItem)} onClick={event => {
         copyItem(currentItem, list); event.stopPropagation()
       }}>
         <i class="el-icon-copy-document" />
       </span>,
-      <span class="drawing-item-delete" title="删除" onClick={event => {
+      <span class="drawing-item-delete" title="删除" style={showToolByCurrentItem(currentItem)} onClick={event => {
         deleteItem(index, list); event.stopPropagation()
       }}>
         <i class="el-icon-delete" />
@@ -20,59 +25,44 @@ const components = {
   }
 }
 
-//前置字段判断方法
-const showByPrependFieldFn = function(list,config){
-  let showStyle = 'display:block;';
-  if(config.showByPrependField !== undefined && config.showByPrependField.length){
-    let b = false;
-    list.forEach((item)=>{
-      if(item.__vModel__ === config.showByPrependField){
-        b = true;
-      }
-    });
-    showStyle = b ? 'display:block;' : 'display:none;'
-  }
-  return showStyle;
-}
+
 
 const layouts = {
   colFormItem(h, currentItem, index, list) {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
+
+    //根据前置字段是否显示
+    const showByPrependField = showByPrependFieldFn(list, config, currentItem);
+    if(!showByPrependField.show){
+      return (
+        <el-col></el-col>
+      )
+    } 
+
     const child = renderChildren.apply(this, arguments)
     let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
+
+    //判断是否组串类，设置active态
+    className = setActiveByTypeCodeTo2(currentItem, list, this.activeId, className);
+
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
-    if (config.showLabel === false) labelWidth = '0'
-    // return (
-    //   <el-col span={config.span} class={className}
-    //     nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
-    //     <el-form-item label-width={labelWidth}
-    //       label={config.showLabel ? config.label : ''} required={config.required}>
-    //       <render key={config.renderKey} conf={currentItem} onInput={ event => {
-    //         this.$set(config, 'defaultValue', event)
-    //       }}>
-    //         {child}
-    //       </render>
-    //     </el-form-item>
-    //     {components.itemBtns.apply(this, arguments)}
-    //   </el-col>
-    // )
-    
-    /**字段说明部分属性配置***/
+    if (config.showLabel === false) labelWidth = '0px'
+   
+
+    /*字段说明组件部分属性配置*/  
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
 
-    /*前值字段判断*/
-
     return (
-      <el-col span={config.span} class={className} style={showByPrependFieldFn(list, config)}
+      <el-col span={config.span} class={className} 
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
         <el-form-item label-width={labelWidth}
           label={config.showLabel ? config.label : ''} required={config.required}>
           <span slot={'label'}>
-            <span class={'mr-5'}>{config.label}</span>
-            <el-tooltip content={config.fieldDescription} placement={'right'} >
-                <i class={'el-icon-warning-outline'} style={fieldDescriptionStyle}></i>
+            <span class={'mr-5'}>{config.showLabel ? config.label : ''}</span>
+            <el-tooltip content={config.fieldDescription} placement={'right'} style={fieldDescriptionStyle}>
+                <i class={'el-icon-warning-outline'}></i>
             </el-tooltip>
           </span>
           <render key={config.renderKey} conf={currentItem} onInput={ event => {
@@ -88,7 +78,16 @@ const layouts = {
   rowFormItem(h, currentItem, index, list) {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
-    const className = this.activeId === config.formId
+
+     //根据前置字段是否显示
+     const showByPrependField = showByPrependFieldFn(list, config, currentItem);
+     if(!showByPrependField.show){
+      return (
+        <el-col></el-col>
+      )
+    } 
+
+    let className = this.activeId === config.formId
       ? 'drawing-row-item active-from-item'
       : 'drawing-row-item'
     let child = renderChildren.apply(this, arguments)
@@ -97,13 +96,31 @@ const layouts = {
               {child}
             </el-row>
     }
+    className += (' ' +setStringClassByTypeCodeTo2(currentItem))
+    // console.log(className,"className")
+    let wrapperClass = 'drag-wrapper';
+    wrapperClass += (' ' +setStringWrapperClassByTypeCodeTo2(currentItem))
+    
+    //组串类父组件行容器不允许其他组件插入进来
+    if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){
+      return (
+        <el-col span={config.span}>
+          <el-row gutter={config.gutter} class={className} 
+            nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>                    
+            <div class={wrapperClass}>
+              {child}
+            </div>
+            {components.itemBtns.apply(this, arguments)}
+          </el-row>
+        </el-col>
+      )
+    }
     return (
       <el-col span={config.span}>
-        <el-row gutter={config.gutter} class={className}
-          nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
-          <span class="component-name">{config.componentName}</span>
+        <el-row gutter={config.gutter} class={className} 
+          nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>          
           <draggable list={config.children || []} animation={340}
-            group="componentsGroup" class="drag-wrapper">
+            group="componentsGroup" class={wrapperClass}>
             {child}
           </draggable>
           {components.itemBtns.apply(this, arguments)}

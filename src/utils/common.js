@@ -1,4 +1,10 @@
 import Cookies from 'js-cookie'
+import {
+  requestLocal, requestSelf, requestRoot,request3
+} from '@/utils/request.js';
+import store from '@/store/store.js';
+// import Axios from 'axios';
+import axios from "axios";
 
 //重设数据类型
 const resetDataType = function (obj,dataType){
@@ -78,12 +84,36 @@ const elAutocompleteFn = {
   }
 }
 
+//国家数据处理成select 支持的数据{label,value}
+function countryListTranslate(list){
+  let countryList = [];
+  list.forEach((item)=>{
+    item.children.forEach((ele)=>{
+      ele.label = ele.txt;
+      ele.value = ele.id;
+    });
+    countryList = countryList.concat(item.children)
+  });
+  return countryList;
+}
 
-
+//城市数据处理成select 支持的数据{label,value}
+function cityListTranslate(list){
+  let res = [];
+  list.forEach((item)=>{
+    res.push({
+      label:item,
+      value:item
+    })
+  });
+  return res;
+}
 
 
   export default {
     resetDataType,
     localStorage:window.localStorage,
     elAutocompleteFn,
+    countryListTranslate,
+    cityListTranslate
 }

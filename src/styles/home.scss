@@ -64,7 +64,8 @@ $lighterBlue: #409EFF;
   overflow: hidden;
 }
 .center-scrollbar {
-  height: calc(100vh - 42px);
+  // height: calc(100vh - 42px);
+  height: calc(100vh - 42px - 96px);
   overflow: hidden;
   border-left: 1px solid #f1e8e8;
   border-right: 1px solid #f1e8e8;
@@ -270,10 +271,8 @@ $lighterBlue: #409EFF;
     }
   }
 }
-// .el-select{
-//   .el-input.is-disabled{
-//     .el-input__inner{
-//       color:#606266;
-//     }
-//   }
-// }
+
+//==================针对换机申请模板部分需求设置的样式========================================
+@import '@/styles/render';
+
+

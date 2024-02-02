@@ -1,5 +1,8 @@
 /* eslint-disable max-len */
 import ruleTrigger from './ruleTrigger'
+import {
+  showToolByCurrentItem, showByPrependFieldFn, setActiveByTypeCodeTo2, setStringClassByTypeCodeTo2, getMaginStyleByTypeCodeTo2
+} from '@/utils/index'
 
 let confGlobal
 let someSpanIsNot24
@@ -71,28 +74,20 @@ function buildFromBtns(scheme, type) {
 // span不为24的用el-col包裹
 function colWrapper(scheme, str) {
   if (someSpanIsNot24 || scheme.__config__.span !== 24) {
-    return `<el-col :span="${scheme.__config__.span}">
+    return `<el-col :span="${scheme.__config__.span}" class="${getChildrenClassNameForTypeCode2(scheme.__config__)}">
       ${str}
     </el-col>`
   }
   return str
 }
 
-//前置字段判断方法
-function showByPrependFieldFn(list,config){
-  let showStyle = 'display:block;';
-  if(config.showByPrependField !== undefined && config.showByPrependField.length){
-    let b = false;
-    list.forEach((item)=>{
-      if(item.__vModel__ === config.showByPrependField){
-        b = true;
-      }
-    });
-    showStyle = b ? 'display:block;' : 'display:none;'
-  }
-  return showStyle;
-}
 
+/*组串类组件的子组件（非第一个组件情况），其表单item设置class= type-code-2-children*/
+function getChildrenClassNameForTypeCode2(config){
+  let className = '';
+  if(config.typeCode === 2 && config.layout === "colFormItem" && config.showLabel === false) className = ' type-code-2-children';
+  return className
+}
 
 const layouts = {
   colFormItem(scheme, fieldsList) {
@@ -109,17 +104,23 @@ const layouts = {
     const required = !ruleTrigger[config.tag] && config.required ? 'required' : ''
     const tagDom = tags[config.tag] ? tags[config.tag](scheme) : null
 
-    /**字段说明提示组件ssssss***/    
-    let fieldDescriptionLabelDom = `<span ${`slot="label"`} v-if="${config.fieldDescription !== undefined && config.fieldDescription.length > 0}">
-                        <span class="mr-5">${config.label}</span>
-                        <el-tooltip content="${config.fieldDescription}" placement="right">
+    /**字段说明提示组件ssssss***/   
+    /*字段说明组件部分属性配置*/  
+    const isRenderSlotLabel = !!(config.fieldDescription !== undefined && config.fieldDescription.length > 0);
+    const fieldDescriptionStyle = 'display:' + (isRenderSlotLabel ? 'inline-block;' : 'none;')
+    const _fieldDescriptionStyle = `style="${fieldDescriptionStyle}"`;
+    
+    const fieldDescriptionLabelDom = `<span ${`slot="label"`}>
+                        <span class="mr-5">${config.showLabel ? config.label : ''}</span>
+                        <el-tooltip content="${config.fieldDescription}" placement="right" ${_fieldDescriptionStyle}>
                             <i class="el-icon-warning-outline" ></i>
                         </el-tooltip>
                       </span>`;
      /**字段说明eeee***/
 
-   
-    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required} style="${showByPrependFieldFn(fieldsList, config)}">
+    //前值字段判断
+    const showByPrependField = showByPrependFieldFn(fieldsList, config, scheme);
+    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required} v-if="${showByPrependField.show}">
         ${fieldDescriptionLabelDom}
         ${tagDom}
       </el-form-item>`
@@ -133,7 +134,10 @@ const layouts = {
     const align = scheme.type === 'default' ? '' : `align="${scheme.align}"`
     const gutter = scheme.gutter ? `:gutter="${scheme.gutter}"` : ''
     const children = config.children.map(el => layouts[el.__config__.layout](el))
-    let str = `<el-row ${type} ${justify} ${align} ${gutter}>
+
+    //前值字段判断
+    const showByPrependField = showByPrependFieldFn(fieldsList, config, scheme);
+    let str = `<el-row ${type} ${justify} ${align} ${gutter} class="${setStringClassByTypeCodeTo2(scheme)}" v-if="${showByPrependField.show}">
       ${children.join('\n')}
     </el-row>`
     str = colWrapper(scheme, str)

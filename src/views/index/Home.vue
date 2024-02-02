@@ -12,7 +12,7 @@
         <div class="components-list">
           <div v-for="(item, listIndex) in leftComponents" :key="listIndex">
             <div class="components-title">
-              <svg-icon icon-class="component" />
+              <!-- <svg-icon icon-class="component" /> -->
               {{ item.title }}
             </div>
             <draggable
@@ -75,7 +75,7 @@
             :disabled="formConf.disabled"
             :label-width="formConf.labelWidth + 'px'"
           >
-            <draggable class="drawing-board" :list="drawingList" :animation="340" group="componentsGroup">
+            <draggable class="drawing-board" :list="drawingList" :animation="340" group="componentsGroup" :key="draggableDOMKey">
               <draggable-item
                 v-for="(item, index) in drawingList"
                 :key="item.renderKey"
@@ -95,6 +95,12 @@
           </el-form>
         </el-row>
       </el-scrollbar>
+
+      <el-divider />
+      <div class="flex-center pb-15">
+        <el-button plain class="mg-15" size="small">取消</el-button>
+        <el-button type="primary" class="mg-15" size="small" @click="saveAllData">保存</el-button>
+      </div>
     </div>
 
     <!-- 中间布局模块eee --> 
@@ -205,19 +211,20 @@ export default {
             saveIdGlobalDebounce: debounce(340, saveIdGlobal),
             leftComponents: [
                 {
-                    title: '输入型组件',
+                    title: '换机模板所需组件',
                     list: inputComponents
                 },
                 {
-                    title: '选择型组件',
+                    title: '其他拓展组件',
                     list: selectComponents
                 },
                 {
-                    title: '布局型组件',
+                    title: '其他类型研发中的组件',
                     list: layoutComponents
                 }
             ],
             rightPanelDOMKey:+new Date() + '_right_panel',
+            draggableDOMKey:+new Date() + '_draggable',
         }
     },
     computed: {
@@ -225,15 +232,17 @@ export default {
     watch: {
     // eslint-disable-next-line func-names
         'activeData.__config__.label': function (val, oldVal) {
-            if (
-                this.activeData.placeholder === undefined
-        || !this.activeData.__config__.tag
-        || oldActiveId !== this.activeId
-            ) {
-                return
-            }
+            if (this.activeData.placeholder === undefined || !this.activeData.__config__.tag || oldActiveId !== this.activeId) return;
             this.activeData.placeholder = this.activeData.placeholder.replace(oldVal, '') + val
-        },
+        }, 
+        'activeData.__config__.groupNum': {
+            async handler(val) {
+                if (this.activeData.__config__.groupNum === undefined || this.activeData.__config__.typeCode !== 2 ) return;
+                console.log(val,"activeData.__config__.groupNum 发生变化");
+                await this.addOrDeleteChildrenForTypeCode2(val)   
+            },
+            immediate: true
+        },       
         activeId: {
             handler(val) {
                 oldActiveId = val
@@ -241,9 +250,17 @@ export default {
             immediate: true
         },
         drawingList: {
-            handler(val) {
+            async handler(val) {
+                // console.log(val,"gengxin drawingList")
+                // //同步drawingList表单数据模型中组串类组件，所有子组件必须同样的配置，除了字段名
+                await this.toSameConfigForTypeCode2(val)
                 this.saveDrawingListDebounce(val)
                 if (val.length === 0) this.idGlobal = 100
+
+                this.$nextTick(()=>{                    
+                    // this.draggableDOMKey = +new Date() + '_draggable';                    
+                })
+              
             },
             deep: true
         },
@@ -336,16 +353,55 @@ export default {
             }
         },
         activeFormItem(currentItem) {
+            // console.log(currentItem,"点击选择item", this.drawingList)
+             //组串类多输入框条件则重定向activeData
+            currentItem = this.resetActiveDataByTypeCode2(currentItem)
+
+             //清除正则设置的currentItem __config__.regVal,以及active状态
+            currentItem = this.clearStatusForRegList(currentItem)
+
             this.activeData = currentItem
             this.activeId = currentItem.__config__.formId
+            
         },
-        onEnd(obj) {
+        //清除正则设置的currentItem __config__.regVal,以及active状态
+        clearStatusForRegList(currentItem){
+            currentItem.__config__.regVal = undefined
+            if(currentItem.__config__.regList){
+                currentItem.__config__.regList.forEach((item)=>{
+                    item.active = false;
+                });
+            }
+            return currentItem;
+        },
+        //组串类多输入框条件则重定向activeData
+        resetActiveDataByTypeCode2(currentItem){
+            //组串类组父节点的时候
+            if(currentItem.__config__.children && currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){
+                //重定义父组件占比宽度
+                currentItem.__config__.span = 24;
+                // eslint-disable-next-line prefer-destructuring
+                currentItem = currentItem.__config__.children[0]
+                // console.log("转发至第一个子元素")
+            } else if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "colFormItem"){//点击到组串类子节点非第一个的时候
+                this.drawingList.forEach((ele)=>{
+                    if(ele.__config__.children && ele.__config__.typeCode === 2 && ele.__config__.layout == "rowFormItem"){
+                        ele.__config__.children.forEach((v,i)=>{
+                            // eslint-disable-next-line prefer-destructuring
+                            if(v.__config__.formId === currentItem.__config__.formId && i !== 0) currentItem = ele.__config__.children[0];
+                        });
+                    }
+                });
+            }
+            return currentItem
+        },
+        onEnd(obj) {               
             if (obj.from !== obj.to) {
                 this.fetchData(tempActiveData)
                 this.activeData = tempActiveData
                 this.activeId = this.idGlobal
             }
-        },
+        },       
         //添加组件
         addComponent(item) {
             const clone = this.cloneComponent(item)
@@ -354,13 +410,15 @@ export default {
             this.activeFormItem(clone)
         },
         //克隆组件配置
-        cloneComponent(origin) {
+        cloneComponent(origin,o,d) {
+           
             const clone = deepClone(origin)
             const config = clone.__config__
             config.span = this.formConf.span /*生成代码时，会根据span做精简判断*/ 
             this.createIdAndKey(clone)
             clone.placeholder !== undefined && (clone.placeholder += config.label)
             tempActiveData = clone
+            console.log(tempActiveData,"tempActiveData")
             return tempActiveData
         },
         /*创建组件id*/
@@ -415,7 +473,8 @@ export default {
                 }
             )
         },
-        drawingItemCopy(item, list) {
+        async drawingItemCopy(item, list) {
+            await this.toSameConfigForTypeCode2(this.drawingList, true);
             let clone = deepClone(item)
             clone = this.createIdAndKey(clone)
             list.push(clone)
@@ -440,21 +499,25 @@ export default {
             const css = cssStyle(makeUpCss(this.formData))
             return beautifier.html(html + script + css, beautifierConf.html)
         },
-        showJson() {
+        async showJson() {
+            await this.toSameConfigForTypeCode2(this.drawingList, true);
             this.AssembleFormData()
             this.jsonDrawerVisible = true
         },
-        download() {
+        async download() {
+            await this.toSameConfigForTypeCode2(this.drawingList, true);
             this.dialogVisible = true
             this.showFileName = true
             this.operationType = 'download'
         },
-        run() {
+        async run() {
+            await this.toSameConfigForTypeCode2(this.drawingList, true);
             this.dialogVisible = true
             this.showFileName = false
             this.operationType = 'run'
         },
-        copy() {
+        async copy() {
+            await this.toSameConfigForTypeCode2(this.drawingList, true);
             this.dialogVisible = true
             this.showFileName = false
             this.operationType = 'copy'
@@ -503,8 +566,119 @@ export default {
             this.$router.push({ 
                 path: '/index'
             })
-        }
+        },
+        /**
+         * 同步drawingList表单数据模型中组串类组件，所有子组件必须同样的配置，除了字段名
+         * @param {Object} list drawingList变量数据
+         * @param {Boolean} isOnlySetRegList 只单独设置组串类组件，同步其所有子元素正则
+        */
+        async toSameConfigForTypeCode2(list, isOnlySetRegList){
+            list.forEach((currentItem)=>{
+                let childrenList = currentItem.__config__.children;
+                if(childrenList && currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){
+                   
+                    let firstItem = JSON.parse(JSON.stringify(childrenList[0]));
+                    let first__vModel__ = firstItem.__vModel__;
 
+                    currentItem.__config__.showByPrependField = firstItem.__config__.showByPrependField;//父节点的前置字段也跟第一子节点一致
+
+                    childrenList.forEach((item,index)=>{
+                        if(index > 0){        
+                            if(isOnlySetRegList){
+                                item.__config__.regList = firstItem['__config__']['regList'];
+                            }else{
+                                let noCopyKeyList = ['__vModel__', 'style', '__config__','__slot__'];
+                                //定义根属性
+                                //定义非第一个的其他组串子元素字段为 “字段”+ “__” + ${index}
+                                item.__vModel__ = first__vModel__ + '__' + index;
+                                // eslint-disable-next-line no-restricted-syntax
+                                for(let key in firstItem){
+                                    if(!noCopyKeyList.includes(key)) item[key] = firstItem[key];
+                                }
+
+                                //定义__config__对象
+                                let noCopyKeyList2 = ['formId','fieldDescription','regList','renderKey','showLabel'];//regList特殊处理，深拷贝;showLabel默认设置不显示
+                                item.__config__.showLabel = false;
+
+                                // eslint-disable-next-line no-restricted-syntax
+                                for(let i in firstItem.__config__){
+                                    if(!noCopyKeyList2.includes(i)) item['__config__'][i] = firstItem['__config__'][i];
+                                }
+                            }                                               
+                           
+                        }
+                    });
+                    
+                }
+            });                 
+            return list;           
+        },
+        //保存最终数据
+        async saveAllData(){
+            await this.toSameConfigForTypeCode2(this.drawingList, true);
+            // console.log(this.drawingList,"最新数据")
+            //判断配置表中所有组件字段名是否都根据服务器字段表来
+            const bb = this.isBindServerField();
+            console.log(bb,"判断配置表中所有组件字段名是否都根据服务器字段表来")
+            if(!bb) {
+                this.$message({
+                    message: '还有组件未绑定数据库字段',
+                    type: 'warning'
+                })
+            }
+        },
+        //判断配置表中所有组件字段名是否都根据服务器字段表来
+        isBindServerField(){
+            let fieldList = [];
+            const _fieldList = this.$store.getters.getFieldList;
+            _fieldList.forEach((item)=>{
+                fieldList.push( item.tableField )
+            });
+            let b = true;
+            this.drawingList.forEach((currentItem)=>{
+                if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){//组串类组件
+                    let childrenList = currentItem.__config__.children;
+                    if(!fieldList.includes(childrenList[0].__vModel__)) b = false                    
+                }else if(currentItem.__config__.layout == "colFormItem"){
+                    if(!fieldList.includes(currentItem.__vModel__)) b = false
+                }
+            })
+            return b
+        },
+        //添加或删除组串类组件子元素
+        async addOrDeleteChildrenForTypeCode2(groupNum){
+            this.drawingList.forEach((currentItem)=>{
+                let childrenList = currentItem.__config__.children;
+                if(childrenList && currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){
+                   
+                    let firstItem = JSON.parse(JSON.stringify(childrenList[0]));
+                    let first__vModel__ = firstItem.__vModel__;
+                    let secondItem = JSON.parse(JSON.stringify(childrenList[1]));
+                    if(childrenList.length === groupNum) return;
+                    let addCount = groupNum - childrenList.length;
+                    let addList = [];
+                    if(addCount > 0){//递增
+                        for(let i = 0; i < addCount; i++){
+                            let index = childrenList.length + i;
+                            secondItem.__vModel__ = first__vModel__ + '__' + index;
+                            secondItem.__config__.formId = ++this.idGlobal;
+                            secondItem.__config__.renderKey = `${secondItem.__config__.formId}${+new Date()}`
+                            addList.push(secondItem)
+                        }
+                        currentItem.__config__.children = childrenList.concat(addList);
+                        console.log("++++",currentItem.__config__.children)
+                    }else if(addCount < 0){//递减
+                        let newList = [];
+                        for(let i = 0; i < groupNum; i++){
+                            newList.push( childrenList[i] )
+                        }
+                        currentItem.__config__.children = newList;
+                        // console.log("----",currentItem.__config__.children)
+                    }
+                    // console.log(currentItem.__config__.children,"currentItem.__config__.children")
+                }
+            });                 
+        },
     }
 }
 </script>

@@ -25,17 +25,17 @@
     },
     created() {
       //获取语言环境
-      this.getLanguage();
+      // this.getLanguage();
 
-      this.$request({
-          data:this.$com.resetDataType({}),
-          url:'/json/channel_device.json',
-          method:"get"
-        }).then(res => {
+      // this.$request({
+      //     data:this.$com.resetDataType({}),
+      //     url:'/json/channel_device.json',
+      //     method:"get"
+      //   }).then(res => {
             
-        }, err => {
-          console.log(err)
-        });
+      //   }, err => {
+      //     console.log(err)
+      //   });
     },
     props:{
 
