@@ -235,6 +235,7 @@ export default {
             if (this.activeData.placeholder === undefined || !this.activeData.__config__.tag || oldActiveId !== this.activeId) return;
             this.activeData.placeholder = this.activeData.placeholder.replace(oldVal, '') + val
         }, 
+        //监听组串类组件变化子组件个数
         'activeData.__config__.groupNum': {
             async handler(val) {
                 if (this.activeData.__config__.groupNum === undefined || this.activeData.__config__.typeCode !== 2 ) return;
@@ -242,7 +243,27 @@ export default {
                 await this.addOrDeleteChildrenForTypeCode2(val)   
             },
             immediate: true
-        },       
+        },   
+        //监听自定义日期，时间选择类型变化,更新组件定位问题
+        'activeData.__config__.isRange': {
+            async handler(val,val2) {
+                if(val2 === undefined) return;
+                this.$nextTick(()=>{                
+                    this.draggableDOMKey = +new Date() + '_draggable';                    
+                })
+            },
+            immediate: true
+        }, 
+        //换机模板组件--日期时间选择器监听其是否超过当前日期时间，切换则重新渲染设计器表单中枢
+        'activeData.__config__.noOverCurrDate': {
+            async handler(val,val2) {
+                if(val2 === undefined && !val) return;
+                this.$nextTick(()=>{                
+                    this.draggableDOMKey = +new Date() + '_draggable';                    
+                })
+            },
+            immediate: true
+        },      
         activeId: {
             handler(val) {
                 oldActiveId = val
@@ -439,10 +460,12 @@ export default {
             return item
         },
         AssembleFormData() {
+            
             this.formData = {
                 fields: deepClone(this.drawingList),
                 ...this.formConf
             }
+            console.log(this.formData,"this.formData")
         },
         generate(data) {
             const func = this[`exec${titleCase(this.operationType)}`]
@@ -558,7 +581,17 @@ export default {
             this.formConf = data
         },
         jumpPreview(){
-            this.$router.replace({ name: "parser2" });
+            this.$router.replace(
+                { name: "parser2" },
+                ()=>{
+                    location.reload();
+                    console.log("callbackk ")
+                }
+            );
+            
+            // this.$router.replace(
+            //     { name: "parser2" }
+            // );
         },
         toIndex(){
             this.$store.commit('setCurrTempInfo', {});

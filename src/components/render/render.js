@@ -105,9 +105,17 @@ export default {
   },
   render(h) {
     const dataObject = makeDataObject()
-    const confClone = deepClone(this.conf)
-    const children = this.$slots.default || []
+    let confClone = deepClone(this.conf)
+    const children = this.$slots.default || [];
 
+    //设置自定义换机模板日期选择组件，选择日期是否可超当前日期
+    confClone = this.set_noOverCurrDate_by_typeCode6(confClone)
+
+     //上传组件设置 before-upload 属性，监听上传之前事件
+     confClone = this.set_beforeUpload_by_typeCode9(confClone)
+
+    // console.log(confClone,"confClone")
+    // console.log(dataObject,"dataObject")
     // 如果slots文件夹存在与当前tag同名的文件，则执行文件中的代码
     mountSlotFiles.call(this, h, confClone, children)
 
@@ -118,5 +126,52 @@ export default {
     buildDataObject.call(this, confClone, dataObject)
 
     return h(this.conf.__config__.tag, dataObject, children)
+  },
+  methods:{
+    //设置自定义换机模板日期选择组件，选择日期是否可超当前日期
+    set_noOverCurrDate_by_typeCode6(confClone){
+      if([5,6].includes( confClone.__config__.typeCode )){//针对换机申请模板自定义组件---日期选择器和时间选择器
+        if(confClone.__config__.noOverCurrDate){
+          confClone['picker-options'] = {
+              disabledDate:function(time) {
+                  // return time.getTime() > Date.now() - 8.64e7; // 选择今天以及今天以前的日期
+                  // return time.getTime() < Date.now() - 8.64e7;//设置选择今天及今天之后的日期
+                  return time.getTime() > Date.now() - 8.64e6;//设置选择今天以及今天以前的日期
+              }
+          };
+        }
+      }
+      return confClone
+    },
+    //上传组件设置 before-upload 属性，监听上传之前事件
+    set_beforeUpload_by_typeCode9(confClone){
+      const units = {
+        KB: 1024,
+        MB: 1024 * 1024,
+        GB: 1024 * 1024 * 1024
+      }
+
+      if([9,109].includes( confClone.__config__.typeCode )){//针对换机申请模板自定义 组件---附件上传和原本的上传组件
+        confClone['before-upload'] = function(file){
+          console.log(file,"上传之前的文件对象",confClone);
+          let isRightSize = file.size / units[confClone.__config__.sizeUnit] < confClone.__config__.fileSize
+          if (!isRightSize) {
+            this.$message.error(`文件大小超过 ${confClone.__config__.fileSize}${confClone.__config__.sizeUnit}`)
+          }
+
+          if(confClone.accept){
+            let isAccept = new RegExp(confClone.accept).test(file.type)
+            if (!isAccept) {
+              this.$message.error(`应该选择${confClone.accept}类型的文件`)
+            }
+            return isRightSize && isAccept
+          }else{
+            return isRightSize
+          }
+        }
+      }
+      return confClone
+    },
   }
+
 }

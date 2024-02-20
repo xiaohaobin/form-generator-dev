@@ -255,6 +255,11 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
       ${uploadVar}
       ${selectOptions}
       ${props}
+      typeCode6PickerOptions:{/*设置自定义换机模板日期选择组件，选择日期是否可超当前日期的data变量配置*/
+          disabledDate:function(time) {
+              return time.getTime() > Date.now() - 8.64e6;/*设置选择今天以及今天以前的日期*/
+          }
+      },
     }
   },
   computed: {},

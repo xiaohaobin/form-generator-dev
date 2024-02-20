@@ -212,7 +212,7 @@ export const inputComponents = [
     },
     {
         __config__: {
-            label: '时间选择',
+            label: '时间选择器',
             tag: 'el-time-picker',
             tagIcon: 'time',
             defaultValue: null,
@@ -227,20 +227,25 @@ export const inputComponents = [
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
             typeCode:5,
+            isRange: false,
         },
         placeholder: '请选择',
         style: { width: '100%' },
         disabled: false,
         clearable: true,
-        'picker-options': {
-            selectableRange: '00:00:00-23:59:59'
-        },
+        // 'picker-options': {
+        //     selectableRange: '00:00:00-23:59:59'
+        // },
+        'is-range': false,
+        'range-separator': '~',
+        'start-placeholder': '开始时间',
+        'end-placeholder': '结束时间',
         format: 'HH:mm:ss',
         'value-format': 'HH:mm:ss'
     },
     {
         __config__: {
-            label: '日期选择',
+            label: '日期选择器',
             tag: 'el-date-picker',
             tagIcon: 'date',
             defaultValue: null,
@@ -255,6 +260,8 @@ export const inputComponents = [
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
             typeCode:6,
+            isRange: false,
+            noOverCurrDate:true,//最大日期不超过当前日期
         },
         placeholder: '请选择',
         type: 'date',
@@ -267,7 +274,8 @@ export const inputComponents = [
         'end-placeholder': '结束日期',
         format: 'yyyy-MM-dd',
         'value-format': 'yyyy-MM-dd',
-        readonly: false
+        readonly: false,
+        editable:false
     },
     {
         __config__: {
@@ -330,13 +338,13 @@ export const inputComponents = [
             append: ''
         },
         // 其余的为可直接写在组件标签上的属性
-        placeholder: '请输入',
+        placeholder: undefined,
         style: { width: '100%' },
-        clearable: true,
+        clearable: undefined,
         'prefix-icon': '',
         'suffix-icon': '',
-        maxlength: null,
-        'show-word-limit': false,
+        maxlength: undefined,
+        'show-word-limit': undefined,
         readonly: true,
         disabled: false
     },
@@ -351,7 +359,7 @@ export const inputComponents = [
             labelWidth: null,
             required: true,
             span: 24,
-            showTip: false,
+            showTip: true,
             buttonText: '点击上传',
             regList: [],
             changeTag: true,
@@ -361,6 +369,7 @@ export const inputComponents = [
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
             typeCode:9,
+            uploadDes:'',//上传说明
         },
         __slot__: {
             'list-type': true
@@ -371,8 +380,36 @@ export const inputComponents = [
         name: 'file',
         'auto-upload': true,
         'list-type': 'text',
-        multiple: false
-    } 
+        multiple: false,
+        
+    },
+    {
+        __diyComponentsName__: 'diy-text',//自定义组件名
+	    __config__: {
+	        label: '纯文本',
+	        showLabel: false,
+	        changeTag: true,
+	        // labelWidth: null,
+	        tag: 'el-link',
+            tagIcon: 'input',
+	        span: 24,
+	        layout: 'colFormItem',
+            isShowColorSelect: true,//是否显示颜色选择下拉框
+            isFontWeightBold: true, //是否加粗
+            noCursorPointer: true,//没有手指鼠标
+            isText: true,//是否纯文本
+            typeCode:10,
+            color:"#000",
+	    },
+	    __slot__: {
+	        // default: '随便输入什么2.0',
+            text: '随便输入什么'
+	    },        
+	    type: undefined,
+	    underline: false,
+        
+    }, 
+   
 ]
 
 // 选择型组件 【左面板】typeCode 100~200
@@ -829,33 +866,7 @@ export const selectComponents = [
 
 // 布局型组件 【左面板】typeCode 200~300
 export const layoutComponents = [
-    {
-        __diyComponentsName__: 'diy-text',//自定义组件名
-	    __config__: {
-	        label: '纯文本',
-	        showLabel: false,
-	        // changeTag: false,
-	        // labelWidth: null,
-	        tag: 'el-link',
-            tagIcon: 'input',
-	        span: 24,
-	        layout: 'colFormItem',
-	        document: 'https://element.eleme.cn/#/zh-CN/component/link',
-            isShowColorSelect: true,//是否显示颜色选择下拉框
-            colorSelect: ['primary','success','warning','danger','info'],
-            isFontWeightBold: true, //是否加粗
-            noCursorPointer: true,//没有手指鼠标
-            isText: true,//是否纯文本
-            typeCode:201,
-	    },
-	    __slot__: {
-	        // default: '随便输入什么2.0',
-            text: '随便输入什么'
-	    },        
-	    type: 'danger',
-	    underline: false,
-        
-    },
+    
     {
         __config__: {
             layout: 'rowFormItem',

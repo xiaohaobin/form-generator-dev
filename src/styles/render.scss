@@ -25,3 +25,40 @@
 }
 .type-code-2 > .drawing-item-delete{top:0;}
 .type-code-2 > .drawing-item-copy{top:0;}
+
+//强制设置组串类组件表单样式
+// .el-form--label-right .type-code-2 .el-col-6:first-child label{
+//   text-align: left;
+//   float: none;
+//   width: auto !important;
+//   padding-bottom: 10px;
+// } 
+// .el-form--label-right .type-code-2 .el-col-6:first-child .el-form-item__content{margin-left: 0 !important;}
+
+.string-components-style-1{
+  text-align: left;
+  float: none;
+  width: auto !important;
+  padding-bottom: 10px;
+}
+.string-components-style-2{
+  margin-left: 0 !important;
+}
+
+@for $i from 1 through 4 {
+  .el-form--label-right .type-code-2 .el-col-#{$i*6}:first-child label{ 
+    @extend .string-components-style-1
+  }
+  .el-form--label-right .type-code-2 .el-col-#{$i*6}:first-child .el-form-item__content{
+    @extend .string-components-style-2
+  }
+  .el-form--label-left .type-code-2 .el-col-#{$i*6}:first-child label{ 
+    @extend .string-components-style-1
+  }
+  .el-form--label-left .type-code-2 .el-col-#{$i*6}:first-child .el-form-item__content{
+    @extend .string-components-style-2
+  }
+}
+.el-form-item[type-code="10"]{
+  label{display: none;}
+} 

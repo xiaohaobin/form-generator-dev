@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import ruleTrigger from './ruleTrigger'
 import {
-  showToolByCurrentItem, showByPrependFieldFn, setActiveByTypeCodeTo2, setStringClassByTypeCodeTo2, getMaginStyleByTypeCodeTo2
+  showByPrependFieldFn, setStringClassByTypeCodeTo2,set_noOverCurrDate_by_typeCode6
 } from '@/utils/index'
 
 let confGlobal
@@ -39,9 +39,9 @@ export function cssStyle(cssStr) {
 
 function buildFormTemplate(scheme, child, type) {
   let labelPosition = ''
-  if (scheme.labelPosition !== 'right') {
+  // if (scheme.labelPosition !== 'right') {
     labelPosition = `label-position="${scheme.labelPosition}"`
-  }
+  // }
   const disabled = scheme.disabled ? `:disabled="${scheme.disabled}"` : ''
   let str = `<el-form ref="${scheme.formRef}" :model="${scheme.formModel}" :rules="${scheme.formRules}" size="${scheme.size}" ${disabled} label-width="${scheme.labelWidth}px" ${labelPosition}>
       ${child}
@@ -59,7 +59,7 @@ function buildFromBtns(scheme, type) {
   let str = ''
   if (scheme.formBtns && type === 'file') {
     str = `<el-form-item size="large">
-          <el-button type="primary" @click="submitForm">提交</el-button>
+          <el-button type="primary" @click="submitForm">提交2</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>`
     if (someSpanIsNot24) {
@@ -101,6 +101,9 @@ const layouts = {
       labelWidth = 'label-width="0"'
       label = ''
     }
+    //换机自定义日期选择器,设置只能选择今天以及以前的日期
+    // scheme = set_noOverCurrDate_by_typeCode6(scheme)
+
     const required = !ruleTrigger[config.tag] && config.required ? 'required' : ''
     const tagDom = tags[config.tag] ? tags[config.tag](scheme) : null
 
@@ -120,7 +123,7 @@ const layouts = {
 
     //前值字段判断
     const showByPrependField = showByPrependFieldFn(fieldsList, config, scheme);
-    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required} v-if="${showByPrependField.show}">
+    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required} v-if="${showByPrependField.show}" type-code="${config.typeCode}">
         ${fieldDescriptionLabelDom}
         ${tagDom}
       </el-form-item>`
@@ -283,7 +286,7 @@ const tags = {
 
     return `<${tag} ${vModel} ${isRange} ${format} ${valueFormat} ${pickerOptions} ${width} ${placeholder} ${startPlaceholder} ${endPlaceholder} ${rangeSeparator} ${clearable} ${disabled}></${tag}>`
   },
-  'el-date-picker': el => {
+  'el-date-picker': el => {   
     const {
       tag, disabled, vModel, clearable, placeholder, width
     } = attrBuilder(el)
@@ -294,8 +297,11 @@ const tags = {
     const valueFormat = el['value-format'] ? `value-format="${el['value-format']}"` : ''
     const type = el.type === 'date' ? '' : `type="${el.type}"`
     const readonly = el.readonly ? 'readonly' : ''
-
-    return `<${tag} ${type} ${vModel} ${format} ${valueFormat} ${width} ${placeholder} ${startPlaceholder} ${endPlaceholder} ${rangeSeparator} ${clearable} ${readonly} ${disabled}></${tag}>`
+    const editable = el.editable ? `` : `:editable="${false}"`
+    //自定义换机模板组件--日期选择器配置，定义是否选择可超过当前日期，组件属性对picker-options绑定变量typeCode6PickerOptions，必须要在js.js脚本上注入
+    const pickerOptions = el.__config__.noOverCurrDate ? `:picker-options='typeCode6PickerOptions'` : '';
+    
+    return `<${tag} ${type} ${vModel} ${format} ${valueFormat} ${pickerOptions} ${width} ${placeholder} ${startPlaceholder} ${endPlaceholder} ${rangeSeparator} ${clearable} ${readonly} ${disabled} ${editable} ></${tag}>`
   },
   'el-rate': el => {
     const { tag, disabled, vModel } = attrBuilder(el)
@@ -426,7 +432,13 @@ function buildElUploadChild(scheme) {
   const config = scheme.__config__
   if (scheme['list-type'] === 'picture-card') list.push('<i class="el-icon-plus"></i>')
   else list.push(`<el-button size="small" type="primary" icon="el-icon-upload">${config.buttonText}</el-button>`)
-  if (config.showTip) list.push(`<div slot="tip" class="el-upload__tip">只能上传不超过 ${config.fileSize}${config.sizeUnit} 的${scheme.accept}文件</div>`)
+  if (config.showTip){
+    let htmlContent = `<div slot="tip" class="el-upload__tip">只能上传不超过 ${config.fileSize}${config.sizeUnit} 的${scheme.accept}文件</div>`
+    if(config.typeCode === 9){
+      htmlContent = `<div slot="tip" class="el-upload__tip">${config.uploadDes || '<p></p>'}</div>`
+    }
+    list.push(htmlContent)
+  } 
   return list.join('\n')
 }
 

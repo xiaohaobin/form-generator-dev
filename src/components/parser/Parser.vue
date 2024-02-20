@@ -41,7 +41,7 @@ const layouts = {
     return (
       <el-col span={config.span} class={setClassNameForTypeCode2(scheme)}>
         <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
-          label={config.showLabel ? config.label : ''}>
+          label={config.showLabel ? config.label : ''} type-code={config.typeCode}>
           <span slot={'label'}>
             <span class={'mr-5'}>{config.showLabel ? config.label : ''}</span>
             <el-tooltip content={config.fieldDescription} placement={'right'} style={fieldDescriptionStyle}>

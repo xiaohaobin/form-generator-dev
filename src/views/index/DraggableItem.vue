@@ -57,7 +57,7 @@ const layouts = {
     return (
       <el-col span={config.span} class={className} 
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
-        <el-form-item label-width={labelWidth}
+        <el-form-item label-width={labelWidth} type-code={config.typeCode}
           label={config.showLabel ? config.label : ''} required={config.required}>
           <span slot={'label'}>
             <span class={'mr-5'}>{config.showLabel ? config.label : ''}</span>
@@ -100,7 +100,6 @@ const layouts = {
     // console.log(className,"className")
     let wrapperClass = 'drag-wrapper';
     wrapperClass += (' ' +setStringWrapperClassByTypeCodeTo2(currentItem))
-    
     //组串类父组件行容器不允许其他组件插入进来
     if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){
       return (

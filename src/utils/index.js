@@ -323,3 +323,19 @@ export function setClassNameForTypeCode2(currentItem){
   }
   return className
 }
+
+ //设置自定义换机模板日期选择组件，选择日期是否可超当前日期
+ export function set_noOverCurrDate_by_typeCode6(confClone){
+  if([5,6].includes( confClone.__config__.typeCode )){
+    if(confClone.__config__.noOverCurrDate){
+      confClone['picker-options'] = {
+          disabledDate:function(time) {
+              // return time.getTime() > Date.now() - 8.64e7; // 选择今天以及今天以前的日期
+              // return time.getTime() < Date.now() - 8.64e7;//设置选择今天及今天之后的日期
+              return time.getTime() > Date.now() - 8.64e6;//设置选择今天以及今天以前的日期
+          }
+      };
+    }
+  }
+  return confClone
+}

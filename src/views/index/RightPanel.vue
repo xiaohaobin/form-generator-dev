@@ -11,7 +11,11 @@
         <el-form v-show="currentTab==='field' && showField" size="small" label-width="90px"
         :label-position="'top'">
 
-          <el-form-item v-if="activeData.__config__.changeTag" :label=" '字段类型： ' + getTxtByCurrCom() ">
+          <el-form-item v-if="activeData.__config__.changeTag" >
+            <span slot="label">
+              字段类型：
+              <b>{{getTxtByCurrCom() }}</b>
+            </span>
             <!-- <el-select
               v-model="activeData.__config__.tagIcon"
               placeholder="组件类型"
@@ -37,7 +41,7 @@
             <el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）" />
           </el-form-item>          -->
 
-          <el-form-item label="字段选择">            
+          <el-form-item label="字段选择" v-if="activeData.__config__.typeCode !== 10">            
             <el-select v-model="activeData.__vModel__" placeholder="请选择" filterable :style="{width: '100%'}" @focus="tableFieldFocus" @change="tableFieldChange">
               <el-option v-for="(item, index) in tableFieldOptions" :key="index" :label="item.label" :value="item.value" :disabled="hasSelectedFieldList.includes(item.value)"></el-option>
             </el-select>
@@ -51,7 +55,7 @@
             <el-input v-model="activeData.placeholder" placeholder="请输入内容" @input="changeRenderKey" />
           </el-form-item>          
 
-          <el-form-item v-if="isShowDefaultValueByTypeCode()" label="默认值">
+          <el-form-item v-if="isShowDefaultValueByTypeCode() && activeData.__config__.typeCode !== 10" label="默认值">
             <el-input v-if="activeData.__config__.typeCode !== 4"
               :value="setDefaultValue(activeData.__config__.defaultValue)"
               placeholder="请输入默认值"
@@ -69,13 +73,13 @@
             <el-input v-model="activeData.__config__.fieldDescription" placeholder="请输入字段说明" @input="changeRenderKey" />
           </el-form-item>
 
-          <el-form-item label="前置字段">
+          <el-form-item label="前置字段" v-if="activeData.__config__.typeCode !== 10">
             <el-select v-model="activeData.__config__.showByPrependField" placeholder="请选择" filterable clearable :style="{width: '100%'}" @change="showByPrependFieldChangeEvent">
               <el-option v-for="(item, index) in tableFieldOptions2" :key="index" :label="item.label" :value="item.value" ></el-option>
             </el-select>
           </el-form-item>
 
-          <el-form-item v-if="activeData.__config__.span!==undefined" label="组件所占宽度">
+          <el-form-item v-if="activeData.__config__.span!==undefined && activeData.__config__.typeCode !== 10" label="组件所占宽度">
             <div class="diy-el-slider">
               <el-slider v-model="activeData.__config__.span" :max="24" :min="0" :step="6" :marks="slideMarks" @change="spanChange" :show-tooltip="false" class="diy-el-slider-main"/>
               <span>{{ (activeData.__config__.span / 24 * 100).toFixed() + '%' }}</span>
@@ -104,18 +108,45 @@
               <el-form-item v-if="activeData.clearable !== undefined" label="能否清空">
                 <el-switch v-model="activeData.clearable" />
               </el-form-item>
+
+              <el-form-item v-if="activeData['auto-upload'] !== undefined" label="自动上传">
+                <el-switch v-model="activeData['auto-upload']" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20">
+            <el-col :span="12" v-if="activeData.__config__.typeCode !== 9">
+              <el-form-item v-if="activeData.__config__.showTip !== undefined" label="显示提示">
+                <el-switch v-model="activeData.__config__.showTip" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">              
+              <el-form-item v-if="activeData.__config__.tag === 'el-upload'" label="多选文件">
+                <el-switch v-model="activeData.multiple" />
+              </el-form-item>
             </el-col>
           </el-row>
           
-          <el-row :gutter="20">
+          
+          
+          <el-row :gutter="20" v-if="![5,6].includes( activeData.__config__.typeCode )">
             <el-col :span="12">
-              <el-form-item v-if="activeData.readonly !== undefined" label="是否只读">
+              <el-form-item v-if="activeData.readonly !== undefined && activeData.__config__.typeCode !== 8" label="是否只读">
                 <el-switch v-model="activeData.readonly" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item v-if="activeData['show-word-limit'] !== undefined" label="输入统计">
                 <el-switch v-model="activeData['show-word-limit']" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20" v-if="[6].includes( activeData.__config__.typeCode )">
+            <el-col :span="24">
+              <el-form-item label="禁止超过当前日期时间">
+                <el-switch v-model="activeData.__config__.noOverCurrDate" @change="noOverCurrDateChangeEvent"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -129,6 +160,20 @@
             <el-col :span="12">
               <el-form-item v-if="activeData.__config__.tag === 'el-select'" label="是否多选">
                 <el-switch v-model="activeData.multiple" @change="multipleChange" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <!-- 纯文本属性 -->
+          <el-row :gutter="20" v-if="activeData.__config__.typeCode === 10">
+            <el-col :span="12">
+              <el-form-item v-if="activeData.__config__.isFontWeightBold !== undefined" label="字体加粗">
+                  <el-switch v-model="activeData.__config__.isFontWeightBold"></el-switch>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item v-if="activeData.__config__.color !== undefined" label="颜色选择">
+                <el-color-picker v-model="activeData.__config__.color"></el-color-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -200,12 +245,18 @@
             {{ activeData.__config__.componentName }}
           </el-form-item>
          
-          <el-form-item v-if="activeData['start-placeholder']!==undefined" label="开始占位">
-            <el-input v-model="activeData['start-placeholder']" placeholder="请输入占位提示" />
-          </el-form-item>
-          <el-form-item v-if="activeData['end-placeholder']!==undefined" label="结束占位">
-            <el-input v-model="activeData['end-placeholder']" placeholder="请输入占位提示" />
-          </el-form-item>
+          <template v-if="isShowRangeDatePropsByTypeCode()">
+            <el-form-item v-if="activeData['start-placeholder']!==undefined" label="开始占位">
+              <el-input v-model="activeData['start-placeholder']" placeholder="请输入占位提示" />
+            </el-form-item>
+            <el-form-item v-if="activeData['end-placeholder']!==undefined" label="结束占位">
+              <el-input v-model="activeData['end-placeholder']" placeholder="请输入占位提示" />
+            </el-form-item>
+            <el-form-item v-if="activeData['range-separator'] !== undefined" label="分隔符">
+              <el-input v-model="activeData['range-separator']" placeholder="请输入分隔符" />
+            </el-form-item>
+          </template>
+          
 
           <el-form-item v-if="activeData.__config__.layout==='rowFormItem'&&activeData.gutter!==undefined" label="栅格间隔">
             <el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔" />
@@ -250,21 +301,7 @@
             />
           </el-form-item>
          
-
-          <el-form-item v-if="activeData.__config__.isShowColorSelect && activeData.__config__.colorSelect" label="颜色选择">
-            <el-select v-model="activeData.type" :style="{width: '100%'}">
-              <el-option
-                v-for="(item, index) in activeData.__config__.colorSelect"
-                :key="index"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item v-if="activeData.__config__.isFontWeightBold !== undefined" label="字体加粗">
-              <el-switch v-model="activeData.__config__.isFontWeightBold"></el-switch>
-          </el-form-item>
+          
        
 
           <el-form-item v-if="activeData.__config__.tag==='el-checkbox-group'" label="最多可选">
@@ -364,13 +401,23 @@
               @input="onSwitchValueInput($event, 'inactive-value')"
             />
           </el-form-item>
+
+          <el-form-item v-if="[5,6].includes( activeData.__config__.typeCode )" label="选择类型">
+            <el-select v-model="activeData['is-range']" :style="{ width: '100%' }" v-if="activeData.__config__.typeCode === 6" @change="dateTypeIsRangeOptionsEvent">
+              <el-option :label="item.label" :value="item.value" v-for="(item,index) in dateTypeIsRangeOptions" :key="index" />
+            </el-select>
+            <el-select v-model="activeData['is-range']" :style="{ width: '100%' }" v-else @change="timeTypeIsRangeOptionsEvent" >
+              <el-option :label="item.label" :value="item.value" v-for="(item,index) in timeTypeIsRangeOptions" :key="index"/>
+            </el-select>
+          </el-form-item>
+
           <el-form-item
             v-if="activeData.type !== undefined && 'el-date-picker' === activeData.__config__.tag"
-            label="时间类型"
+            label="日期纬度"
           >
             <el-select
               v-model="activeData.type"
-              placeholder="请选择时间类型"
+              placeholder="请选择日期纬度"
               :style="{ width: '100%' }"
               @change="dateTypeChange"
             >
@@ -382,7 +429,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item v-if="activeData.name !== undefined" label="文件字段名">
+          <el-form-item v-if="activeData.name !== undefined && activeData.__config__.typeCode !== 9" label="文件字段名">
             <el-input v-model="activeData.name" placeholder="请输入上传文件字段名" />
           </el-form-item>
           <el-form-item v-if="activeData.accept !== undefined" label="文件类型">
@@ -392,6 +439,7 @@
               :style="{ width: '100%' }"
               clearable
             >
+              <el-option label="全部" value="" />
               <el-option label="图片" value="image/*" />
               <el-option label="视频" value="video/*" />
               <el-option label="音频" value="audio/*" />
@@ -452,9 +500,7 @@
           >
             <el-input v-model="activeData.__slot__.default" placeholder="请输入按钮文字" />
           </el-form-item>
-          <el-form-item v-if="activeData['range-separator'] !== undefined" label="分隔符">
-            <el-input v-model="activeData['range-separator']" placeholder="请输入分隔符" />
-          </el-form-item>
+          
           <el-form-item v-if="activeData['picker-options'] !== undefined" label="时间段">
             <el-input
               v-model="activeData['picker-options'].selectableRange"
@@ -462,14 +508,16 @@
             />
           </el-form-item>
 
-          <el-form-item v-if="[5,6].includes( activeData.__config__.typeCode )" label="选择类型">
-            <el-select v-model="activeData['is-range']" :style="{ width: '100%' }" v-if="activeData.__config__.typeCode === 6" @change="dateTypeIsRangeOptionsEvent">
-              <el-option :label="item.label" :value="item.value" v-for="(item,index) in dateTypeIsRangeOptions" :key="index"/>
-            </el-select>
-            <el-select v-model="activeData['is-range']" :style="{ width: '100%' }" v-else>
-              <el-option :label="item.label" :value="item.value" v-for="(item,index) in timeTypeIsRangeOptions" :key="index"/>
-            </el-select>
+          <el-form-item label="" v-show="activeData.__config__.typeCode === 9">
+            <div class="flex-space-between w-100 mb-5">
+              <div><span>上传说明</span></div>              
+              <!-- <el-button size="mini" @click="confirmUploadDes">确定</el-button> -->
+            </div>            
+            <textarea id="uploadDesEditer" ></textarea>
+            <!-- tinymce.get(0).getContent() -->
           </el-form-item>
+
+          
 
           <!-- <el-form-item v-if="[6].includes( activeData.__config__.typeCode )" label="选择时间日期纬度">
             <el-select v-model="activeData['type']" :style="{ width: '100%' }" v-if="activeData.is-range === true">
@@ -480,12 +528,19 @@
             </el-select>
           </el-form-item> -->
 
-          <el-form-item v-if="activeData.format !== undefined" label="选择纬度">
+          <el-form-item v-if="activeData.format !== undefined && !([5,6].includes(activeData.__config__.typeCode))" label="输入时间格式">
             <el-input
               :value="activeData.format"
               placeholder="请输入时间格式"
               @input="setTimeValue($event)"
             />
+          </el-form-item>
+          <!-- timeTypeOptions -->
+
+          <el-form-item label="请选择时间纬度" v-if="[5].includes(activeData.__config__.typeCode)" >
+              <el-select v-model="activeData.format" :style="{ width: '100%' }" @change="timeTypeOptionsChangeEvent">
+                <el-option v-for="(item,index) in timeTypeOptions" :key="index" :label="item.label" :value="item.value" />
+              </el-select>
           </el-form-item>
 
           <template v-if="isShowOptionsByTypeCode()">
@@ -734,15 +789,7 @@
             <el-switch v-model="activeData.filterable" />
           </el-form-item>
          
-          <el-form-item v-if="activeData.__config__.showTip !== undefined" label="显示提示">
-            <el-switch v-model="activeData.__config__.showTip" />
-          </el-form-item>
-          <el-form-item v-if="activeData.__config__.tag === 'el-upload'" label="多选文件">
-            <el-switch v-model="activeData.multiple" />
-          </el-form-item>
-          <el-form-item v-if="activeData['auto-upload'] !== undefined" label="自动上传">
-            <el-switch v-model="activeData['auto-upload']" />
-          </el-form-item>
+         
           
           <!-- <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
             <el-switch v-model="activeData.disabled" />
@@ -843,6 +890,9 @@ import {
 } from '@/components/generator/config'
 import { getDrawingList, saveFormConf } from '@/utils/db'
 import {getCountryListApi, getCityListApi} from '@/utils/api.js'
+//加载富文本编辑器操作
+import loadTinymce from '@/utils/loadTinymce'
+import { debounce } from 'throttle-debounce'
 
 const dateTimeFormat = {
   date: 'yyyy-MM-dd',
@@ -927,6 +977,21 @@ export default {
           "format": "yyyy-MM-dd HH:mm:ss",
           "value-format": "yyyy-MM-dd HH:mm:ss",
         }
+      ],
+      timeTypeOptions: [
+        {
+          label: '时分秒(HH:mm:ss)',
+          value: 'HH:mm:ss',
+          "format": "HH:mm:ss",
+          "value-format": "HH:mm:ss",
+        },
+        {
+          label: '时分(HH:mm)',
+          value: 'HH:mm',
+          "format": "HH:mm",
+          "value-format": "HH:mm",
+        },
+       
       ],
       dateTypeIsRangeOptions:[//日期类型，单个日期，范围日期
         {label:'单个日期',value:false},
@@ -1072,7 +1137,33 @@ export default {
         saveFormConf(val)
       },
       deep: true
-    },    
+    }, 
+    // 'activeData.__config__.typeCode':function(n,o){
+    //   this.$nextTick(()=>{
+    //     console.log(n,o,"变化")
+    //     if(o !== undefined){
+    //       if(n === 9){
+    //         //附件上传--上传说明初始化插件
+    //         this.uploadDesEditerInit();
+    //       }else{
+    //         //销毁--附件上传--上传说明编辑器
+    //         this.destroyTinymce();
+    //       }
+    //     }
+    //   });
+    // },   
+    'activeData.__vModel__':function(n,o){
+      this.$nextTick(async ()=>{
+        if(o !== undefined){
+          if(this.activeData.__config__.typeCode === 9){
+             //销毁--附件上传--上传说明编辑器
+            await this.destroyTinymce();
+             //附件上传--上传说明初始化插件
+            await this.uploadDesEditerInit();
+          }
+        }
+      });
+    }
   },
   created(){
     console.log("正则列表",this.$store.getters.getRegList)
@@ -1080,7 +1171,8 @@ export default {
   },
   mounted(){
     
-    
+    //附件上传--上传说明初始化插件
+    this.uploadDesEditerInit()
   },
   methods: {
     addSelectItem() {
@@ -1230,9 +1322,12 @@ export default {
       let list = this.tagList;
       let txt = '';
       list.forEach((item)=>{
-        item.options.forEach((option)=>{
-            // if(option.__config__.tagIcon == this.activeData.__config__.tagIcon) txt = option.__config__.label;
-            if(option.__config__.typeCode == this.activeData.__config__.typeCode) txt = option.__config__.label;
+        item.options.forEach((option)=>{          
+          if(option.__config__.typeCode === this.activeData.__config__.typeCode){
+            if( [2].includes(this.activeData.__config__.typeCode) ){
+              txt = option.__config__.label;
+            }else if(option.__config__.tag == this.activeData.__config__.tag) txt = option.__config__.label;
+          }
         });
       });
       return txt;
@@ -1246,6 +1341,8 @@ export default {
     //字段变化
     async tableFieldChange(){
       this.activeData.__config__.showByPrependField = undefined;//字段变化清空前置字段
+      //针对换机模板--附件上传组件，动态修改上传文件提交字段
+      if(this.activeData.__config__.typeCode === 9) this.activeData.name = this.activeData.__vModel__;
       // console.log("字段变化.........")
       await setTimeout(()=>{
         //根据存储数据，更新字段池内容
@@ -1448,7 +1545,7 @@ export default {
     },
     //是否展示正则规则
     isShowRegListByTypeCode(){      
-      const noPropTypeCode = [7, 4,5,6];//不需要默认值的组件类型：7、下拉框;4,是否选择；5,时间选择组件；6，日期选择组件
+      const noPropTypeCode = [7, 4,5,6,8,9];//不需要默认值的组件类型：7、下拉框;4,是否选择；5,时间选择组件；6，日期选择组件;8,展示文本;9,附件上传；
       if(Array.isArray(this.activeData.__config__.regList) && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
       return false;
     },
@@ -1458,15 +1555,108 @@ export default {
       if(['el-checkbox-group', 'el-radio-group', 'el-select'].indexOf(this.activeData.__config__.tag) > -1 && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
       return false;
     },
+    //是否展示日期选择器范围参数属性
+    isShowRangeDatePropsByTypeCode(){      
+      const noPropTypeCode = [5,6];//需要判断的组件类型：5,自定义换机时间选择器；6,自定义换机日期选择器；
+      if(noPropTypeCode.includes( this.activeData.__config__.typeCode )) return false;
+      return true;
+    },
      /****************************************************************************部分属性开启禁用条件，--针对换机模板组件，部分属性屏蔽eee*******************************************/
     /**********************************************日期时间选择器处理sss************************************************************************************************/
     //换机模板组件--日期选择器切换类型（单个或者范围）
     dateTypeIsRangeOptionsEvent(){
+      this.activeData.__config__.isRange = this.activeData['is-range'];
       let dateOptions = this.activeData['is-range'] ? this.dateRangeTypeOptions : this.dateTypeOptions;
+      this.activeData.__config__.defaultValue = null;//值清空，避免冲突类型
       
       this.activeData.type = dateOptions[0].value;
       this.activeData.format = dateOptions[0].format;
       this.activeData['value-format'] = dateOptions[0]['value-format'];
+    },
+    //换机模板组件--日期选择器切换类型（单个或者范围）
+    timeTypeIsRangeOptionsEvent(){
+      this.activeData.__config__.isRange = this.activeData['is-range'];
+      this.activeData.__config__.defaultValue = null;//值清空，避免冲突类型
+    },
+    //换机模板组件--日期时间选择器监听其是否超过当前日期时间，切换则清空值
+    noOverCurrDateChangeEvent(){
+      this.activeData.__config__.defaultValue = null;//值清空，避免冲突类型
+    },
+    //自定义换机模板--时间选择器纬度切换
+    timeTypeOptionsChangeEvent(){
+      this.$set(this.activeData.__config__, 'defaultValue', null)
+      this.$set(this.activeData, 'value-format', this.activeData.format)
+    },
+    /**********************************************日期时间选择器处理eee************************************************************************************************/
+    //附件上传--上传说明初始化插件
+    async uploadDesEditerInit(){
+      const _this = this;
+      loadTinymce(tinymce => {
+        // eslint-disable-next-line global-require 
+        require('@/components/tinymce/zh_CN')
+        tinymce.init({
+            selector: '#uploadDesEditer', //容器，可使用css选择器
+            language:'zh_CN', //调用放在langs文件夹内的语言包
+            // menubar: 'file edit insert view format table',
+            menubar:false,
+            plugins:[],
+            toolbar:[
+  'code searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent blockquote removeformat subscript superscript codesample hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table emoticons forecolor backcolor fullscreen'
+],
+            height: 300,
+            branding: false,
+            object_resizing: false,
+            end_container_on_empty_block: true,
+            powerpaste_word_import: 'clean',
+            code_dialog_height: 450,
+            code_dialog_width: 1000,
+            advlist_bullet_styles: 'square',
+            advlist_number_styles: 'default',
+            default_link_target: '_blank',
+            link_title: false,
+            nonbreaking_force_tab: true,
+            init_instance_callback: (editor) => {
+              console.log("初始化之后的回调")
+              editor.setContent( this.activeData.__config__.uploadDes || '<p></p>' )
+              this.vModel(editor)
+            }
+        });
+
+      })
+
+    },
+    //销毁--附件上传，上传说明初始化插件
+    async destroyTinymce() {
+      if (!window.tinymce) return
+      const _tinymce = window.tinymce.get('uploadDesEditer')
+      if (_tinymce) {
+        _tinymce.destroy()
+      }
+    },
+    //确定上传说明,设置到组件
+    confirmUploadDes(content){
+      const _tinymce = tinymce.get('uploadDesEditer');
+      if (_tinymce) {
+        if(this.activeData.__config__.typeCode === 9) this.activeData.__config__.uploadDes = _tinymce.getContent();      
+      }
+      
+    },
+    //监听写入上传附件说明编辑器，更新配置的
+    vModel(editor) {
+      // 控制连续写入时setContent的触发频率
+      const debounceSetContent = debounce(250, editor.setContent)
+      this.$watch('value', (val, prevVal) => {
+        if (editor && val !== prevVal && val !== editor.getContent()) {
+          if (typeof val !== 'string') val = val.toString()
+          debounceSetContent.call(editor, val)
+        }
+      })
+      //监听编辑器变化
+      editor.on('change', () => {
+        this.$nextTick(()=>{
+          this.confirmUploadDes()
+        })
+      });
     },
   }
 }

@@ -47,7 +47,9 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    
+  },
   mounted() {
     window.addEventListener('keydown', this.preventDefaultSave)
     const clipboard = new ClipboardJS('.copy-json-btn', {
@@ -77,7 +79,6 @@ export default {
       loadBeautifier(btf => {
         beautifier = btf
         this.beautifierJson = beautifier.js(this.jsonStr, beautifierConf.js)
-
         loadMonaco(val => {
           monaco = val
           this.setEditorValue('editorJson', this.beautifierJson)
@@ -87,7 +88,7 @@ export default {
     onClose() {},
     setEditorValue(id, codeStr) {
       if (this.jsonEditor) {
-        this.jsonEditor.setValue(codeStr)
+        this.jsonEditor.setValue(codeStr)       
       } else {
         this.jsonEditor = monaco.editor.create(document.getElementById(id), {
           value: codeStr,
