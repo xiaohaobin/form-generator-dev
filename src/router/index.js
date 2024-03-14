@@ -8,40 +8,16 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/index',
+    path: '/formDesignerIndex',
     name: 'indexPage',
     component: index,
-    redirect: '/index/template',
+    redirect: '/formDesignerIndex/template',
     children: [
-      // {
-      //   path: '/index/template', // 子页面路径
-      //   name: 'template',
-      //   component:() => import('@/views/template/index.vue'),
-      //   langKey: 'templateManager'
-      // },
-      // {
-      //   path: '/index/regular', // 子页面路径
-      //   name: 'regular',
-      //   component:() => import('@/views/regular/index.vue'),
-      //   langKey: 'regularManager'
-      // },
-      // {
-      //   path: '/index/field', // 子页面路径
-      //   name: 'field',
-      //   component:() => import('@/views/field/index.vue'),
-      //   langKey: 'fieldManager'
-      // },
-      // {
-      //   path: '/index/commonAPI', // 子页面路径
-      //   name: 'commonAPI',
-      //   component:() => import('@/views/commonAPI/index.vue'),
-      //   langKey: 'commonAPIManager'
-      // },
     ].concat(routerData)
   },
   {
     // path: '/',
-    path: '/home',
+    path: '/formDesignerHome',
     name: 'home',
     component: Home
   },
@@ -62,7 +38,7 @@ const routes = [
   },
   {
     path: '*', // 重定向页面地址
-    redirect: '/index'
+    redirect: '/formDesignerIndex'
     // redirect:'/systemInfo/productInfo',//默认页面
   }
 ]

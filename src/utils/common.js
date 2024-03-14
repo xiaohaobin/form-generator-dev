@@ -113,6 +113,7 @@ function cityListTranslate(list){
   export default {
     resetDataType,
     localStorage:window.localStorage,
+    sessionStorage:window.sessionStorage,
     elAutocompleteFn,
     countryListTranslate,
     cityListTranslate

@@ -90,7 +90,7 @@ $lighterBlue: #409EFF;
 .action-bar{
   position: relative;
   height: 42px;
-  text-align: right;
+  // text-align: right;
   padding: 0 15px;
   box-sizing: border-box;;
   border: 1px solid #f1e8e8;
@@ -99,6 +99,20 @@ $lighterBlue: #409EFF;
   .delete-btn{
     color: #F56C6C;
   }
+}
+.tempTitleBox{
+  span{
+    display: inline-block;
+    max-width: 250px;
+    width:auto;
+    overflow: hidden;text-overflow: ellipsis;white-space: nowrap;
+    text-align: left;
+  }  
+}
+.tempTitleBoxBtn{
+  margin-left: 5px;
+  padding-top: 5px !important;
+  margin-top: 5px;
 }
 .logo-wrapper{
   position: relative;

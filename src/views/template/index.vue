@@ -416,13 +416,16 @@
       },
       //编辑、选择模板类型
       editTempSubmitForm(){
+        let params = {tempType: this.tempType, ...this.currEditItem};
+        params.tempTypeName = this.tempTypeOptions.filter((item)=>{return item.value === this.tempType})[0].label;
+
         this.$store.commit(
           'setCurrTempInfo',
-          this.currEditItem
+          params
         );
         // this.$com.localStorage.setItem('currTempInfo',JSON.stringify(this.currEditItem));
         this.$router.push(
-            {path:"/home",params:{id:123}}//指定跳转到某个嵌套子页面
+            {name:"home",params }//指定跳转到某个嵌套子页面
         )
       },
       //审核模板

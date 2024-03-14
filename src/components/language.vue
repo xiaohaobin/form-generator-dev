@@ -70,11 +70,13 @@
         //   'setLangOption',
         //   this.$i18n.locale
         // );
-
+        this.$nextTick(()=>{
+          location.reload();
+        })
        
 
         //设置语言环境
-        this.setLanguage();
+        // this.setLanguage();
         // if(this.$route.name != "login"){
         //   this.$route.name != Cookies.get('subNavName') && this.$router.replace({ name: Cookies.get('subNavName')})
         // }

@@ -1,6 +1,6 @@
 const routerData = [
     {
-        path: '/index/template', // 子页面路径
+        path: '/formDesignerIndex/template', // 子页面路径
         name: 'template',
         component:() => import('@/views/template/index.vue'),
         langKey: 'templateManager',
@@ -9,7 +9,7 @@ const routerData = [
         iconClass:'el-icon-menu',
     },
     {
-        path: '/index/regular', // 子页面路径
+        path: '/formDesignerIndex/regular', // 子页面路径
         name: 'regular',
         component:() => import('@/views/regular/index.vue'),
         langKey: 'regularManager',
@@ -18,7 +18,7 @@ const routerData = [
         iconClass:'el-icon-folder-checked',
     },
     {
-        path: '/index/field', // 子页面路径
+        path: '/formDesignerIndex/field', // 子页面路径
         name: 'field',
         component:() => import('@/views/field/index.vue'),
         langKey: 'fieldManager',
@@ -27,7 +27,7 @@ const routerData = [
         iconClass:'el-icon-edit-outline',
     },
     {
-        path: '/index/commonAPI', // 子页面路径
+        path: '/formDesignerIndex/commonAPI', // 子页面路径
         name: 'commonAPI',
         component:() => import('@/views/commonAPI/index.vue'),
         langKey: 'commonAPIManager',

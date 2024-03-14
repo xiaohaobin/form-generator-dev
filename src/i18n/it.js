@@ -1033,4 +1033,7 @@ t.deviceManage.verifyRegisterNameNotice = 'Only letters, numbers, spaces, "." an
 t.deviceManage.verifyRegisterNameNotice2 = 'The register name length must be in the range of 1 to 127 bytes.'
 t.deviceManage.checkboxNotice = 'Please check the checkbox of the register in the table row before you can operate.'
 
+//20240221 config.js
+t.singleLineOfText = 'singola riga di testo'
+
 export default t

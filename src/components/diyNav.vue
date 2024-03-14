@@ -53,9 +53,9 @@
         this.defaultActive = i
       },
       toHome(){
-        this.$router.replace(
+        this.$router.push(
             // { name: 'main'}
-            {path:"/home"}//指定跳转到某个嵌套子页面
+            {name:"home"}//指定跳转到某个嵌套子页面
         )
       },
       handleOpen(key, keyPath) {

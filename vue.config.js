@@ -61,7 +61,7 @@ module.exports = {
       },
       '/local':{//本地的接口
               // target:'http://20.60.5.235:8848/ShineMaster-X/cgi-bin/', // 你请求的第三方接口域名或者ip http://20.60.5.235:51070/cgi-bin json\form-generator\regular\regularList.json
-              target:'http://20.60.5.235:54841/json/form-generator/', // 你请求的第三方接口域名或者ip 直接在vscode运行打包的项目
+              target:'http://20.60.5.235:59463/json/form-generator/', // 你请求的第三方接口域名或者ip 直接在vscode运行打包的项目
               changeOrigin:true, // 在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样服务端和服务端进行数据的交互就不会有跨域问题
               pathRewrite:{
                 '^/local': ''  // 替换target中的请求地址，也就是说以后你在请求https://www.runoob.com/这个地址的时候直接写成/api即可。
@@ -75,7 +75,7 @@ module.exports = {
               }
       },
       '/root':{//本地
-              target:'http://20.60.5.235:54841/', // http://20.60.5.235:8848/
+              target:'http://20.60.5.235:59463/', // http://20.60.5.235:8848/
               changeOrigin:true, // 在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样服务端和服务端进行数据的交互就不会有跨域问题
               pathRewrite:{
                 '^/root': ''  // 替换target中的请求地址，也就是说以后你在请求https://www.runoob.com/这个地址的时候直接写成/api即可。

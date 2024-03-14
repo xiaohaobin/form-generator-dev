@@ -893,6 +893,7 @@ import {getCountryListApi, getCityListApi} from '@/utils/api.js'
 //加载富文本编辑器操作
 import loadTinymce from '@/utils/loadTinymce'
 import { debounce } from 'throttle-debounce'
+import { plugins, toolbar } from '@/components/tinymce/config'
 
 const dateTimeFormat = {
   date: 'yyyy-MM-dd',
@@ -1592,17 +1593,16 @@ export default {
     async uploadDesEditerInit(){
       const _this = this;
       loadTinymce(tinymce => {
-        // eslint-disable-next-line global-require 
+        // eslint-disable-next-line global-require         
         require('@/components/tinymce/zh_CN')
         tinymce.init({
             selector: '#uploadDesEditer', //容器，可使用css选择器
             language:'zh_CN', //调用放在langs文件夹内的语言包
-            // menubar: 'file edit insert view format table',
             menubar:false,
             plugins:[],
-            toolbar:[
-  'code searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent blockquote removeformat subscript superscript codesample hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table emoticons forecolor backcolor fullscreen'
-],
+            // menubar: 'file edit insert view format table',
+            // plugins,
+            toolbar,
             height: 300,
             branding: false,
             object_resizing: false,

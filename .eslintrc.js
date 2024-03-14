@@ -52,13 +52,14 @@ module.exports = {
   "arrow-spacing":0,
   "object-curly-newline":0,
   
-  // "no-alert": 0,//禁止使用alert confirm prompt
+  "no-alert": 0,//禁止使用alert confirm prompt
   // "no-array-constructor": 2,//禁止使用数组构造器
   // "no-bitwise": 0,//禁止使用按位运算符
   // "no-caller": 1,//禁止使用arguments.caller或arguments.callee
   // "no-catch-shadow": 2,//禁止catch子句参数与外部作用域变量同名
   // "no-class-assign": 2,//禁止给类赋值
-  // "no-cond-assign": 2,//禁止在条件表达式中使用赋值语句
+  "no-cond-assign": 0,//禁止在条件表达式中使用赋值语句
+  "space-unary-ops":0,
   // "no-console": 2,//禁止使用console
   // "no-const-assign": 2,//禁止修改const声明的变量
   // "no-constant-condition": 2,//禁止在条件中使用常量表达式 if(true) if(1)
@@ -78,11 +79,11 @@ module.exports = {
   // "no-eq-null": 2,//禁止对null使用==或!=运算符
   // "no-eval": 1,//禁止使用eval
   // "no-ex-assign": 2,//禁止给catch语句中的异常参数赋值
-  // "no-extend-native": 2,//禁止扩展native对象
+  "no-extend-native": 0,//禁止扩展native对象
   // "no-extra-bind": 2,//禁止不必要的函数绑定
   // "no-extra-boolean-cast": 2,//禁止不必要的bool转换
   // "no-extra-parens": 2,//禁止非必要的括号
-  // "no-extra-semi": 2,//禁止多余的冒号
+  "no-extra-semi": 0,//禁止多余的冒号
   // "no-fallthrough": 1,//禁止switch穿透
   // "no-floating-decimal": 2,//禁止省略浮点数中的0 .5 3.
   // "no-func-assign": 2,//禁止重复的函数声明
@@ -97,7 +98,7 @@ module.exports = {
   // "no-label-var": 2,//label名不能与var声明的变量名相同
   // "no-labels": 2,//禁止标签声明
   // "no-lone-blocks": 2,//禁止不必要的嵌套块
-  // "no-lonely-if": 2,//禁止else语句内只有if语句
+  "no-lonely-if": 0,//禁止else语句内只有if语句
   // "no-loop-func": 1,//禁止在循环中使用函数（如果没有引用外部变量不形成闭包就可以）
   // "no-mixed-requires": [0, false],//声明时不能混用声明类型
   // "no-mixed-spaces-and-tabs": [2, false],//禁止混用tab和空格
@@ -139,7 +140,8 @@ module.exports = {
   // "no-this-before-super": 0,//在调用super()之前不能使用this或super
   // "no-throw-literal": 2,//禁止抛出字面量错误 throw "error";
   "no-undef": 0,//不能有未定义的变量
-  // "no-undef-init": 2,//变量初始化时不能直接给它赋值为undefined
+  "no-undef-init": 0,//变量初始化时不能直接给它赋值为undefined
+  "no-unsafe-finally":0,
   // "no-undefined": 2,//不能使用undefined
   // "no-unexpected-multiline": 2,//避免多行表达式
   // "no-underscore-dangle": 1,//标识符不能以_开头或结尾
@@ -156,7 +158,7 @@ module.exports = {
   // "no-warning-comments": [1, { "terms": ["todo", "fixme", "xxx"], "location": "start" }],//不能有警告备注
   // "no-with": 2,//禁用with
   
-  // "array-bracket-spacing": [2, "never"],//是否允许非空数组里面有多余的空格
+  "array-bracket-spacing": 0,//是否允许非空数组里面有多余的空格
   // "arrow-parens": 0,//箭头函数用小括号括起来
   // "arrow-spacing": 0,//=>的前/后括号
   // "accessor-pairs": 0,//在对象中使用getter/setter
@@ -174,16 +176,20 @@ module.exports = {
   "consistent-return": 0,//return 后面是否允许省略
   // "consistent-this": [2, "that"],//this别名
   // "constructor-super": 0,//非派生类不能调用super，派生类必须调用super
-  // "curly": [2, "all"],//必须使用 if(){} 中的{}
-  // "default-case": 2,//switch语句最后必须有default
+  "curly": 0,//必须使用 if(){} 中的{}
+  "default-case": 0,//switch语句最后必须有default
   // "dot-location": 0,//对象访问符的位置，换行的时候在行首还是行尾
+  "no-restricted-syntax":0,
+  "no-global-assign":0,
   "dot-notation": [0, { "allowKeywords": true }],//避免不必要的方括号
   "eol-last": 0,//文件以单一的换行符结束
   "eqeqeq": 0,//必须使用全等
   "func-names": 0,//函数表达式必须有名字
+  "no-mixed-operators":0,
+  "no-restricted-properties":0,
   // "func-style": [0, "declaration"],//函数风格，规定只能使用函数声明/函数表达式
   // "generator-star-spacing": 0,//生成器函数*的前后空格
-  // "guard-for-in": 0,//for in循环要用if语句过滤
+  "guard-for-in": 0,//for in循环要用if语句过滤
   // "handle-callback-err": 0,//nodejs 处理错误
   // "id-length": 0,//变量名长度
   // "indent": [2, 4],//缩进风格
@@ -191,7 +197,7 @@ module.exports = {
   "key-spacing": [0, { "beforeColon": false, "afterColon": true }],//对象字面量中冒号的前后空格
   // "lines-around-comment": 0,//行前/行后备注
   // "max-depth": [0, 4],//嵌套块深度
-  // "max-len": [0, 80, 4],//字符串最大长度
+  "max-len": [0, 80, 4],//字符串最大长度
   // "max-nested-callbacks": [0, 2],//回调嵌套深度
   // "max-params": [0, 3],//函数最多只能有3个参数
   // "max-statements": [0, 10],//函数内最多有几个声明
@@ -207,12 +213,13 @@ module.exports = {
   "prefer-const": 0,//首选const
   "block-spacing":0,
   "nonblock-statement-body-position":0,
+  "prefer-destructuring":0,
   // "prefer-spread": 0,//首选展开运算
   // "prefer-reflect": 0,//首选Reflect的方法
   // "quotes": [1, "single"],//引号类型 `` "" ''
   "quotes":0,//引号类型 `` "" ''
   "quote-props":[0, "always"],//对象字面量中的属性名是否强制双引号
-  // "radix": 2,//parseInt必须指定第二个参数
+  "radix": 0,//parseInt必须指定第二个参数
   // "id-match": 0,//命名检测
   // "require-yield": 0,//生成器函数必须有yield
   "semi": 0,//语句强制分号结尾
@@ -224,7 +231,7 @@ module.exports = {
   "space-in-parens": 0,//小括号里面要不要有空格
   "space-infix-ops": 0,//中缀操作符周围要不要有空格
   // "space-return-throw-case": 2,//return throw case后面要不要加空格
-  // "space-unary-ops": [0, { "words": true, "nonwords": false }],//一元运算符的前/后要不要加空格
+  "space-unary-ops": [0, { "words": true, "nonwords": false }],//一元运算符的前/后要不要加空格
   // "spaced-comment": 0,//注释风格要不要有空格什么的
   // "strict": 2,//使用严格模式
   // "use-isnan": 2,//禁止比较时使用NaN，只能用isNaN()

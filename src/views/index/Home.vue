@@ -2,11 +2,8 @@
   <div class="container">
     <!-- 左边模块sss --> 
     <div class="left-board">
-      <div class="logo-wrapper" style="display: flex;">
-       
-        <el-link @click="jumpPreview" :title="$t('preview')" class="el-icon-view"></el-link>
+      <div class="logo-wrapper" style="display: flex;">        
         <language></language>
-        <el-link @click="toIndex" title="返回首页" class="el-icon-s-home"></el-link>
       </div>
       <el-scrollbar class="left-scrollbar">
         <div class="components-list">
@@ -24,23 +21,22 @@
               :sort="false"
               @end="onEnd"
             >
-              <div
+            <div
                 v-for="(element, index) in item.list"
                 :key="index"
                 class="components-item"
                 @click="addComponent(element)"
               >
-                <div class="components-body">
+                <div class="components-body" v-if="element.__config__.typeCode !== undefined">
                     <div class="flex-center">
                         <svg-icon :icon-class="element.__config__.tagIcon" />
                     </div>
                     <div class="flex-center mt-5">
                         {{ element.__config__.label }}
                     </div>
-                  
-                  
                 </div>
-              </div>
+            </div>
+             
             </draggable>
           </div>
         </div>
@@ -50,22 +46,53 @@
 
     <!-- 中间布局模块sss --> 
     <div class="center-board">
-      <div class="action-bar">
-        <el-button icon="el-icon-video-play" type="text" @click="run">
-          运行
-        </el-button>
-        <el-button icon="el-icon-view" type="text" @click="showJson">
-          查看json
-        </el-button>
-        <el-button icon="el-icon-download" type="text" @click="download">
-          导出vue文件
-        </el-button>
-        <el-button class="copy-btn-main" icon="el-icon-document-copy" type="text" @click="copy">
-          复制代码
-        </el-button>
-        <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty">
-          清空
-        </el-button>
+      <div class="action-bar flex-space-between">
+        <div class="flex-flex-start" v-if="formDesignerTempParams && formDesignerTempParams.tempName">
+            <el-button style="color:#000;" type="text" class="tempTitleBox" :title="formDesignerTempParams.tempName + '('+ formDesignerTempParams.tempTypeName +')'">
+            {{formDesignerTempParams.tempName + "("+ formDesignerTempParams.tempTypeName +")"}}
+            </el-button>
+
+            <div>
+                <el-popover
+                    placement="right"
+                    width="250"
+                    v-model="tempNameEditerVisible">
+                    <div class="mb-5"><el-input v-model="formDesignerTempParams.tempName" size="mini"></el-input></div>
+                    <div style="text-align: right; margin: 0">
+                        <el-button size="mini" type="text" @click="tempNameEditerVisible = false">取消</el-button>
+                        <el-button type="primary" size="mini" @click="tempNameEditerVisible = false">确定</el-button>
+                    </div>
+                    <el-link icon="el-icon-edit" class="tempTitleBoxBtn" slot="reference" title="点击编辑模板名称"></el-link>
+                </el-popover>
+            </div>
+           
+            
+        </div>
+        <div>
+            <el-button icon="el-icon-s-home" type="text" @click="toIndex">
+            {{ '返回首页' }}
+            </el-button>       
+            <el-button icon="el-icon-video-play" type="text" @click="run">
+            运行
+            </el-button>
+            <el-button icon="el-icon-view" type="text" @click="showJson">
+            查看json
+            </el-button>
+            <el-button icon="el-icon-download" type="text" @click="download">
+            导出vue文件
+            </el-button>
+            <el-button class="copy-btn-main" icon="el-icon-document-copy" type="text" @click="copy">
+            复制代码
+            </el-button>
+            <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty">
+            清空
+            </el-button>
+            <el-button icon="el-icon-view" type="text" @click="jumpPreview">
+            {{ $t('preview') }}
+            </el-button>
+        </div>
+        
+        
       </div>
       <el-scrollbar class="center-scrollbar">
         <el-row class="center-board-row" :gutter="formConf.gutter">
@@ -138,6 +165,8 @@
   </div>
 </template>
 
+
+
 <script>
 import draggable from 'vuedraggable'//拖拽组件
 import { debounce } from 'throttle-debounce'//限制函数的执行频率
@@ -168,6 +197,8 @@ import {
 import loadBeautifier from '@/utils/loadBeautifier'
 
 import language from '@/components/language.vue'
+
+
 
 let beautifier
 const emptyActiveData = { style: {}, autosize: {} }
@@ -225,6 +256,8 @@ export default {
             ],
             rightPanelDOMKey:+new Date() + '_right_panel',
             draggableDOMKey:+new Date() + '_draggable',
+            formDesignerTempParams:{},//表单模板相关数据
+            tempNameEditerVisible:false,
         }
     },
     computed: {
@@ -293,14 +326,26 @@ export default {
         }
     },
     created() {
-        console.log('....333',process.env.NODE_ENV,this.$route.params.id)
+        const _this = this;
+        let formDesignerTempParams = this.$store.getters.getCurrTempInfo;
+         //模板管理页面传递的数据进行会话存储
+        this.setSessionStore('formDesignerTempParams',formDesignerTempParams);
+        this.formDesignerTempParams = (JSON.stringify(formDesignerTempParams) === '{}' ? this.getSessionStore('formDesignerTempParams') : formDesignerTempParams)
+
+        console.log('this.formDesignerTempParams', this.formDesignerTempParams)
+        console.log('路由传参：', this.$route)
         // console.log( this.$t('validate.format', {attr:'邮箱'} ))
         // console.log( this.$t('prompt.info', {handle:"国际化拼接 "} ))
-        
+
+        //模板管理页面跳转进来的时候，重载提示弹出
+        // window.onbeforeunload = function(event) {
+        //     console.log('监听重新加载')
+        //     if(_this.$route.name == 'home') event.returnValue = "重载页面提示弹窗";            
+        // };
     },
     mounted() {
-        // console.log(this.$store.getters.getCurrTempInfo.tempName,"当前所选模板信息",this.$com.localStorage.getItem('currTempInfo'))
-
+        console.log(this.$store.getters.getCurrTempInfo,"当前所选模板信息",this.$com.localStorage.getItem('currTempInfo'))
+        
         if (Array.isArray(drawingListInDB) && drawingListInDB.length > 0) {
             this.drawingList = drawingListInDB
         } else {
@@ -581,7 +626,7 @@ export default {
             this.formConf = data
         },
         jumpPreview(){
-            this.$router.replace(
+            this.$router.push(
                 { name: "parser2" },
                 ()=>{
                     location.reload();
@@ -597,7 +642,7 @@ export default {
             this.$store.commit('setCurrTempInfo', {});
             // this.$com.localStorage.removeItem('currTempInfo')
             this.$router.push({ 
-                path: '/index'
+                name: 'indexPage'
             })
         },
         /**
@@ -652,7 +697,7 @@ export default {
             // console.log(this.drawingList,"最新数据")
             //判断配置表中所有组件字段名是否都根据服务器字段表来
             const bb = this.isBindServerField();
-            console.log(bb,"判断配置表中所有组件字段名是否都根据服务器字段表来")
+            console.log(bb,"判断配置表中所有组件字段名是否都根据服务器字段表来",this.drawingList,this.formDesignerTempParams)
             if(!bb) {
                 this.$message({
                     message: '还有组件未绑定数据库字段',
@@ -672,7 +717,7 @@ export default {
                 if(currentItem.__config__.typeCode === 2 && currentItem.__config__.layout == "rowFormItem"){//组串类组件
                     let childrenList = currentItem.__config__.children;
                     if(!fieldList.includes(childrenList[0].__vModel__)) b = false                    
-                }else if(currentItem.__config__.layout == "colFormItem"){
+                }else if(currentItem.__config__.layout == "colFormItem" && currentItem.__config__.typeCode !== 10){//纯文本不需要绑定字段
                     if(!fieldList.includes(currentItem.__vModel__)) b = false
                 }
             })
@@ -712,6 +757,17 @@ export default {
                 }
             });                 
         },
+        //模板管理页面传递的数据进行会话存储
+        setSessionStore(name,params){
+            let p = JSON.stringify(params);
+            if(p !== '{}') this.$com.sessionStorage.setItem(name,JSON.stringify(params));
+        },
+        //模板管理页面传递的数据进行会话存储
+        getSessionStore(name){
+            let p = this.$com.sessionStorage.getItem(name);
+            return JSON.parse(p)
+        },
+        
     }
 }
 </script>

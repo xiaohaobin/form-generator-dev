@@ -1,3 +1,5 @@
+import i18n from '@/i18n'
+
 // 表单属性【右面板】
 export const formConf = {
     formRef: 'elForm',
@@ -22,7 +24,7 @@ export const inputComponents = [
     {
     // 组件的自定义配置
         __config__: {
-            label: '单行文本',
+            label: i18n.messages[i18n.locale].singleLineOfText,//'单行文本',
             labelWidth: null,
             showLabel: true,
             changeTag: true,
@@ -873,7 +875,8 @@ export const layoutComponents = [
             tagIcon: 'row',
             label: '行容器',
             layoutTree: true,
-            document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
+            document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes',
+            typeCode:200,
         },
         type: 'default',
         justify: 'start',
@@ -890,7 +893,7 @@ export const layoutComponents = [
             span: 24,
             layout: 'colFormItem',
             document: 'https://element.eleme.cn/#/zh-CN/component/button',
-            
+            typeCode:201,
         },
         __slot__: {
             default: '主要按钮'
