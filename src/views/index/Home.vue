@@ -630,7 +630,7 @@ export default {
                 { name: "parser2" },
                 ()=>{
                     location.reload();
-                    console.log("callbackk ")
+                    // console.log("callbackk ")
                 }
             );
             

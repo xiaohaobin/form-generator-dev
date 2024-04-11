@@ -37,10 +37,10 @@ export default {
   props: {},
   data() {
     return {
-      key2: +new Date(),
-      key3: (+new Date()) + 1000,
+      scoreData:localStorage.getItem("drawingItems"),
+      key3: +new Date(),
       formConf3: {
-        fields: testFormConf,
+        fields: [],
         // fields: fieldsList,
         __methods__: {
           clickTestButton1() {
@@ -70,10 +70,20 @@ export default {
     }
   },
   computed: {},
-  watch: {},
-  created() {},
-  mounted() {
+  watch: {
+    'formConf3.fields':function(n,o){
+      console.log("配置变化",n,o)
+      this.$nextTick(()=>{
+        this.key3 = +new Date()
+      })
+    }
+  },
+  created() {
     
+  },
+  mounted() {
+    this.formConf3.fields = testFormConf;
+    console.log('c')
   },
   methods: { 
     sumbitForm3(data) {

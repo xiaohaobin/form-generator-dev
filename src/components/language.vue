@@ -71,7 +71,7 @@
         //   this.$i18n.locale
         // );
         this.$nextTick(()=>{
-          location.reload();
+          // location.reload();
         })
        
 

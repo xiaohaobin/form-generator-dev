@@ -5,7 +5,7 @@ import Tinymce from '@/components/tinymce/index.vue'
 
 Vue.component('tinymce', Tinymce)
 Vue.prototype.$axios = axios
-
+console.info(1111111111111)
 const $previewApp = document.getElementById('previewApp')
 const childAttrs = {
   file: '',

@@ -114,6 +114,9 @@ export default {
      //上传组件设置 before-upload 属性，监听上传之前事件
      confClone = this.set_beforeUpload_by_typeCode9(confClone)
 
+     //上传组件成功之后 on-success 属性，监听事件
+     confClone = this.set_onSuccess_by_typeCode9(confClone)
+
     // console.log(confClone,"confClone")
     // console.log(dataObject,"dataObject")
     // 如果slots文件夹存在与当前tag同名的文件，则执行文件中的代码
@@ -168,6 +171,16 @@ export default {
           }else{
             return isRightSize
           }
+        }
+      }
+      return confClone
+    },
+    //上传组件成功之后 on-success 属性，监听事件
+    set_onSuccess_by_typeCode9(confClone){
+      if([9,109].includes( confClone.__config__.typeCode )){//针对换机申请模板自定义 组件---附件上传和原本的上传组件
+        confClone['on-success'] = function(response, file, fileList){
+          console.log(response, file, fileList,"on-success事件")
+          
         }
       }
       return confClone
