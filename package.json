@@ -14,7 +14,10 @@
   "dependencies": {
     "@babel/parser": "^7.7.4",
     "axios": "^0.19.2",
+    "body-parser": "^1.20.2",
     "caniuse-lite": "^1.0.30001591",
+    "chalk": "^4.1.2",
+    "chokidar": "^3.6.0",
     "clipboard": "^2.0.4",
     "core-js": "^3.6.5",
     "element-theme": "^2.0.1",

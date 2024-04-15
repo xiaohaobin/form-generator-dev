@@ -349,9 +349,9 @@
 
         getCommonAPIListApiByPage( this.$com.resetDataType(requestData) ).then(res => {
             console.log(res,"res")
-            if(res.result*1 === 0){
-              this.tableList = res.obj.datas;
-              this.pageConfig.total = res.obj.total;
+            if(res.code*1 === 200){
+              this.tableList = res.data;
+              this.pageConfig.total = res.totalCount;
             }
         }, err => {
           console.log(err)

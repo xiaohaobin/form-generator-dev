@@ -23,11 +23,23 @@ import com from '@/utils/common.js'
 import store from '@/store/store.js';
 
 import {
-requestLocal, requestSelf, requestRoot,request3
+requestLocal, requestSelf, requestRoot,request3, requestMock
 } from '@/utils/request.js';
 
 //初始api接口
 import {getRegularListApi, getFieldListApi} from '@/utils/api.js'
+
+
+
+/**
+ * @author xhb
+ * @description 生产环境默认都使用mock，如果正式用于生产环境时，记得去掉
+ */
+if (process.env.NODE_ENV === 'production') {
+  const { mockXHR } = require('@/utils/static.js')
+  mockXHR()
+}
+
 
 //防止注入尖括号
 // xhb.inputPreventXssEvent();
@@ -41,6 +53,7 @@ Vue.prototype.$request3 = request3;
 Vue.prototype.$requestSelf = requestSelf;
 Vue.prototype.$requestLocal = requestLocal;
 Vue.prototype.$requestRoot = requestRoot;
+Vue.prototype.$requestMock = requestMock;
 //开发环境使用本地local接口，生产环境使用第三方接口
 Vue.prototype.$request = Vue.prototype.isDevelopment ? requestLocal : request3;
 
@@ -71,13 +84,13 @@ async function initAllLibData(){
     //使用await同步操作代替then回调异步操作，直接输出数据
     
     const regularListRes = await getRegularListApi( com.resetDataType({lang:'cn'}) );// com.resetDataType设置输入数据类型（参数1，为要传输的数据，参数2位数据类型,'json','formData',不传为键值对）
-    if(regularListRes.result === 0) Vue.prototype.$store.commit('updateRegList', regularListRes.obj);
+    if(regularListRes.code === 200) Vue.prototype.$store.commit('updateRegList', regularListRes.obj);
     // console.log(regularListRes,"regularListRes")
 
     //getFieldListApi
     //使用await同步操作代替then回调异步操作，直接输出数据
     const fieldListRes = await getFieldListApi();//直接接受一个对象，是传递json格式
-    if(fieldListRes.result === 0) Vue.prototype.$store.commit('updateFieldList', fieldListRes.obj);
+    if(fieldListRes.code === 200) Vue.prototype.$store.commit('updateFieldList', fieldListRes.obj);
     // console.log(fieldListRes,"fieldListRes")
   } catch (error) {
     console.warn('request请求后报错', error);

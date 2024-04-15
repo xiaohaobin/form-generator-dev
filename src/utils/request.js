@@ -1,3 +1,4 @@
+import { baseURL } from '@/config'
 import axios from "axios";
 import xhb from "@/utils/xhb.plugin.js";//自定义的
 // console.log("request.js",xhbCom)
@@ -7,6 +8,8 @@ import { Loading,Message } from 'element-ui';//element UI
 import i18n from '@/i18n'
 // console.log(i18n.messages[i18n.locale],"i18n")
 let t = i18n.messages[i18n.locale];//語言配置
+
+
 
 
 function premiseFn(fn){
@@ -346,6 +349,48 @@ export async function requestLocal(config,noLoading) {
 }
 
 
+/**
+ * 请求--模拟接口（主要接口）
+ * ==========================================================================================
+*/
+export async function requestMock(config,noLoading) {
+  let instance = axios.create({
+    baseURL,
+    timeout: 15 * 1000,
+    headers:{
+
+    },
+    params:{//设置默认请求参数
+      // author:"xhb",
+      language:getLanguageFn(),
+    }
+  })
+
+  // axios的拦截器(类似python的中间件的request)
+  instance.interceptors.request.use(aaa => {    
+     if(noLoading === undefined) loading = Loading.service(loadingOption);
+    return aaa
+  }, err => {
+    console.log(err);
+  })
+  // 数据返回拦截
+  instance.interceptors.response.use(aaa => {    
+    if(noLoading === undefined) loading.close();
+    aaa.data = JSON.parse( JSON.stringify( aaa.data) );    
+    if(config.noVerify === undefined)  requestErrorTodo(aaa);
+    return aaa.data;
+    
+  }, err => {
+     if(noLoading === undefined) loading.close();
+     errorMessageLayer();
+  });
+  
+  const lastRes = await instance(config)
+  // 直接返回
+  return lastRes
+}
+
+// =========================================================================================
 
 export async function requestRoot(config,noLoading) {
   let instance = axios.create({

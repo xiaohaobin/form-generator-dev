@@ -1,6 +1,6 @@
 // import Cookies from 'js-cookie'
 import {
-  requestLocal, requestSelf, requestRoot,request3
+  requestLocal, requestSelf, requestRoot,request3, requestMock
 } from '@/utils/request.js';
 // import store from '@/store/store.js';
 // import axios from "axios";
@@ -10,7 +10,8 @@ import {
 
 
 const isDev = window.OSSFormDesigner === 'development';//开发环境
-const Resquest = isDev ? requestLocal : request3;
+// const Resquest = isDev ? requestLocal : request3;//使用服务器代理请求方式模拟数据
+const Resquest = isDev ? requestMock : request3;//使用Mockjs方式模拟数据
 
 /**
  * 柯里化 axios請求成功返回輸出請求數據================================================================================================================================
@@ -39,7 +40,7 @@ let promisify = function promisify(fn) {
   const PA_request_fn = async (url, data, options = {}) => {  
       const defaultOptions = {
         // 请求方法, 默认get
-        method: 'GET',
+        method: "GET",
         // 是否显示loading
         isShowLoading: true,
         // 接口报错是否展示toast
@@ -58,7 +59,16 @@ let promisify = function promisify(fn) {
           const res = await PA_Request(params);
         //   console.log('request:', res, params);
           
-          if (res.result !== 0 && _options.noVerify === undefined) {
+          // if (res.result !== 0 && _options.noVerify === undefined) {
+          //   console.warn(`运行时错误提示,接口为${url}`);
+          //   // eslint-disable-next-line no-throw-literal
+          //   throw {
+          //     status: -1,
+          //     msg: `系统错误${res.msg}，请稍后再试～`,//打印的是後臺的msg字段
+          //   };
+          // }
+
+          if (res.code !== 200 && _options.noVerify === undefined) {
             console.warn(`运行时错误提示,接口为${url}`);
             // eslint-disable-next-line no-throw-literal
             throw {
@@ -84,7 +94,7 @@ let promisify = function promisify(fn) {
   }
   //=======================================================================================================================================================================
   // const hostName = 'http://20.60.5.235:54467/json/form-generator/';
-  // const response = await axios.get(hostName + '/regular/allList.json', { 
+  // const response = await axios.get(hostName + '/regular/allList', { 
   //   params:{ page: 1, limit: 20 },
   //   headers: {'X-Custom-Header': 'mmp'}, 
   // });
@@ -94,9 +104,9 @@ let promisify = function promisify(fn) {
   //定义接口调用==================================================================== =================================================
 
   //请求正则所有列表
-  export const getRegularListApi = data => PA_request_fn('regular/allList.json', data, { type: 'GET' });
+  export const getRegularListApi = data => PA_request_fn('regular/allList', data, { type: 'POST' });
   //请求正则分页列表
-  export const getRegularListApiByPage = data => PA_request_fn('regular/list.json', data, { type: 'GET' });
+  export const getRegularListApiByPage = data => PA_request_fn('regular/list', data, { type: 'POST' });
   //正则删除
   export const delRegular = data => PA_request_fn('regular/delRegular', data, { type: 'POST' });
   //正则新增
@@ -106,12 +116,12 @@ let promisify = function promisify(fn) {
 
 
   //请求字段所有列表
-  export const getFieldListApi = data => PA_request_fn('field/allList.json', data, { type: 'GET' });
+  export const getFieldListApi = data => PA_request_fn('field/allList', data, { type: 'POST' });
   //请求字段分页列表
-  export const getFieldListApiByPage = data => PA_request_fn('field/list.json', data, { type: 'GET' });
+  export const getFieldListApiByPage = data => PA_request_fn('field/list', data, { type: 'POST' });
   
     // 请求数据库表列表
-  export const getDatabaseTableList = data => PA_request_fn('field/databaseTableList.json', data, { type: 'GET' });  
+  export const getDatabaseTableList = data => PA_request_fn('field/databaseTableList', data, { type: 'POST' });  
   //字段删除
   export const delField = data => PA_request_fn('field/delField', data, { type: 'POST' });
   //字段新增
@@ -121,7 +131,7 @@ let promisify = function promisify(fn) {
 
 
   //请求模板分页列表
-  export const getTemplateListApiByPage = data => PA_request_fn('template/list.json', data, { type: 'GET' });
+  export const getTemplateListApiByPage = data => PA_request_fn('template/list', data, { type: 'POST' });
   //模板删除
   export const delTemplate = data => PA_request_fn('template/delTemplate', data, { type: 'POST' });
   //模板新增
@@ -131,9 +141,9 @@ let promisify = function promisify(fn) {
 
 
   //请求公共API所有列表
-  export const getCommonAPIListApi = data => PA_request_fn('commonAPI/allList.json', data, { type: 'GET' });
+  export const getCommonAPIListApi = data => PA_request_fn('commonAPI/allList', data, { type: 'POST' });
   //请求公共API分页列表
-  export const getCommonAPIListApiByPage = data => PA_request_fn('commonAPI/list.json', data, { type: 'GET' });  
+  export const getCommonAPIListApiByPage = data => PA_request_fn('commonAPI/list', data, { type: 'POST' });  
   //公共API删除
   export const delCommonAPI = data => PA_request_fn('commonAPI/delCommonAPI', data, { type: 'POST' });
   //公共API新增
@@ -144,10 +154,10 @@ let promisify = function promisify(fn) {
 
   //无需验证的公共接口
   //请求国家列表
-  export const getCountryListApi = data => PA_request_fn('common/country.json', data, { type: 'GET', noVerify: true});
+  export const getCountryListApi = data => PA_request_fn('common/country', data, { type: 'POST', noVerify: true});
 
   //请求城市列表
-  export const getCityListApi = data => PA_request_fn('common/city.json', data, { type: 'GET', noVerify: true});
+  export const getCityListApi = data => PA_request_fn('common/city', data, { type: 'POST', noVerify: true});
 
 
   

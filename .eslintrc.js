@@ -23,6 +23,7 @@ module.exports = {
     'import/extensions': 0,
     'import/no-unresolved': 0,
     'comma-dangle': [0, 'never'],
+    'global-require':0,
     semi: [1, 'never'],
     'no-unused-expressions': 0,
     'no-plusplus': 0,

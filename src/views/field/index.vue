@@ -341,9 +341,9 @@
 
         getFieldListApiByPage( this.$com.resetDataType(requestData) ).then(res => {
             console.log(res,"res")
-            if(res.result*1 === 0){
-              this.tableList = res.obj.datas;
-              this.pageConfig.total = res.obj.total;
+            if(res.code*1 === 200){
+              this.tableList = res.data;
+              this.pageConfig.total = res.totalCount;
             }
         }, err => {
           console.log(err)
@@ -367,11 +367,11 @@
       getDataBaseTableList(){
         getDatabaseTableList( this.$com.resetDataType({}) ).then(res => {
             console.log(res,"res")
-            if(res.result*1 === 0){
-              res.obj.forEach((item)=>{
+            if(res.code*1 === 200){
+              res.data.forEach((item)=>{
                 item.value = item.name;
               });
-              this.tableNameOptions = res.obj;
+              this.tableNameOptions = res.data;
             }
         }, err => {
           console.log(err)

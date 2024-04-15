@@ -15,6 +15,13 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
+
+//引入模拟数据模块，并配置部署模拟服务和接口
+const mockServer = () => {
+  if (process.env.NODE_ENV === 'development') return require('./mock')
+  else return ''
+}
+
 module.exports = {
   //生产环境配置资源引入路劲
   publicPath: process.env.NODE_ENV === 'production'
@@ -37,6 +44,7 @@ module.exports = {
     }
   },
   devServer: {
+    after: mockServer(),
     // autoOpenBrowser: true,
     overlay: false,
     // overlay: {
