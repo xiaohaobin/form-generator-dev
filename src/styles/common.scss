@@ -1,0 +1,835 @@
+/**
+ * @author 肖浩彬
+ * @date 2023-02-11
+ * @describe 公共样式表，所有系统适用，关于单位类名，带“-”为rem单位，带“_”为vh或者vw
+ * */
+
+ @charset "utf-8";
+ /*rem与px ,1:16*/
+ // 定义数字运算
+ $rem: 0.0625rem;
+ //$rem: 2rpx;
+ //  html{font-size: 16px;}
+ //  body,h1,h2,h3,h4,h5,h6,hr,p,iframe,dl,dt,dd,ul,ol,li,pre,form,button,input,textarea,th,td,fieldset{font-size: 14*$rem;}
+ 
+ /* 字体大小（自适应） sss */
+ $font-sizes: (
+   12: 1vh,
+   13: 1.35vh,
+   14: 1.45vh,
+   15: 1.55vh,
+   16: 1.66vh,
+   18: 1.86vh,
+   20: 2.07vh,
+   22: 2.28vh,
+   24: 2.48vh,
+   25: 2.58vh,
+   26: 2.69vh,
+   28: 2.89vh,
+   30: 3.1vh,
+   32: 3.31vh,
+   34: 3.51vh,
+   36: 3.72vh
+ ); // 定义字体大小映射
+ 
+ @each $size, $value in $font-sizes {
+   .fs_#{$size} {
+	 font-size: $value;
+   }
+ }
+ /* 字体大小（自适应） eee */
+ 
+ /* 颜色和背景颜色 sss */
+ // $colors: (
+ //   white: $--color-white,
+ //   red: red,
+ //   green: green,
+ //   black: black,
+ //   blue: blue,
+ //   orange: orange,
+ //   yellow: yellow,
+ //   gray: gray
+ // ); // 定义颜色映射
+ 
+ // @each $name, $color in $colors {
+ //   // 生成颜色类
+ //   .c-#{$name} {
+ //     color: $color;
+ //   }
+ 
+ //   // 生成背景颜色类
+ //   .bg-c-#{$name} {
+ //     background-color: $color;
+ //   }
+ // }
+ /* 颜色和背景颜色 eee */
+ 
+ /*flex布局sss*/
+ .flex-function {
+   display: flex;
+   display: -webkit-flex;
+ }
+ /*水平从左到右排列*/
+ .flex-flex-row {
+   @extend .flex-function;
+   flex-direction: row;
+ }
+ 
+ /*水平从右到左排列*/
+ .flex-flex-row-rev {
+   @extend .flex-function;
+   flex-direction: row-reverse;
+ }
+ 
+ /*垂直从上到下排列*/
+ .flex-flex-column {
+   @extend .flex-function;
+   flex-direction: column;
+ }
+ 
+ /*垂直从下到上排列*/
+ .flex-flex-column-rev {
+   @extend .flex-function;
+   flex-direction: column-reverse;
+ }
+ /* 水平左对齐，有小间距 */
+ .flex-flex-start {
+   @extend .flex-function;
+   justify-content: flex-start;
+ }
+ /* 水平右对齐，有小间距 */
+ .flex-flex-end {
+   @extend .flex-function;
+   justify-content: flex-end;
+ }
+ 
+ /* 水平居中对齐，有小间距 */
+ .flex-center {
+   @extend .flex-function;
+   justify-content: center;
+ }
+ 
+ /* 两端对齐，项目之间的间隔都相等 */
+ .flex-space-between {
+   @extend .flex-function;
+   justify-content: space-between;
+ }
+ 
+ /* 每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍 */
+ .flex-space-around {
+   @extend .flex-function;
+   justify-content: space-around;
+ }
+ 
+ /*每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔小一倍*/
+ .flex-space-evenly {
+   @extend .flex-function;
+   justify-content: space-evenly;
+ }
+ 
+ /*项目不换行*/
+ .flex-nowrap {
+   @extend .flex-function;
+   flex-wrap: nowrap;
+ }
+ 
+ /*项目换行*/
+ .flex-wrap {
+   @extend .flex-function;
+   flex-wrap: wrap;
+ }
+ 
+ /*项目反向换行（即第一行排在最下方，以此类推）*/
+ .flex-wrap-reverse {
+   @extend .flex-function;
+   flex-wrap: wrap-reverse;
+ }
+ 
+ /* 针对父元素 ，水平居中，垂直居中*/
+ .flex-center-middle {
+   @extend .flex-function;
+   align-items: center;
+   justify-content: center;
+ }
+ 
+ /*针对父元素，水平居中，垂直放在最低*/
+ .flex-center-end {
+   @extend .flex-function;
+   align-items: flex-end;
+   justify-content: center;
+ }
+ /*容器高度固定的情况下*/
+ .flex-wrap-fixed-height {
+   @extend .flex-function;
+   flex-wrap: wrap;
+   align-content: flex-start;
+ }
+ /*flex布局eee*/
+ 
+ 
+ /* 内外边距（自适应） sss */
+ $sizes: 5, 10, 15, 20, 25, 30,; // 定义尺寸列表
+ $vh-map: (
+   5: 0.52vh,
+   10: 1.04vh,
+   15: 1.55vh,
+   20: 2.08vh,
+   25: 2.6vh,
+   30: 3.12vh
+ ); // 定义 vh 映射
+ $vw-map: (
+   5: 0.265vw,
+   10: 0.53vw,
+   15: 0.785vw,
+   20: 1.05vw,
+   25: 1.305vw,
+   30: 1.565vw
+ ); // 定义 vw 映射
+ 
+ // 生成 padding 和 margin 工具类
+ @each $size in $sizes {
+   // 上下 padding
+   .pt_#{$size} { padding-top: map-get($vh-map, $size); }
+   .pb_#{$size} { padding-bottom: map-get($vh-map, $size); }
+ 
+   // 左右 padding
+   .pl_#{$size} { padding-left: map-get($vw-map, $size); }
+   .pr_#{$size} { padding-right: map-get($vw-map, $size); }
+ 
+   // 全局 padding
+   .pd_#{$size} { padding: map-get($vh-map, $size) map-get($vw-map, $size); }
+ 
+   // 上下 margin
+   .mt_#{$size} { margin-top: map-get($vh-map, $size); }
+   .mb_#{$size} { margin-bottom: map-get($vh-map, $size); }
+ 
+   // 左右 margin
+   .ml_#{$size} { margin-left: map-get($vw-map, $size); }
+   .mr_#{$size} { margin-right: map-get($vw-map, $size); }
+ 
+   // 全局 margin
+   .mg_#{$size} { margin: map-get($vh-map, $size) map-get($vw-map, $size); }
+ }
+ /* 内外边距（自适应） eee */
+ 
+ /*****************************************************************生成 1-100px 的 margin/padding 工具类************************************************************/ 
+ @for $i from 1 through 100 {
+   // 顺便定义字体（1-100）大小
+   .fs-#{$i}{font-size: #{$i* $rem};}
+   .icon-fs-#{$i}{//字体宽高大小
+	 width: #{$i* $rem} !important;
+	 height: #{$i* $rem} !important;
+   }
+   // 全局 margin/padding
+   .m-#{$i} { margin: #{$i* $rem}; }
+   .p-#{$i} { padding: #{$i* $rem}; }
+   .mg-#{$i} { margin: #{$i* $rem}; }
+   .pd-#{$i} { padding: #{$i* $rem}; }
+   .l-h-#{$i}{line-height: #{$i* $rem};}
+ 
+   // 方向映射表：缩写 -> CSS属性
+   $directions: (
+	 "t": "top",
+	 "b": "bottom",
+	 "l": "left",
+	 "r": "right",
+	 "x": ("left", "right"),
+	 "y": ("top", "bottom")
+   );
+ 
+   // 遍历方向生成类
+   @each $abbrev, $props in $directions {
+	 // 处理水平/垂直方向（如 .mx-10）
+	 @if type-of($props) == "list" {
+	   .m#{$abbrev}-#{$i} {
+		 @each $prop in $props { margin-#{$prop}: #{$i* $rem}; }
+	   }
+	   .p#{$abbrev}-#{$i} {
+		 @each $prop in $props { padding-#{$prop}: #{$i* $rem}; }
+	   }
+	 }
+	 // 处理单方向（如 .mt-10）
+	 @else {
+	   .m#{$abbrev}-#{$i} { margin-#{$props}: #{$i* $rem}; }
+	   .p#{$abbrev}-#{$i} { padding-#{$props}: #{$i* $rem}; }
+	 }
+   }
+ }
+ /*
+ 编译后会生成如下 CSS：
+ .m-1 { margin: 1px; }
+ .p-1 { padding: 1px; }
+ .mt-1 { margin-top: 1px; }
+ .pt-1 { padding-top: 1px; }
+ .mx-1 { margin-left: 1px; margin-right: 1px; }
+ .px-1 { padding-left: 1px; padding-right: 1px; }
+ **/
+ /*****************************************************************生成 1-100px 的 margin/padding 工具类************************************************************/ 
+ 
+ 
+ /*文字单行溢出省略号*/
+ .text-overflow {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+ }
+ .text-overflow-span {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   display: inline-block;
+   max-width: 100%;
+ }
+ .hide {
+   display: none;
+ }
+ .no-border {
+   border: none;
+ }
+ .v-hidden {
+   visibility: hidden;
+ }
+ .required:before {
+   content: '*';
+   color: red;
+   display: inline;
+   margin-right: $rem * 5;
+ }
+ .text-c {
+   text-align: center;
+ }
+ .text-l {
+   text-align: left;
+ }
+ .text-r {
+   text-align: right;
+ }
+ /*清除浮动样式sss*/
+ .lf {
+   float: left;
+ }
+ .rf {
+   float: right;
+ }
+ .parent-clear {
+   overflow: hidden;
+ }
+ .parent-clear:after {
+   content: '';
+   display: block;
+   clear: both;
+ }
+ /* 清除浮动样式eee */
+ 
+ /* 清除浮动 */
+ .clearfix {
+   zoom: 1;
+ }
+ .clearfix:after {
+   content: '\00A0';
+   display: block;
+   visibility: hidden;
+   width: 0;
+   height: 0;
+   clear: both;
+   font-size: 0;
+   line-height: 0;
+   overflow: hidden;
+ }
+ /* 清除浮动 */
+ 
+ .inline-block {
+   display: inline-block;
+ }
+ .block {
+   display: block;
+ }
+ .inline {
+   display: inline;
+ }
+ 
+ /* 固定表格头部样式1 sss */
+ /* table.fixed-head{
+	  width: auto;
+  } */
+ table.fixed-head th,
+ table.fixed-head td {
+   width: auto;
+ }
+ table.fixed-head tbody {
+   display: block;
+   overflow: scroll;
+   height: 200px;
+ }
+ table.fixed-head thead,
+ table.fixed-head tbody tr {
+   display: table;
+   width: 100%;
+   table-layout: fixed;
+ }
+ table.fixed-head thead {
+   width: calc(100% - 1em);
+ }
+ /* 固定表格头部样式1 eee */
+ 
+ /* 固定表格头部样式2 sss */
+ /* table-fix-box为表格外面div容器 */
+ .table-fix-box {
+   width: 100%;
+   max-height: 500px;
+   overflow: scroll;
+ }
+ .table-fix-box thead {
+   position: sticky;
+   top: 0;
+ }
+ /* 固定表格头部样式2 eee */
+ 
+ 
+ /*宽度，高度，最大最小宽度高度样式表 百分比sss**/ 
+ @for $i from 1 through 100 {
+   .w-#{$i} {
+	 width: $i * 1%;
+   }
+   .max-w-#{$i} {
+	 max-width: $i * 1% !important;
+   }
+   .min-w-#{$i} {
+	 min-width: $i * 1%;
+   }
+   .h-#{$i} {
+	 height: $i * 1%;
+   }
+   .max-h-#{$i} {
+	 max-height: $i * 1%;
+   }
+   .min-h-#{$i} {
+	 min-height: $i * 1%;
+   }
+ }
+ /*宽度，高度，最大最小宽度高度样式表 百分比eee**/ 
+ 
+ /* 圆角样式表 sss */
+ @for $i from 1 through 30 {
+   .radius-#{$i} {
+	 border-radius: #{$i}px;
+   }
+ }
+ @for $i from 1 through 100 {
+   .radius-#{$i}p {
+	 border-radius: #{$i}#{'%'};
+   }
+ }
+ @for $i from 1 through 30 {
+   // 左上角
+   .radius-tl-#{$i} { border-top-left-radius: #{$i}px; }
+   // 右上角
+   .radius-tr-#{$i} { border-top-right-radius: #{$i}px; }
+   // 左下角
+   .radius-bl-#{$i} { border-bottom-left-radius: #{$i}px; }
+   // 右下角
+   .radius-br-#{$i} { border-bottom-right-radius: #{$i}px; }
+ }
+ /* 圆角样式表 eee */
+ 
+ a[href],
+ input[type='submit'],
+ input[type='image'],
+ input[type='button'],
+ label[for],
+ select,
+ button {
+   cursor: pointer;
+ }
+ ul,
+ li {
+   list-style: none;
+   padding: 0;
+ }
+ 
+ /* 默认样式修改eee */
+ 
+ /* 文本样式相关修改 sss */
+ 
+ /* 文本缩进类 */
+ .text-indent {
+   text-indent: $rem * 32;
+ }
+ /*12px*/
+ .text-indent-xs {
+   text-indent: $rem * 12;
+ }
+ /*14px*/
+ .text-indent-sm {
+   text-indent: $rem * 14;
+ }
+ /*16px*/
+ .text-indent-md {
+   text-indent: $rem * 16;
+ }
+ /*18px*/
+ .text-indent-lg {
+   text-indent: $rem * 18;
+ }
+ 
+ /* 适合单行，宽度固定，内容溢出省略sss... */
+ .one-overflow {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+ }
+ 
+ /* 适合多行，默认3行，宽度不固定以及移动端显示，内容溢出省略sss... */
+ .more-overflow {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 3;
+   -webkit-box-orient: vertical;
+ }
+ /* 制造文本模糊效果 */
+ .txt-shadow {
+   color: transparent;
+   text-shadow: 0 0 2 * $rem rgba(0, 0, 0, 0.5);
+ }
+ 
+ /* 文本首字下沉效果 */
+ .txt-first-down:first-letter {
+   float: left;
+   font-size: 28 * $rem;
+ }
+ 
+ /* 文本样式相关修改 eee */
+ 
+ /*  未知宽高情况下，垂直水平居中sss*/
+ .center-pos {
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%);
+   -moz-transform: translate(-50%, -50%);
+   -ms-transform: translate(-50%, -50%);
+   -o-transform: translate(-50%, -50%);
+   -webkit-transform: translate(-50%, -50%);
+ }
+ /*  未知宽高情况下，垂直水平居中eee*/
+ 
+ /* 垂直居中sss */
+ .v-middle {
+   position: relative;
+   top: 50%;
+   -webkit-transform: -webkit-translateY(-50%);
+   -moz-transform: -moz-translateY(-50%);
+   -o-transform: -o-translateY(-50%);
+   transform: translateY(-50%);
+ }
+ /* 垂直居中eee */
+ 
+ /* 关于动画sss */
+ 
+ /*旋转动画  */
+ .rorate-animate {
+   -moz-animation: spin 2s linear 1s 5 alternate;
+   -ms-animation: spin 2s linear 1s 5 alternate;
+   -webkit-animation: spin 2s linear 1s 5 alternate;
+   animation: spin 2s linear infinite;
+ }
+ @-webkit-keyframes spin {
+   from {
+	 -webkit-transform: rotate(0deg);
+   }
+   to {
+	 -webkit-transform: rotate(360deg);
+   }
+ }
+ @keyframes spin {
+   from {
+	 transform: rotate(0deg);
+   }
+   to {
+	 transform: rotate(360deg);
+   }
+ }
+ @-moz-keyframes spin {
+   from {
+	 -webkit-transform: rotate(0deg);
+   }
+   to {
+	 -webkit-transform: rotate(360deg);
+   }
+ }
+ @-ms-keyframes spin {
+   from {
+	 -webkit-transform: rotate(0deg);
+   }
+   to {
+	 -webkit-transform: rotate(360deg);
+   }
+ }
+ /*旋转动画  eee*/
+ 
+ /* 动画实现简单的loading效果 ===省略号加载条  sss */
+ .com-loading:after {
+   display: inline-block;
+   overflow: hidden;
+   vertical-align: bottom;
+   content: '\2026';
+   animation: ellipsis 2s infinite;
+   transform: scale(1.5);
+ }
+ @-webkit-keyframes ellipsis {
+   from {
+	 width: 2 * $rem;
+   }
+   to {
+	 width: 15 * $rem;
+   }
+ }
+ @-ms-keyframes ellipsis {
+   from {
+	 width: 2 * $rem;
+   }
+   to {
+	 width: 15 * $rem;
+   }
+ }
+ @-moz-keyframes ellipsis {
+   from {
+	 width: 2 * $rem;
+   }
+   to {
+	 width: 15 * $rem;
+   }
+ }
+ @keyframes ellipsis {
+   from {
+	 width: 2 * $rem;
+   }
+   to {
+	 width: 15 * $rem;
+   }
+ }
+ /*  动画实现简单的loading效果 ===省略号加载条  eee */
+ 
+ /* css3 绘制图标sss */
+ /* 墙 */
+ .com-gradient {
+   position: relative;
+   width: 300px;
+   height: 300px;
+   border-radius: 50%;
+   background-color: silver;
+   background-image: linear-gradient(335deg, #b00 23px, transparent 23px), linear-gradient(155deg, #d00 23px, transparent 23px),
+	 linear-gradient(335deg, #b00 23px, transparent 23px), linear-gradient(155deg, #d00 23px, transparent 23px);
+   background-size: 58px 58px;
+   background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+ }
+ 
+ /* 月亮 */
+ .com-moon {
+   display: inline-block;
+   height: 1.5em;
+   width: 1.5em;
+   box-shadow: inset -0.4em 0 0 orange;
+   border-radius: 2em;
+   transform: rotate(20deg);
+ }
+ /* css3 绘制图标eee*/
+ 
+ /*循环缩放动画sss*/
+ @keyframes scaleDraw {
+   /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
+   0% {
+	 transform: scale(1); /*开始为原始大小*/
+   }
+   25% {
+	 transform: scale(1.2); /*放大1.1倍*/
+   }
+   50% {
+	 transform: scale(1);
+   }
+   75% {
+	 transform: scale(1.2);
+   }
+ }
+ 
+ /*循环缩放动画*/
+ .animate-scale {
+   -webkit-animation-name: scaleDraw; /*关键帧名称*/
+   -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+   -webkit-animation-iteration-count: infinite; /*动画播放的次数*/
+   -webkit-animation-duration: 5s; /*动画所花费的时间*/
+ 
+   animation-name: scaleDraw; /*关键帧名称*/
+   animation-timing-function: ease-in-out; /*动画的速度曲线*/
+   animation-iteration-count: infinite; /*动画播放的次数*/
+   animation-duration: 5s; /*动画所花费的时间*/
+ }
+ /*循环缩放动画eee*/
+ 
+ //定义呼吸灯效果
+ @mixin breathe-box-diy($color1: #66b7f9, $name: 'default') {
+   // 呼吸灯效果 rgba(80,148,28,0.38)
+   .breathe-box-#{$name} {
+	 box-shadow: 0 0 0 0 $color1; /* 设置初始阴影 */
+	 animation: breathing-#{$name} 2s infinite ease-in-out; /* 设置动画 */
+   }
+ 
+   @keyframes breathing-#{$name} {
+	 0% {
+	   box-shadow: 0 0 0 0 $color1; /* 初始阴影 */
+	 }
+	 50% {
+	   box-shadow: 0 0 4px 4px $color1; /* 扩展阴影 */
+	 }
+	 100% {
+	   box-shadow: 0 0 0 0 $color1; /* 回到初始阴影 */
+	 }
+   }
+ }
+ //  定义默认 breathe-box-default 呼吸光
+ @include breathe-box-diy(rgba(183, 239, 140, 0.2), 'default');
+ 
+ /* 关于动画eee */
+ 
+ /* 小三角sss */
+ .triangle {
+   /* 基础样式 */
+   border: solid 10 * $rem transparent;
+ }
+ /*下*/
+ .triangle.bottom {
+   border-top-color: green;
+   width: 0;
+   height: 0;
+ }
+ /*上*/
+ .triangle.top {
+   border-bottom-color: green;
+   width: 0;
+   height: 0;
+ }
+ /*左*/
+ .triangle.left {
+   border-right-color: green;
+   width: 0;
+   height: 0;
+ }
+ /*右*/
+ .triangle.right {
+   border-left-color: green;
+   width: 0;
+   height: 0;
+ }
+ /* 小三角eee */
+ 
+ /* 元素阴影 针对各个分辨率大小  sss */
+ .shadow-text-xs {
+   text-shadow: 4 * $rem 3 * $rem 0 #1d9d74, 9 * $rem 8 * $rem 0 rgba(0, 0, 0, 0.15);
+ } /*智能兼容ie10以上 暂不考虑*/
+ 
+ @mixin shadow-normal($oneTwo: 1px, $three: 2px, $color: #cccccc) {
+   -moz-box-shadow: $oneTwo $oneTwo $three $color; /* for firefox */
+   -webkit-box-shadow: $oneTwo $oneTwo $three $color; /* for safari or chrome */
+   box-shadow: $oneTwo $oneTwo $three $color; /* for opera or ie9 */
+ }
+ .shadow-xs {
+   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=100, Color='#cccccc')"; /* For IE 8 */
+   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=100, Color='#cccccc'); /* For IE 5.5 - 7 */
+   @include shadow-normal(1px, 2px, #cccccc);
+ }
+ .shadow-sm {
+   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=120, Color='#cccccc')"; /* For IE 8 */
+   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=120, Color='#cccccc'); /* For IE 5.5 - 7 */
+   @include shadow-normal(2px, 3px, #cccccc);
+ }
+ .shadow-md {
+   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#cccccc')"; /* For IE 8 */
+   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#cccccc'); /* For IE 5.5 - 7 */
+   @include shadow-normal(3px, 5px, #cccccc);
+ }
+ .shadow-lg {
+   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=150, Color='#cccccc')"; /* For IE 8 */
+   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=150, Color='#cccccc'); /* For IE 5.5 - 7 */
+   @include shadow-normal(5px, 8px, #cccccc);
+ }
+ /* 元素阴影 针对各个分辨率大小  eee */
+ 
+ /*背景色渐变sss*/
+ @mixin gradient-bg($color1: #66b7f9, $color2: #1c82d4) {
+   /* Firefox 3.6+ */
+   background: -moz-linear-gradient(to bottom, $color1, $color2);
+   /* Safari 4-5, Chrome 1-9 */
+   background: -webkit-gradient(linear, to bottom, from($color1), to($color2));
+   /* Safari 5.1+, Chrome 10+ */
+   background: -webkit-linear-gradient(to bottom, $color1, $color2);
+   /* Opera 11.10+ */
+   background: -o-linear-gradient(to bottom, $color1, $color2);
+   /* default */
+   background: linear-gradient(to bottom, $color1, $color2);
+   background-color: $color2;
+ }
+ /*蓝色渐变*/
+ .gradient-bg-blue {
+   @include gradient-bg(#66b7f9, #1c82d4);
+ }
+ /**橙色渐变*/
+ .gradient-bg-orange {
+   @include gradient-bg(#ffaa00, #ffff00);
+ }
+ /**绿色渐变*/
+ .gradient-bg-green {
+   @include gradient-bg(#00aa00, #005500);
+ }
+ /**红色渐变*/
+ .gradient-bg-red {
+   @include gradient-bg(#ff007f, #ff0000);
+ }
+ /**紫色渐变*/
+ .gradient-bg-zise {
+   @include gradient-bg(#aa55ff, #aa00ff);
+ }
+ /**褐色渐变*/
+ .gradient-bg-hese {
+   @include gradient-bg(#545455, #f4f0ea);
+ }
+ 
+ /**灰色渐变*/
+ .gradient-bg-hui {
+   @include gradient-bg(#c9c9c9, #f6f1ee);
+ }
+ /* 背景色渐变eee */
+ 
+ /*mui 自定义模板的索引和背景重新定义*/
+ .mui-backdrop.mui-backdrop-diy {
+   z-index: 9999;
+   background-color: rgba(0, 0, 0, 0.5);
+ }
+ [v-cloak] {
+   display: none;
+ }
+ 
+ /* 自定义页面公共遮罩层 */
+ .diy-mask-layer {
+   position: fixed;
+   z-index: 13288547577;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   background-color: rgba(0, 0, 0, 0.5);
+ }
+ 
+ // @base: #f04615;
+ // @width: 0.5;
+ 
+ // .fn-class {
+ //   width: percentage(@width); // returns `50%`
+ //   color: saturate(@base, 5%);
+ //   background-color: spin(lighten(@base, 25%), 8);
+ // }
+ 
+ .border {
+   border: 1px solid #ddd;
+ }
+ 

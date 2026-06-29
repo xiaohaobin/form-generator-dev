@@ -23,8 +23,13 @@ import csCZ from './cs-CZ'
 Vue.use(VueI18n)
 
 export const messages = {
+  'cn': {
+    _lang: '简体中文1',
+    ...zhCN,
+    ...zhCNLocale
+  },
   'zh-CN': {
-    _lang: '简体中文',
+    _lang: '简体中文2',
     ...zhCN,
     ...zhCNLocale
   },

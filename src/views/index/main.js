@@ -3,7 +3,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from '@/router'
 
-import '@/styles/common.css'
+import '@/styles/common.scss'
 import '@/styles/index.scss'
 import '@/icons'
 import axios from 'axios'

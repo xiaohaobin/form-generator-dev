@@ -44,6 +44,7 @@ module.exports = {
     }
   },
   devServer: {
+    port:80,
     after: mockServer(),
     // autoOpenBrowser: true,
     overlay: false,

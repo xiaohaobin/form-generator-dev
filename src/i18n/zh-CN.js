@@ -1032,6 +1032,6 @@ t.deviceManage.verifyRegisterNameNotice2 = '寄存器名称长度必须在字节
 t.deviceManage.checkboxNotice = '请先勾选表格行内寄存器复选框，才能操作'
 
 //20240221 config.js
-t.singleLineOfText = '单行文本'
+t.singleLineOfText = '输入框'
 
 export default t

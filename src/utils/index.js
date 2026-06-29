@@ -107,7 +107,7 @@ export function jsonClone(obj) {
 // 深拷贝对象
 export function deepClone(obj) {
   const _toString = Object.prototype.toString
-
+  
   // null, undefined, non-object, function
   if (!obj || typeof obj !== 'object') {
     return obj
@@ -121,7 +121,7 @@ export function deepClone(obj) {
   // Date
   if (_toString.call(obj) === '[object Date]') {
     return new Date(obj.getTime())
-  }
+  }  
 
   // RegExp
   if (_toString.call(obj) === '[object RegExp]') {
@@ -157,7 +157,7 @@ export function isObjectUnde(t) {
 }
 
 
-/*==================================================================针对换机申请模板需求进行设计的函数-----------------------------------------------------------------------*/
+/*==================================================================针对表单模板需求进行设计的函数-----------------------------------------------------------------------*/
 /**
  * 根据是否组串类组件，是否显示子元素的工具
  * @param {Object} currentItem 当前active 组件配置对象

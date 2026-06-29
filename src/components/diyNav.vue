@@ -29,7 +29,7 @@
     data() {
       return {
         // routerLinkData:[
-        //   {txt:'换机申请模板管理', url:'/index/template', name:'template', index:'1', iconClass:'el-icon-menu'},
+        //   {txt:'表单模板管理', url:'/index/template', name:'template', index:'1', iconClass:'el-icon-menu'},
         //   {txt:'校验规则管理', url:'/index/regular', name:'regular', index:'2', iconClass:'el-icon-folder-checked'},
         //   {txt:'字段管理后台', url:'/index/field', name:'field', index:'3', iconClass:'el-icon-edit-outline'},
         // ],

@@ -14,11 +14,11 @@ keys.forEach(key => {
   componentChild[tag] = value
 })
 
-function vModel(dataObject, defaultValue) {
+function vModel(dataObject, defaultValue, _formConfig_) {
   dataObject.props.value = defaultValue
-
-  dataObject.on.input = val => {
+  dataObject.on.input = (val) => {
     this.$emit('input', val)
+    this.$emit('diy', [val, _formConfig_])
   }
 }
 
@@ -38,9 +38,15 @@ function emitEvents(confClone) {
   ['on', 'nativeOn'].forEach(attr => {
     const eventKeyList = Object.keys(confClone[attr] || {})
     eventKeyList.forEach(key => {
-      const val = confClone[attr][key]
-      if (typeof val === 'string') {
-        confClone[attr][key] = event => this.$emit(val, event)
+      const val = confClone[attr][key];
+      // let val = confClone[attr][key];
+      // val.prototype.confClone = confClone;
+      // console.log(val,"val, ");
+      // console.log(confClone,"attr, ");
+      // console.log(key,"key, ");     
+
+      if (typeof val === 'string') {        
+        confClone[attr][key] = event => this.$emit(val, event);
       }
     })
   })
@@ -50,7 +56,7 @@ function buildDataObject(confClone, dataObject) {
   Object.keys(confClone).forEach(key => {
     const val = confClone[key]
     if (key === '__vModel__') {
-      vModel.call(this, dataObject, confClone.__config__.defaultValue)
+      vModel.call(this, dataObject, confClone.__config__.defaultValue, confClone)
     } else if (dataObject[key] !== undefined) {
       if (dataObject[key] === null
         || dataObject[key] instanceof RegExp
@@ -133,7 +139,7 @@ export default {
   methods:{
     //设置自定义换机模板日期选择组件，选择日期是否可超当前日期
     set_noOverCurrDate_by_typeCode6(confClone){
-      if([5,6].includes( confClone.__config__.typeCode )){//针对换机申请模板自定义组件---日期选择器和时间选择器
+      if([5,6].includes( confClone.__config__.typeCode )){//针对表单模板自定义组件---日期选择器和时间选择器
         if(confClone.__config__.noOverCurrDate){
           confClone['picker-options'] = {
               disabledDate:function(time) {
@@ -154,7 +160,7 @@ export default {
         GB: 1024 * 1024 * 1024
       }
 
-      if([9,109].includes( confClone.__config__.typeCode )){//针对换机申请模板自定义 组件---附件上传和原本的上传组件
+      if([9,109].includes( confClone.__config__.typeCode )){//针对表单模板自定义 组件---附件上传和原本的上传组件
         confClone['before-upload'] = function(file){
           console.log(file,"上传之前的文件对象",confClone);
           let isRightSize = file.size / units[confClone.__config__.sizeUnit] < confClone.__config__.fileSize
@@ -177,7 +183,7 @@ export default {
     },
     //上传组件成功之后 on-success 属性，监听事件
     set_onSuccess_by_typeCode9(confClone){
-      if([9,109].includes( confClone.__config__.typeCode )){//针对换机申请模板自定义 组件---附件上传和原本的上传组件
+      if([9,109].includes( confClone.__config__.typeCode )){//针对表单模板自定义 组件---附件上传和原本的上传组件
         confClone['on-success'] = function(response, file, fileList){
           console.log(response, file, fileList,"on-success事件")
           

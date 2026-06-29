@@ -3,7 +3,7 @@
     <div class="pd-10 box-bg">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>换机申请模板管理</el-breadcrumb-item>
+        <el-breadcrumb-item>表单模板管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     
@@ -154,6 +154,13 @@
                 :value="item.value" :disabled="item.disabled"></el-option>
             </el-select>
           </el-form-item>
+          <!-- <el-form-item label="选择模板类型" prop="tempType">
+            <el-select v-model="addTempForm.tempType" placeholder="请选择" filterable
+              :style="{width: '100%'}">
+              <el-option v-for="(item, index) in tempTypeOptions" :key="index" :label="item.label"
+                :value="item.value" :disabled="item.disabled"></el-option>
+            </el-select>
+          </el-form-item> -->
           <el-form-item size="small" class="flex-flex-end">
             <el-button @click="addTempResetForm">取消</el-button>
             <el-button type="primary" @click="addTempSubmitForm">确定</el-button>            
@@ -261,6 +268,7 @@
           tempName: undefined,
           productType: undefined,
           country: undefined,
+          tempType: undefined,
         },
         rules: {
           scene: selectRules,
@@ -275,6 +283,7 @@
             trigger: 'blur'
           }],
           productType: selectRules,
+          tempType: selectRules,
         },
         sceneOptions: [{
           "label": "选项一",
@@ -292,12 +301,12 @@
         }],
         tempType:1,
         tempTypeOptions:[///发送配件模板/客诉链接模板/工单补录模板/工单转换机模板/Call Log模板
-          {value:1, label:"换机申请模板"},
-          {value:2, label:"发送配件模板"},
-          {value:3, label:"客诉链接模板"},
-          {value:4, label:"工单补录模板"},
-          {value:5, label:"工单转换机模板"},
-          {value:6, label:"Call Log模板"},
+          {value:1, label:"建站表单模板"},
+          {value:2, label:"设备设置项通用模板"},
+          {value:3, label:"逆变器设置项模板"},
+          {value:4, label:"采集器设置项模板"},
+          {value:5, label:"储能机设置项模板"},
+          {value:6, label:"阳台储能机设置项模板"},
         ],
         checkType:'1'
       }

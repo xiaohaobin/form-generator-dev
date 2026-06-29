@@ -7,6 +7,7 @@ import {
   } from '@/utils/request.js';
 
 //i18n.messages,i18n.locale
+console.log(i18n.messages,i18n.locale,"................")
 Vue.use(Vuex);
 const store = new Vuex.Store({
     // 1. state
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
         i18nLocal:i18n.locale,//默认中文
         i18nOption:i18n.messages[i18n.locale],
         languageConfig:[
+          {key:'cn',code:0},
           {key:'zh-CN',code:0},
           {key:'zh-TW',code:1},
           {key:'en-US',code:2},
@@ -105,7 +107,7 @@ const store = new Vuex.Store({
             });
             return languageItem;
           }
-          return LanguageConfig                    
+          return LanguageConfig
         },
         //还可以传参写
         getCountOther:(state) => (num) =>{
@@ -128,7 +130,7 @@ const store = new Vuex.Store({
             }
             return html;
           }
-          
+
           return n;
         },
         //获取设备设置开关机数据
@@ -268,11 +270,11 @@ const store = new Vuex.Store({
         },
         /**
          * 更新正则表
-         * @param {Object} state 
+         * @param {Object} state
          * @param {Object} serverData 服务器正则数据列表 []
-         * 
+         *
         */
-        updateRegList(state, serverData){          
+        updateRegList(state, serverData){
           serverData.forEach((item)=>{
             item.pattern = item.webRegular;
             item.message = item.remark;
@@ -281,12 +283,12 @@ const store = new Vuex.Store({
         },
         /**
          * 更新字段表
-         * @param {Object} state 
+         * @param {Object} state
          * @param {Object} serverData 服务器字段数据列表 []
-         * 
+         *
         */
-        updateFieldList(state, serverData){ 
-          //{label:'用户名称',value:'userName', disabled:false},         
+        updateFieldList(state, serverData){
+          //{label:'用户名称',value:'userName', disabled:false},
           serverData.forEach((item)=>{
             item.label = item.fieldAlias;
             item.value = item.tableField;
@@ -296,20 +298,20 @@ const store = new Vuex.Store({
         },
         /**
          * 更新国家列表表
-         * @param {Object} state 
+         * @param {Object} state
          * @param {Object} serverData 服务器字段数据列表 []
-         * 
+         *
         */
-        updateCountryList(state, serverData){ 
+        updateCountryList(state, serverData){
           state.countryList = serverData;
         },
         /**
          * 更新城市列表表
-         * @param {Object} state 
+         * @param {Object} state
          * @param {Object} serverData 服务器字段数据列表 []
-         * 
+         *
         */
-        updateCityList(state, serverData){ 
+        updateCityList(state, serverData){
           state.cityList = serverData;
         },
     },

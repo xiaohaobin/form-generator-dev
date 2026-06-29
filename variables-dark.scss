@@ -1,0 +1,441 @@
+/**
+ * @description 全局主题变量配置
+ */
+/* stylelint-disable */
+@charset "utf-8";
+// @import './system-color.scss';
+
+// ui 规范颜色
+// 主题中性色
+$Growatt-gray-1: #fafaf9;
+$Growatt-gray-2: #f3f4f2;
+$Growatt-gray-3: #edefea;
+$Growatt-gray-4: #e6e9e2;
+$Growatt-gray-4-1: #8f928d;
+$Growatt-gray-5: #d9ded4;
+$Growatt-gray-6: #ced4c8;
+$Growatt-gray-7: #c2c8be;
+$Growatt-gray-8: #b7bcb4;
+$Growatt-gray-9: #a6aaa3;
+$Growatt-gray-10: #8f928d;
+$Growatt-gray-11: #777b75;
+$Growatt-gray-12: #494d47;
+$Growatt-gray-13: #31352f;
+$Growatt-gray-14: #252923;
+$Growatt-logo-color: #595757;
+
+/**
+背景色： Gray-1、Gray-2、Gray-3、Gray-4
+分割线： Gray-7、Gray-4、Gray-5、Gray-6
+外框线： Gray-8、Gray-5、Gray-6、Gray-7
+文字色： Gray-9、Gray-11、Gray-12、Gray-14
+*/
+// 中性色
+$Gray-1: #fafafa;
+$Gray-2: #f5f5f5;
+$Gray-3: #f0f0f0;
+$Gray-4: #ebebeb;
+$Gray-5: #e0e0e0;
+$Gray-6: #d6d6d6;
+$Gray-7: #cccccc;
+$Gray-8: #c2c2c2;
+$Gray-9: #b3b3b3;
+$Gray-10: #999999;
+$Gray-11: #7f7f7f;
+$Gray-12: #4d4d4d;
+$Gray-13: #333333;
+$Gray-14: #191919;
+
+//框架默认主题色
+$base-color-default: #6FBA2C;
+// 主题色延伸的十二色
+$base-color--1:#1d2219;
+$base-color--2:#20261D;
+$base-color--3:#283521;
+$base-color--4:#2D441E;
+$base-color--5:#355022;
+$base-color--6:#3D5E26;
+$base-color--7:#466D29;
+$base-color--8:#4F7D2B;
+$base-color--9:$base-color-default;
+$base-color--10:#64AE19;
+$base-color--11:#85D04B;
+$base-color--12:#C7F1AD;
+
+// 蓝色以及拓展色十二色
+$blue-color-default:#2D80E0;
+$blue-color--1:#18212B;
+$blue-color--2:#1A2431;
+$blue-color--3:#183251;
+$blue-color--4:#153B69;
+$blue-color--5:#19467A;
+$blue-color--6:#225089;
+$blue-color--7:#295D9C;
+$blue-color--8:#2E6CB5;
+$blue-color--9:$blue-color-default;
+$blue-color--10:#3775BF;
+$blue-color--11:#80B9FF;
+$blue-color--12:#CFE3FE;
+
+// 橙色以及拓展色十二色
+$orange-color-default:#e08114;
+$orange-color--1:#241F1B;
+$orange-color--2:#2B231E;
+$orange-color--3:#3C2B1D;
+$orange-color--4:#4C2E13;
+$orange-color--5:#593615;
+$orange-color--6:#67411F;
+$orange-color--7:#7B502A;
+$orange-color--8:#9A6332;
+$orange-color--9:$orange-color-default;
+$orange-color--10:#D37500;
+$orange-color--11:#FCA960;
+$orange-color--12:#FEDFC7;
+
+// 红色以及拓展色十二色
+$red-color-default:#E03C36;
+$red-color--1:#261E1C;
+$red-color--2:#2C1F1D;
+$red-color--3:#471F1B;
+$red-color--4:#5D1B17;
+$red-color--5:#6C211C;
+$red-color--6:#7B2C26;
+$red-color--7:#933B34;
+$red-color--8:#BA4A41;
+$red-color--9:$red-color-default;
+$red-color--10:#BB4B42;
+$red-color--11:#FF9184;
+$red-color--12:#FFD2CC;
+
+
+.base-color{color: $base-color-default;}
+.base-background-color{background-color: $base-color-default;}
+// $base-color-default: #2009a7;
+
+// 总览页面2D小卡片颜色
+$overflow-2D-card-color:#dee6ee;
+// $overflow-2D-card-color:$blue-color--3;
+
+// 总览页面3Dpolyline线条颜色
+$overflow-3D-polyline-color:#000014;
+
+/*主色调混合白色和黑色合成新颜色，颜色从深到浅*/
+$--color-white: #000;//浅色主题情况
+$--color-black: #fff;//浅色主题情况
+$--color-primary-light-1: mix($--color-white, $base-color-default, 10%);
+$--color-primary-light-2: mix($--color-white, $base-color-default, 20%);
+$--color-primary-light-3: mix($--color-white, $base-color-default, 30%);
+$--color-primary-light-4: mix($--color-white, $base-color-default, 40%);
+$--color-primary-light-5: mix($--color-white, $base-color-default, 50%);
+$--color-primary-light-6: mix($--color-white, $base-color-default, 60%);
+$--color-primary-light-7: mix($--color-white, $base-color-default, 70%);
+$--color-primary-light-8: mix($--color-white, $base-color-default, 80%);
+$--color-primary-light-9: mix($--color-white, $base-color-default, 90%);
+$--color-primary-light-9_7: $base-color--1;
+
+// 带透明度颜色【30%，50%，70%，90%】transparentize 取反
+// 透明字体
+$--color-font-10: transparentize($--color-black, 0.9);//禁用
+$--color-font-20: transparentize($--color-black, 0.8);//
+$--color-font-30: transparentize($--color-black, 0.7);//禁用
+$--color-font-40: transparentize($--color-black, 0.6);//
+$--color-font-50: transparentize($--color-black, 0.5);//二级文本
+$--color-font-60: transparentize($--color-black, 0.4);
+$--color-font-70: transparentize($--color-black, 0.3);//一级文本
+$--color-font-80: transparentize($--color-black, 0.2);
+$--color-font-90: transparentize($--color-black, 0.1);//标题
+
+// 小卡片背景色
+$--color-bg-10: transparentize($--color-white, 0.9);
+$--color-bg-20: transparentize($--color-white, 0.8);
+$--color-bg-30: transparentize($--color-white, 0.7);
+$--color-bg-40: transparentize($--color-white, 0.6);
+$--color-bg-50: transparentize($--color-white, 0.5);
+$--color-bg-60: transparentize($--color-white, 0.4);
+$--color-bg-70: transparentize($--color-white, 0.3);
+$--color-bg-80: transparentize($--color-white, 0.2);
+$--color-bg-90: transparentize($--color-white, 0.1);
+
+
+$--color-white-f: #fff;//浅色主题情况[固定白色]
+$--color-black-f: #000;//浅色主题情况[固定黑色]
+// 带透明度颜色【30%，50%，70%，90%】transparentize 取反
+// 透明字体
+$--color-font-10-f: transparentize($--color-black-f, 0.9);//禁用
+$--color-font-20-f: transparentize($--color-black-f, 0.8);//
+$--color-font-30-f: transparentize($--color-black-f, 0.7);//禁用
+$--color-font-40-f: transparentize($--color-black-f, 0.6);//
+$--color-font-50-f: transparentize($--color-black-f, 0.5);//二级文本
+$--color-font-60-f: transparentize($--color-black-f, 0.4);
+$--color-font-70-f: transparentize($--color-black-f, 0.3);//一级文本
+$--color-font-80-f: transparentize($--color-black-f, 0.2);
+$--color-font-90-f: transparentize($--color-black-f, 0.1);//标题
+
+// 小卡片背景色
+$--color-bg-10-f: transparentize($--color-white-f, 0.9);
+$--color-bg-20-f: transparentize($--color-white-f, 0.8);
+$--color-bg-30-f: transparentize($--color-white-f, 0.7);
+$--color-bg-40-f: transparentize($--color-white-f, 0.6);
+$--color-bg-50-f: transparentize($--color-white-f, 0.5);
+$--color-bg-60-f: transparentize($--color-white-f, 0.4);
+$--color-bg-70-f: transparentize($--color-white-f, 0.3);
+$--color-bg-80-f: transparentize($--color-white-f, 0.2);
+$--color-bg-90-f: transparentize($--color-white-f, 0.1);
+
+// 链接颜色
+$base-color-link: $blue-color-default;
+
+// 滚动条填充色
+$base-scroll-bar-fill:#d7d7da;
+$base-scroll-bar-fill2:$base-scroll-bar-fill;//#c1c9d3
+$scrollbar-thumb-bg:$Growatt-gray-8;
+$scrollbar-thumb-bg-hover:rgba(144, 147, 153, 0.3);
+$base-scrollbar-thumb-bg:$base-scroll-bar-fill2;
+$base-scrollbar-thumb-bg-hover:$base-scroll-bar-fill2;
+$base-scrollbar-track-bg-hover:transparent;
+
+// 页面模块颜色
+// $base-page-module-color: #f4f6f8;
+$base-page-module-color: #0a0a0a;
+$base-page-module-children-color: $--color-white;
+
+// 表格头部背景色
+// $base-table-header-background-color: #f1f2ef;
+$base-table-header-background-color: #393838;
+// 表格边框颜色
+$base-table-border-color: $Gray-4;
+// 表格字体颜色
+$base-table-cell-color: $--color-black;
+
+//卡片背景色1
+$base-background-color-1: rgba(222, 230, 222, 0.3);
+//卡片背景色2
+$base-background-color-2: rgba(222, 228, 230, 0.3);
+//卡片背景色3
+$base-background-color-3: rgba(230, 228, 222, 0.3);
+
+$base-show-more-box-link-li-color: $base-table-header-background-color;
+
+$base-device-details-left-module-height: 87vh;
+// 头部svg icon 颜色
+$base-header-svg-icon-color: $--color-black;
+.base-header-svg-icon-color {
+  color: $base-header-svg-icon-color !important;
+}
+.iconpark-icon {
+  width: 16px;
+  height: 16px;
+  color: $--color-black;
+  vertical-align: middle;
+}
+
+.base-background-color-1 {
+  background-color: $base-background-color-1;
+}
+.base-background-color-2 {
+  background-color: $base-background-color-2;
+}
+.base-background-color-3 {
+  background-color: $base-background-color-3;
+}
+
+.device-info-title {
+  font-size: 18px;
+  color: #6a835f;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.base-color-link-c {
+  color: $base-color-link;
+}
+
+.base-color-link-bg {
+  background-color: $base-color-link;
+}
+
+// 自定义步骤进度条背景色
+$diy-step-item-bar-finish-bg:$base-color-default;
+$diy-step-item-bar-process-bg:rgba(80, 148, 28, 0.38);
+$diy-step-item-bar-wait-bg:rgba(0, 0, 0, 0.08);
+
+
+//默认层级
+$base-z-index: 999;
+//横向布局纵向布局时菜单背景色
+// $base-menu-background: #e4e6ea;
+// $base-menu-background: #101111;
+$base-menu-background: #20261D;
+//菜单文字颜色
+// $base-menu-color: hsla(0, 0%, 100%, 0.95);
+$base-menu-color: $--color-font-70;
+//菜单选中文字颜色
+// $base-menu-color-active: hsla(0, 0%, 100%, 0.95);
+$base-menu-color-active: $--color-black;
+//菜单选中背景色
+// $base-menu-background-active: transparent;
+$base-menu-background-active: $base-table-header-background-color;
+
+// 子集菜单背景色
+$base-sub-menu-background: $--color-white;
+// 子集菜单active背景色
+$base-sub-menu-background-active: $base-table-header-background-color;
+
+// 树组件高亮选中某节点背景色
+$base-tree-curr-node-background-active: #eef1ec;
+// $base-tree-curr-node-background-active: #101010;
+
+// 树节点过滤器过滤到的节点背景色
+$tree-node-filter-bg-color:#fdffa6;
+// $tree-node-filter-bg-color:#18180f;
+
+//标题颜色
+$base-title-color: $--color-white;
+//字体大小配置
+$base-font-weight-default: 400;
+$base-font-weight-small: 510;
+$base-font-weight-middle: 600;
+$base-font-weight-big: 800;
+.font-weight-small{font-weight: $base-font-weight-small;}
+.font-weight-middle{font-weight: $base-font-weight-middle;}
+.font-weight-big{font-weight: $base-font-weight-big;}
+
+$base-font-size-small: 12px;
+$base-font-size-default: 14px;
+$base-font-size-big: 16px;
+$base-font-size-bigger: 18px;
+$base-font-size-max: 22px;
+$base-font-color: $--color-black;
+
+$base-color-blue: $blue-color-default;
+$base-color-green: $base-color-default;
+$base-color-white: $--color-white;
+$base-color-black: $--color-black;
+$base-color-yellow: #faad14;
+$base-color-orange: $orange-color-default;
+$base-color-red: $red-color-default;
+$base-color-primary: $base-color-default;
+$base-color-gray: #909399;
+
+$base-main-width: 1279px;
+$base-border-radius: 4px;
+// $base-border-color: #dcdfe6;
+$base-border-color: #dcdfe6;
+//输入框高度
+$base-input-height: 32px;
+//默认paddiing
+$base-padding: 20px;
+//默认阴影
+$base-box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+//横向布局时top-bar、logo、一级菜单的高度
+$base-top-bar-height: 56px;
+//纵向布局时logo的高度
+$base-logo-height: 75px;
+//顶部nav-bar的高度
+$base-nav-bar-height: 60px;
+//顶部多标签页tabs-bar的高度
+$base-tabs-bar-height: 55px;
+//顶部多标签页tabs-bar中每一个item的高度
+$base-tag-item-height: 34px;
+//菜单li标签的高度
+$base-menu-item-height: 50px;
+//app-main的高度
+// $base-app-main-height: calc(100vh - #{$base-nav-bar-height} - #{$base-tabs-bar-height} - #{$base-padding} - #{$base-padding} - 55px - 55px);
+$base-app-main-height: calc(100vh - #{$base-nav-bar-height} - #{$base-tabs-bar-height} - #{$base-padding} - #{$base-padding} - 55px);
+/*设备列表表格模块高度*/ 
+$base-app-main-height2: calc(100vh - #{$base-nav-bar-height} - #{$base-tabs-bar-height} - #{$base-padding} - #{$base-padding} - 530px);
+//纵向布局时左侧导航未折叠时的宽度
+$base-left-menu-width: 256px;
+//纵向布局时左侧导航未折叠时右侧内容的宽度
+$base-right-content-width: calc(100% - #{$base-left-menu-width});
+//纵向布局时左侧导航已折叠时的宽度
+$base-left-menu-width-min: 56px;
+//纵向布局时左侧导航已折叠时右侧内容的宽度
+$base-right-content-width-min: calc(100% - #{$base-left-menu-width-min});
+//默认动画
+$base-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border 0s, background 0s, color 0s, font-size 0s;
+//默认动画长
+$base-transition-time: 0.3s;
+
+/*背景色渐变sss*/
+@mixin gradient-bg($color1: #66b7f9, $color2: #1c82d4) {
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(to bottom, $color1, $color2);
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, to bottom, from($color1), to($color2));
+  /* Safari 5.1+, Chrome 10+ */
+  background: -webkit-linear-gradient(to bottom, $color1, $color2);
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(to bottom, $color1, $color2);
+  /* default */
+  background: linear-gradient(to bottom, $color1, $color2);
+  background-color: $color2;
+}
+
+$--carousel-arrow-background: rgba(31, 45, 61, 0.11);
+$--carousel-arrow-hover-background: rgba(31, 45, 61, 0.23);
+
+
+:export {
+  //菜单文字颜色变量导出
+  menu-color: $base-menu-color;
+  //菜单选中文字颜色变量导出
+  menu-color-active: $base-menu-color-active;
+  //菜单背景色变量导出
+  menu-background: $base-menu-background;
+  // menu-background: #fff;
+  //框架默认主题色
+  base-color-default: $base-color-default;
+  // 框架主题色的所有百分比添加白色透明合成色
+  color-primary-light-1: $--color-primary-light-1;
+  color-primary-light-2: $--color-primary-light-2;
+  color-primary-light-3: $--color-primary-light-3;
+  color-primary-light-4: $--color-primary-light-4;
+  color-primary-light-5: $--color-primary-light-5;
+  color-primary-light-6: $--color-primary-light-6;
+  color-primary-light-7: $--color-primary-light-7;
+  color-primary-light-8: $--color-primary-light-8;
+  color-primary-light-9: $--color-primary-light-9;
+  // 表格头部背景色
+  base-table-header-background-color: $base-table-header-background-color;
+  // 表格边框颜色
+  base-table-border-color: $base-table-border-color;
+  // 表格字体颜色
+  base-table-cell-color: $base-table-cell-color;
+
+  color-font-10: $--color-font-10;//禁用
+  color-font-20: $--color-font-20;
+  color-font-30: $--color-font-30;//禁用
+  color-font-40: $--color-font-40;
+  color-font-50: $--color-font-50;//二级文本
+  color-font-60: $--color-font-60;
+  color-font-70: $--color-font-70;//一级文本
+  color-font-80: $--color-font-80;
+  color-font-90: $--color-font-90;//标题
+
+  // 小卡片背景色
+  color-bg-10: $--color-bg-10;
+  color-bg-20: $--color-bg-20;
+  color-bg-30: $--color-bg-30;
+  color-bg-40: $--color-bg-40;
+  color-bg-50: $--color-bg-50;
+  color-bg-60: $--color-bg-60;
+  color-bg-70: $--color-bg-70;
+  color-bg-80: $--color-bg-80;
+  color-bg-90: $--color-bg-90;
+
+  // 字体大小
+  base-font-weight-small: $base-font-weight-small;
+  base-font-weight-middle: $base-font-weight-middle;
+  base-font-weight-big: $base-font-weight-big;
+
+  // 链接颜色
+  base-color-link:$base-color-link;
+
+  // 总览页面3Dpolyline线条颜色
+  overflow-3D-polyline-color:$overflow-3D-polyline-color;
+  color-white-f: $--color-white-f;
+  color-black-f: $--color-black-f;
+  color-white: $--color-white;
+  color-black: $--color-black;
+}

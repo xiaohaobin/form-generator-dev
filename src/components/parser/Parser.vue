@@ -235,6 +235,6 @@ export default {
 <style lang='scss'>
 /* .type-code-2-children .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before{display: none;} */
 
-//==================针对换机申请模板部分需求设置的样式========================================
+//==================针对表单模板部分需求设置的样式========================================
 @import '@/styles/render';
 </style>

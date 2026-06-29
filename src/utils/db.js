@@ -1,3 +1,7 @@
+import {
+  inputComponents, selectComponents, layoutComponents, formConf
+} from '@/components/generator/config'
+
 const DRAWING_ITEMS = 'drawingItems'
 const DRAWING_ITEMS_VERSION = '1.2'
 const DRAWING_ITEMS_VERSION_KEY = 'DRAWING_ITEMS_VERSION'
@@ -5,7 +9,37 @@ const DRAWING_ID = 'idGlobal'
 const TREE_NODE_ID = 'treeNodeId'
 const FORM_CONF = 'formConf'
 
-export function getDrawingList() {
+//重定义配置的on事件
+async function resetConfigEvent(configItem){
+  configItem.forEach((item)=>{
+    let itemList = getItemWhenResetConfigEvent(item, inputComponents);
+    if(!itemList){
+      getItemWhenResetConfigEvent(item, selectComponents);
+    }
+  });
+
+  return configItem
+}
+
+
+
+async function getItemWhenResetConfigEvent(configItem,list){
+  let oItem = null;
+  list.forEach((item)=>{
+    if(item.__config__.typeCode === configItem.__config__.typeCode){
+      oItem = item;
+      if(item.on){
+        for(let key in item.on){
+          configItem.on[key] = item.on[key]
+        }
+      }      
+    }
+  });  
+  return oItem
+}
+
+
+export async function getDrawingList() {
   // 加入缓存版本的概念，保证缓存数据与程序匹配
   const version = localStorage.getItem(DRAWING_ITEMS_VERSION_KEY)
   if (version !== DRAWING_ITEMS_VERSION) {
@@ -14,8 +48,13 @@ export function getDrawingList() {
     return null
   }
 
-  const str = localStorage.getItem(DRAWING_ITEMS)
-  if (str) return JSON.parse(str)
+  const str = localStorage.getItem(DRAWING_ITEMS);
+  //处理带有on事件的组件配置
+  if(str){
+    let res = JSON.parse(str);
+    res = await resetConfigEvent(res);
+    return res
+  }    
   return null
 }
 

@@ -1,0 +1,46 @@
+---
+description: Form Generator 项目核心上下文与开发约定
+alwaysApply: true
+---
+
+# Form Generator 项目规则
+
+基于 Vue 2 + Element UI 2 的表单设计器，fork 自 JakHuang/form-generator，已扩展 OSS/Growatt 业务（模板/字段/规则/API 管理）。
+
+## 技术栈
+
+- Vue 2.6 Options API、vue-router 3、Vuex 3、vue-i18n 8
+- Element UI 2.15、vuedraggable、axios、MockJS
+- @vue/cli-service 4.4 多页面构建（index + preview）
+
+## 核心目录
+
+| 路径 | 职责 |
+|------|------|
+| `src/components/generator/config.js` | 组件库 JSON 配置（新增组件入口） |
+| `src/components/render/render.js` + `slots/` | JSON 运行时渲染 |
+| `src/components/parser/Parser.vue` | JSON 表单解析器 |
+| `src/components/generator/html.js/js.js/css.js` | Vue 代码生成 |
+| `src/views/index/Home.vue` | 设计器三栏主界面 |
+| `src/views/index/RightPanel.vue` | 组件属性面板 |
+| `src/views/index/DraggableItem.vue` | 画布拖拽渲染 |
+
+## 组件 JSON 协议
+
+- `__config__`：设计器元数据（label、tag、typeCode、layout、regList 等）
+- `__slot__`：插槽数据（options、prepend 等）
+- `__vModel__`：字段绑定名，关联 Vuex `fieldList`
+- typeCode：0~99 输入型、100~199 选择型、200~299 布局型
+
+## 环境
+
+- `window.OSSFormDesigner === 'development'` 为开发模式
+- 开发用 `requestMock`/`requestLocal`，生产用 `request3`
+- 详细文档见根目录 `PROJECT_DOCUMENTATION.md`
+
+## 编码原则
+
+- 最小改动，匹配现有 Options API 与命名风格
+- 新增组件必须同步 config.js、slots（如需）、RightPanel、代码生成器
+- 业务工具用 `this.$xhb`，接口用 `src/utils/api.js`
+- 注释仅解释非显而易见的业务逻辑

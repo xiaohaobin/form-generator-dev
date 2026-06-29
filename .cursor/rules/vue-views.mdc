@@ -1,0 +1,47 @@
+---
+description: Vue 页面与组件开发约定
+globs: src/{views,components}/**/*.{vue,js}
+alwaysApply: false
+---
+
+# Vue 页面开发规则
+
+## 路由
+
+- 管理后台子路由注册在 `src/utils/routerData.js`，布局壳为 `views/index/index.vue`
+- 设计器页面：`/formDesignerHome` → `Home.vue`
+- 未知路由重定向到 `/formDesignerIndex`
+
+## 页面结构模式
+
+管理页面（template/field/regular/commonAPI）统一结构：
+
+- 面包屑导航 → 筛选表单 → 操作按钮 → `el-table` 列表 → 弹窗 CRUD
+
+## 全局注入
+
+```javascript
+this.$xhb        // 业务工具插件
+this.$store      // Vuex
+this.$com        // common.js 工具
+this.$request    // 当前环境请求实例
+this.$t()        // i18n
+```
+
+## API 调用
+
+- 接口定义在 `src/utils/api.js`，通过 `PA_request_fn` 柯里化封装
+- 成功码 `code === 200`；`noVerify: true` 跳过校验
+- 开发环境 Mock 在 `mock/controller/` 对应模块
+
+## 样式
+
+- 管理页通用类：`pd-10`、`box-bg`、`flex-flex-end`、`mb-5`
+- 主题 CSS：`@/oss-theme/index.css`（main.js 引入）
+- 设计器样式：`src/styles/home.scss`、`render.scss`
+
+## 自定义业务组件
+
+- 国家选择：`components/xhb/xhb-country-select.vue`
+- 顶栏/侧栏：`diyHeader.vue`、`diyNav.vue`
+- 语言切换：`language.vue`

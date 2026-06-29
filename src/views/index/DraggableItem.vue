@@ -67,7 +67,7 @@ const layouts = {
           </span>
           <render key={config.renderKey} conf={currentItem} onInput={ event => {
             this.$set(config, 'defaultValue', event)
-          }}>
+          }}  onDiy={(a,b)=>{console.log('diydiy',a,b)} }>
             {child}
           </render>
         </el-form-item>

@@ -33,7 +33,7 @@ export default {
         fields: [
           {
             __config__: {
-              label: '单行文本',
+              label: '输入框',
               labelWidth: null,
               showLabel: true,
               changeTag: true,

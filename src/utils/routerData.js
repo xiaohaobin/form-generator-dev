@@ -4,7 +4,7 @@ const routerData = [
         name: 'template',
         component:() => import('@/views/template/index.vue'),
         langKey: 'templateManager',
-        txt:'换机申请模板管理',
+        txt:'表单模板管理',
         index:'1',
         iconClass:'el-icon-menu',
     },

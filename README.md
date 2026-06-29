@@ -99,3 +99,9 @@ PS:
 
    
     
+    element-theme 自定义主题方法：
+    1、先将node环境切换到 v14 版本 32进制
+    nvm use 14.18.1 32
+    2、参考文档 修改 已生成的element-variables.scss 文件的主要变量
+    3、导出css文件 ：如修改主题为暗色调之后，导出到dark-theme文件夹
+     et -o ./dark-theme

@@ -5,7 +5,7 @@
         <img src="../assets/image/main-logo1.png" alt="" class="mt-10">
       </div>
       <div class="ml-15 mr-15">
-        <b>换机申请表单配置化模板管理系统</b>
+        <b>表单表单配置化模板管理系统</b>
       </div>
     </div>
 

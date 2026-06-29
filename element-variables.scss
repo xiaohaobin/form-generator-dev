@@ -1,966 +1,986 @@
-/* Element Chalk Variables */
-
-// Special comment for theme configurator
-// type|skipAutoTranslation|Category|Order
-// skipAutoTranslation 1
-
+@charset "utf-8";
+@import 'variables-dark.scss';
 /* Transition
 -------------------------- */
-$--all-transition: all .3s cubic-bezier(.645,.045,.355,1) !default;
-$--fade-transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1) !default;
-$--fade-linear-transition: opacity 200ms linear !default;
-$--md-fade-transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1), opacity 300ms cubic-bezier(0.23, 1, 0.32, 1) !default;
-$--border-transition-base: border-color .2s cubic-bezier(.645,.045,.355,1) !default;
-$--color-transition-base: color .2s cubic-bezier(.645,.045,.355,1) !default;
+$--all-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+$--fade-transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1);
+$--fade-linear-transition: opacity 200ms linear;
+$--md-fade-transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1), opacity 300ms cubic-bezier(0.23, 1, 0.32, 1);
+$--border-transition-base: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+$--color-transition-base: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 /* Color
 -------------------------- */
 /// color|1|Brand Color|0
-$--color-primary: #6FBA2C !default;
+$--color-primary: $base-color-default;
 /// color|1|Background Color|4
-$--color-white: #FFFFFF !default;
+$--color-white: #000;
 /// color|1|Background Color|4
-$--color-black: #000000 !default;
-$--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default; /* 53a8ff */
-$--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default; /* 66b1ff */
-$--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default; /* 79bbff */
-$--color-primary-light-4: mix($--color-white, $--color-primary, 40%) !default; /* 8cc5ff */
-$--color-primary-light-5: mix($--color-white, $--color-primary, 50%) !default; /* a0cfff */
-$--color-primary-light-6: mix($--color-white, $--color-primary, 60%) !default; /* b3d8ff */
-$--color-primary-light-7: mix($--color-white, $--color-primary, 70%) !default; /* c6e2ff */
-$--color-primary-light-8: mix($--color-white, $--color-primary, 80%) !default; /* d9ecff */
-$--color-primary-light-9: mix($--color-white, $--color-primary, 90%) !default; /* ecf5ff */
-/// color|1|Functional Color|1
-$--color-success: #6FBA2C !default;
-/// color|1|Functional Color|1
-$--color-warning: #FAAD14 !default;
-/// color|1|Functional Color|1
-$--color-danger: #FF4D4F !default;
-/// color|1|Functional Color|1
-$--color-info: #1890FF !default;
+$--color-black: #fff;
+$--color-primary-light-1: mix($--color-white, $--color-primary, 10%);
 
-$--color-success-light: mix($--color-white, $--color-success, 80%) !default;
-$--color-warning-light: mix($--color-white, $--color-warning, 80%) !default;
-$--color-danger-light: mix($--color-white, $--color-danger, 80%) !default;
-$--color-info-light: mix($--color-white, $--color-info, 80%) !default;
+/* 53a8ff */
+$--color-primary-light-2: mix($--color-white, $--color-primary, 20%);
 
-$--color-success-lighter: mix($--color-white, $--color-success, 90%) !default;
-$--color-warning-lighter: mix($--color-white, $--color-warning, 90%) !default;
-$--color-danger-lighter: mix($--color-white, $--color-danger, 90%) !default;
-$--color-info-lighter: mix($--color-white, $--color-info, 90%) !default;
+/* 66b1ff */
+$--color-primary-light-3: mix($--color-white, $--color-primary, 30%);
+
+/* 79bbff */
+$--color-primary-light-4: mix($--color-white, $--color-primary, 40%);
+
+/* 8cc5ff */
+$--color-primary-light-5: mix($--color-white, $--color-primary, 50%);
+
+/* a0cfff */
+$--color-primary-light-6: mix($--color-white, $--color-primary, 60%);
+
+/* b3d8ff */
+$--color-primary-light-7: mix($--color-white, $--color-primary, 70%);
+
+/* c6e2ff */
+$--color-primary-light-8: mix($--color-white, $--color-primary, 80%);
+
+/* d9ecff */
+$--color-primary-light-9: mix($--color-white, $--color-primary, 90%);
+
+/* ecf5ff */
+/// color|1|Functional Color|1
+$--color-success: $base-color-green;
+/// color|1|Functional Color|1
+$--color-warning: $base-color-orange;
+/// color|1|Functional Color|1
+$--color-danger: $base-color-red;
+/// color|1|Functional Color|1
+$--color-info: $base-color-gray;
+
+$--color-success-light: mix($--color-white, $--color-success, 80%);
+$--color-warning-light: mix($--color-white, $--color-warning, 80%);
+$--color-danger-light: mix($--color-white, $--color-danger, 80%);
+$--color-info-light: mix($--color-white, $--color-info, 80%);
+
+$--color-success-lighter: mix($--color-white, $--color-success, 90%);
+$--color-warning-lighter: mix($--color-white, $--color-warning, 90%);
+$--color-danger-lighter: mix($--color-white, $--color-danger, 90%);
+$--color-info-lighter: mix($--color-white, $--color-info, 90%);
 /// color|1|Font Color|2
-$--color-text-primary: #303133 !default;
+$--color-text-primary: $--color-font-90;
 /// color|1|Font Color|2
-$--color-text-regular: #606266 !default;
+// $--color-text-regular: #606266;
+$--color-text-regular: $--color-black;
 /// color|1|Font Color|2
-$--color-text-secondary: #909399 !default;
+$--color-text-secondary: $--color-font-50;
 /// color|1|Font Color|2
-$--color-text-placeholder: #C0C4CC !default;
+// $--color-text-placeholder: $--color-font-30;
+$--color-text-placeholder: $Gray-9;
 /// color|1|Border Color|3
-$--border-color-base: #DCDFE6 !default;
+$--border-color-base: $base-border-color;
 /// color|1|Border Color|3
-$--border-color-light: #E4E7ED !default;
+$--border-color-light: $Growatt-gray-4;
+/// color|1|Border Color|3 边框，线颜色
+$--border-color-lighter: $base-table-border-color;
 /// color|1|Border Color|3
-$--border-color-lighter: #EBEEF5 !default;
-/// color|1|Border Color|3
-$--border-color-extra-light: #F2F6FC !default;
+$--border-color-extra-light: $Gray-3;
+;
 
 // Background
 /// color|1|Background Color|4
-$--background-color-base: #F5F7FA !default;
+$--background-color-base: $base-color--2;
 
 /* Link
 -------------------------- */
-$--link-color: $--color-primary-light-2 !default;
-$--link-hover-color: $--color-primary !default;
+$--link-color: $--color-primary-light-2;
+$--link-hover-color: $--color-primary;
 
 /* Border
 -------------------------- */
-$--border-width-base: 1px !default;
-$--border-style-base: solid !default;
-$--border-color-hover: $--color-text-placeholder !default;
-$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
+$--border-width-base: 1px;
+$--border-style-base: solid;
+$--border-color-hover: $--color-text-placeholder;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base;
 /// borderRadius|1|Radius|0
-$--border-radius-base: 4px !default;
+$--border-radius-base: $base-border-radius;
 /// borderRadius|1|Radius|0
-$--border-radius-small: 2px !default;
+$--border-radius-small: $base-border-radius;
 /// borderRadius|1|Radius|0
-$--border-radius-circle: 100% !default;
+$--border-radius-circle: 100%;
 /// borderRadius|1|Radius|0
-$--border-radius-zero: 0 !default;
+$--border-radius-zero: 0;
 
 // Box-shadow
 /// boxShadow|1|Shadow|1
-$--box-shadow-base: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) !default;
+$--box-shadow-base: 0 2px 4px $--color-font-10, 0 0 6px rgba(0, 0, 0, 0.04);
 // boxShadow|1|Shadow|1
-$--box-shadow-dark: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .12) !default;
+$--box-shadow-dark: 0 2px 4px $--color-font-10, 0 0 6px $--color-font-10;
 /// boxShadow|1|Shadow|1
-$--box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
+$--box-shadow-light: 0 2px 12px 0 $--color-font-10;
 
 /* Fill
 -------------------------- */
-$--fill-base: $--color-white !default;
+$--fill-base: $--color-white;
 
 /* Typography
 -------------------------- */
-$--font-path: 'fonts' !default;
-$--font-display: 'auto' !default;
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+$--font-display: 'auto';
 /// fontSize|1|Font Size|0
-$--font-size-extra-large: 20px !default;
+$--font-size-extra-large: 20px;
 /// fontSize|1|Font Size|0
-$--font-size-large: 18px !default;
+$--font-size-large: 18px;
 /// fontSize|1|Font Size|0
-$--font-size-medium: 16px !default;
+$--font-size-medium: 16px;
 /// fontSize|1|Font Size|0
-$--font-size-base: 14px !default;
+$--font-size-base: 14px;
 /// fontSize|1|Font Size|0
-$--font-size-small: 13px !default;
+$--font-size-small: 13px;
 /// fontSize|1|Font Size|0
-$--font-size-extra-small: 12px !default;
+$--font-size-extra-small: 12px;
 /// fontWeight|1|Font Weight|1
-$--font-weight-primary: 500 !default;
+$--font-weight-primary: 500;
 /// fontWeight|1|Font Weight|1
-$--font-weight-secondary: 100 !default;
+$--font-weight-secondary: 100;
 /// fontLineHeight|1|Line Height|2
-$--font-line-height-primary: 24px !default;
+$--font-line-height-primary: 24px;
 /// fontLineHeight|1|Line Height|2
-$--font-line-height-secondary: 16px !default;
-$--font-color-disabled-base: #bbb !default;
+$--font-line-height-secondary: 16px;
+$--font-color-disabled-base: $Gray-7;
+
 /* Size
 -------------------------- */
-$--size-base: 14px !default;
+$--size-base: 14px;
 
 /* z-index
 -------------------------- */
-$--index-normal: 1 !default;
-$--index-top: 1000 !default;
-$--index-popper: 2000 !default;
+$--index-normal: 1;
+$--index-top: 1000;
+$--index-popper: 2000;
 
 /* Disable base
 -------------------------- */
-$--disabled-fill-base: $--background-color-base !default;
-$--disabled-color-base: $--color-text-placeholder !default;
-$--disabled-border-base: $--border-color-light !default;
+$--disabled-fill-base: $--background-color-base;
+$--disabled-color-base: $--color-text-placeholder;
+$--disabled-border-base: $--border-color-light;
 
 /* Icon
 -------------------------- */
-$--icon-color: #666 !default;
-$--icon-color-base: $--color-info !default;
+$--icon-color: $Gray-13;
+$--icon-color-base: $--color-info;
 
 /* Checkbox
 -------------------------- */
 /// fontSize||Font|1
-$--checkbox-font-size: 14px !default;
+$--checkbox-font-size: 14px;
 /// fontWeight||Font|1
-$--checkbox-font-weight: $--font-weight-primary !default;
+$--checkbox-font-weight: $--font-weight-primary;
 /// color||Color|0
-$--checkbox-font-color: $--color-text-regular !default;
-$--checkbox-input-height: 14px !default;
-$--checkbox-input-width: 14px !default;
+$--checkbox-font-color: $--color-text-regular;
+$--checkbox-input-height: 14px;
+$--checkbox-input-width: 14px;
 /// borderRadius||Border|2
-$--checkbox-border-radius: $--border-radius-small !default;
+$--checkbox-border-radius: $--border-radius-small;
 /// color||Color|0
-$--checkbox-background-color: $--color-white !default;
-$--checkbox-input-border: $--border-base !default;
+$--checkbox-background-color: $--color-white;
+$--checkbox-input-border: $--border-base;
 
 /// color||Color|0
-$--checkbox-disabled-border-color: $--border-color-base !default;
-$--checkbox-disabled-input-fill: #edf2fc !default;
-$--checkbox-disabled-icon-color: $--color-text-placeholder !default;
+$--checkbox-disabled-border-color: $--border-color-base;
+$--checkbox-disabled-input-fill: $Growatt-gray-3;
+$--checkbox-disabled-icon-color: $--color-text-placeholder;
 
-$--checkbox-disabled-checked-input-fill: $--border-color-extra-light !default;
-$--checkbox-disabled-checked-input-border-color: $--border-color-base !default;
-$--checkbox-disabled-checked-icon-color: $--color-text-placeholder !default;
+$--checkbox-disabled-checked-input-fill: $--border-color-extra-light;
+$--checkbox-disabled-checked-input-border-color: $--border-color-base;
+$--checkbox-disabled-checked-icon-color: $--color-text-placeholder;
 
 /// color||Color|0
-$--checkbox-checked-font-color: $--color-primary !default;
-$--checkbox-checked-input-border-color: $--color-primary !default;
+$--checkbox-checked-font-color: $--color-primary;
+$--checkbox-checked-input-border-color: $--color-primary;
 /// color||Color|0
-$--checkbox-checked-background-color: $--color-primary !default;
-$--checkbox-checked-icon-color: $--fill-base !default;
+$--checkbox-checked-background-color: $--color-primary;
+$--checkbox-checked-icon-color: $--fill-base;
 
-$--checkbox-input-border-color-hover: $--color-primary !default;
+$--checkbox-input-border-color-hover: $--color-primary;
 /// height||Other|4
-$--checkbox-bordered-height: 40px !default;
+$--checkbox-bordered-height: 40px;
 /// padding||Spacing|3
-$--checkbox-bordered-padding: 9px 20px 9px 10px !default;
+$--checkbox-bordered-padding: 9px 20px 9px 10px;
 /// padding||Spacing|3
-$--checkbox-bordered-medium-padding: 7px 20px 7px 10px !default;
+$--checkbox-bordered-medium-padding: 7px 20px 7px 10px;
 /// padding||Spacing|3
-$--checkbox-bordered-small-padding: 5px 15px 5px 10px !default;
+$--checkbox-bordered-small-padding: 5px 15px 5px 10px;
 /// padding||Spacing|3
-$--checkbox-bordered-mini-padding: 3px 15px 3px 10px !default;
-$--checkbox-bordered-medium-input-height: 14px !default;
-$--checkbox-bordered-medium-input-width: 14px !default;
+$--checkbox-bordered-mini-padding: 3px 15px 3px 10px;
+$--checkbox-bordered-medium-input-height: 14px;
+$--checkbox-bordered-medium-input-width: 14px;
 /// height||Other|4
-$--checkbox-bordered-medium-height: 36px !default;
-$--checkbox-bordered-small-input-height: 12px !default;
-$--checkbox-bordered-small-input-width: 12px !default;
+$--checkbox-bordered-medium-height: 36px;
+$--checkbox-bordered-small-input-height: 12px;
+$--checkbox-bordered-small-input-width: 12px;
 /// height||Other|4
-$--checkbox-bordered-small-height: 32px !default;
-$--checkbox-bordered-mini-input-height: 12px !default;
-$--checkbox-bordered-mini-input-width: 12px !default;
+$--checkbox-bordered-small-height: 32px;
+$--checkbox-bordered-mini-input-height: 12px;
+$--checkbox-bordered-mini-input-width: 12px;
 /// height||Other|4
-$--checkbox-bordered-mini-height: 28px !default;
+$--checkbox-bordered-mini-height: 28px;
 
 /// color||Color|0
-$--checkbox-button-checked-background-color: $--color-primary !default;
+$--checkbox-button-checked-background-color: $--color-primary;
 /// color||Color|0
-$--checkbox-button-checked-font-color: $--color-white !default;
+$--checkbox-button-checked-font-color: $--color-white;
 /// color||Color|0
-$--checkbox-button-checked-border-color: $--color-primary !default;
-
-
+$--checkbox-button-checked-border-color: $--color-primary;
 
 /* Radio
 -------------------------- */
 /// fontSize||Font|1
-$--radio-font-size: $--font-size-base !default;
+$--radio-font-size: $--font-size-base;
 /// fontWeight||Font|1
-$--radio-font-weight: $--font-weight-primary !default;
+$--radio-font-weight: $--font-weight-primary;
 /// color||Color|0
-$--radio-font-color: $--color-text-regular !default;
-$--radio-input-height: 14px !default;
-$--radio-input-width: 14px !default;
+$--radio-font-color: $--color-text-regular;
+$--radio-input-height: 14px;
+$--radio-input-width: 14px;
 /// borderRadius||Border|2
-$--radio-input-border-radius: $--border-radius-circle !default;
+$--radio-input-border-radius: $--border-radius-circle;
 /// color||Color|0
-$--radio-input-background-color: $--color-white !default;
-$--radio-input-border: $--border-base !default;
+$--radio-input-background-color: $--color-white;
+$--radio-input-border: $--border-base;
 /// color||Color|0
-$--radio-input-border-color: $--border-color-base !default;
+$--radio-input-border-color: $--border-color-base;
 /// color||Color|0
-$--radio-icon-color: $--color-white !default;
+$--radio-icon-color: $--color-white;
 
-$--radio-disabled-input-border-color: $--disabled-border-base !default;
-$--radio-disabled-input-fill: $--disabled-fill-base !default;
-$--radio-disabled-icon-color: $--disabled-fill-base !default;
+$--radio-disabled-input-border-color: $--disabled-border-base;
+$--radio-disabled-input-fill: $--disabled-fill-base;
+$--radio-disabled-icon-color: $--disabled-fill-base;
 
-$--radio-disabled-checked-input-border-color: $--disabled-border-base !default;
-$--radio-disabled-checked-input-fill: $--disabled-fill-base !default;
-$--radio-disabled-checked-icon-color: $--color-text-placeholder !default;
+$--radio-disabled-checked-input-border-color: $--disabled-border-base;
+$--radio-disabled-checked-input-fill: $--disabled-fill-base;
+$--radio-disabled-checked-icon-color: $--color-text-placeholder;
 
 /// color||Color|0
-$--radio-checked-font-color: $--color-primary !default;
+$--radio-checked-font-color: $--color-primary;
 /// color||Color|0
-$--radio-checked-input-border-color: $--color-primary !default;
+$--radio-checked-input-border-color: $--color-primary;
 /// color||Color|0
-$--radio-checked-input-background-color: $--color-white !default;
+$--radio-checked-input-background-color: $--color-white;
 /// color||Color|0
-$--radio-checked-icon-color: $--color-primary !default;
+$--radio-checked-icon-color: $--color-primary;
 
-$--radio-input-border-color-hover: $--color-primary !default;
+$--radio-input-border-color-hover: $--color-primary;
 
-$--radio-bordered-height: 40px !default;
-$--radio-bordered-padding: 12px 20px 0 10px !default;
-$--radio-bordered-medium-padding: 10px 20px 0 10px !default;
-$--radio-bordered-small-padding: 8px 15px 0 10px !default;
-$--radio-bordered-mini-padding: 6px 15px 0 10px !default;
-$--radio-bordered-medium-input-height: 14px !default;
-$--radio-bordered-medium-input-width: 14px !default;
-$--radio-bordered-medium-height: 36px !default;
-$--radio-bordered-small-input-height: 12px !default;
-$--radio-bordered-small-input-width: 12px !default;
-$--radio-bordered-small-height: 32px !default;
-$--radio-bordered-mini-input-height: 12px !default;
-$--radio-bordered-mini-input-width: 12px !default;
-$--radio-bordered-mini-height: 28px !default;
+$--radio-bordered-height: 40px;
+$--radio-bordered-padding: 12px 20px 0 10px;
+$--radio-bordered-medium-padding: 10px 20px 0 10px;
+$--radio-bordered-small-padding: 8px 15px 0 10px;
+$--radio-bordered-mini-padding: 6px 15px 0 10px;
+$--radio-bordered-medium-input-height: 14px;
+$--radio-bordered-medium-input-width: 14px;
+$--radio-bordered-medium-height: 36px;
+$--radio-bordered-small-input-height: 12px;
+$--radio-bordered-small-input-width: 12px;
+$--radio-bordered-small-height: 32px;
+$--radio-bordered-mini-input-height: 12px;
+$--radio-bordered-mini-input-width: 12px;
+$--radio-bordered-mini-height: 28px;
 
 /// fontSize||Font|1
-$--radio-button-font-size: $--font-size-base !default;
+$--radio-button-font-size: $--font-size-base;
 /// color||Color|0
-$--radio-button-checked-background-color: $--color-primary !default;
+$--radio-button-checked-background-color: $--color-primary;
 /// color||Color|0
-$--radio-button-checked-font-color: $--color-white !default;
+$--radio-button-checked-font-color: $--color-white;
 /// color||Color|0
-$--radio-button-checked-border-color: $--color-primary !default;
-$--radio-button-disabled-checked-fill: $--border-color-extra-light !default;
+$--radio-button-checked-border-color: $--color-primary;
+$--radio-button-disabled-checked-fill: $--border-color-extra-light;
 
 /* Select
 -------------------------- */
-$--select-border-color-hover: $--border-color-hover !default;
-$--select-disabled-border: $--disabled-border-base !default;
+$--select-border-color-hover: $--border-color-hover;
+$--select-disabled-border: $--disabled-border-base;
 /// fontSize||Font|1
-$--select-font-size: $--font-size-base !default;
-$--select-close-hover-color: $--color-text-secondary !default;
+$--select-font-size: $--font-size-base;
+$--select-close-hover-color: $--color-text-secondary;
 
-$--select-input-color: $--color-text-placeholder !default;
-$--select-multiple-input-color: #666 !default;
+$--select-input-color: $--color-text-placeholder;
+$--select-multiple-input-color: $Gray-13;
 /// color||Color|0
-$--select-input-focus-border-color: $--color-primary !default;
+$--select-input-focus-border-color: $--color-primary;
 /// fontSize||Font|1
-$--select-input-font-size: 14px !default;
+$--select-input-font-size: 14px;
 
-$--select-option-color: $--color-text-regular !default;
-$--select-option-disabled-color: $--color-text-placeholder !default;
-$--select-option-disabled-background: $--color-white !default;
+$--select-option-color: $--color-text-regular;
+$--select-option-disabled-color: $--color-text-placeholder;
+$--select-option-disabled-background: $--color-white;
 /// height||Other|4
-$--select-option-height: 34px !default;
-$--select-option-hover-background: $--background-color-base !default;
+$--select-option-height: 34px;
+$--select-option-hover-background: $--background-color-base;
 /// color||Color|0
-$--select-option-selected-font-color: $--color-primary !default;
-$--select-option-selected-hover: $--background-color-base !default;
+$--select-option-selected-font-color: $--color-primary;
+$--select-option-selected-hover: $--background-color-base;
 
-$--select-group-color: $--color-info !default;
-$--select-group-height: 30px !default;
-$--select-group-font-size: 12px !default;
+$--select-group-color: $--color-info;
+$--select-group-height: 30px;
+$--select-group-font-size: 12px;
 
-$--select-dropdown-background: $--color-white !default;
-$--select-dropdown-shadow: $--box-shadow-light !default;
-$--select-dropdown-empty-color: #999 !default;
+$--select-dropdown-background: $--color-white;
+$--select-dropdown-shadow: $--box-shadow-light;
+$--select-dropdown-empty-color: $Gray-10;
 /// height||Other|4
-$--select-dropdown-max-height: 274px !default;
-$--select-dropdown-padding: 6px 0 !default;
-$--select-dropdown-empty-padding: 10px 0 !default;
-$--select-dropdown-border: solid 1px $--border-color-light !default;
+$--select-dropdown-max-height: 274px;
+$--select-dropdown-padding: 6px 0;
+$--select-dropdown-empty-padding: 10px 0;
+$--select-dropdown-border: solid 1px $--border-color-light;
 
 /* Alert
 -------------------------- */
-$--alert-padding: 8px 16px !default;
+$--alert-padding: 8px 16px;
 /// borderRadius||Border|2
-$--alert-border-radius: $--border-radius-base !default;
+$--alert-border-radius: $--border-radius-base;
 /// fontSize||Font|1
-$--alert-title-font-size: 13px !default;
+$--alert-title-font-size: 13px;
 /// fontSize||Font|1
-$--alert-description-font-size: 12px !default;
+$--alert-description-font-size: 12px;
 /// fontSize||Font|1
-$--alert-close-font-size: 12px !default;
+$--alert-close-font-size: 12px;
 /// fontSize||Font|1
-$--alert-close-customed-font-size: 13px !default;
+$--alert-close-customed-font-size: 13px;
 
-$--alert-success-color: $--color-success-lighter !default;
-$--alert-info-color: $--color-info-lighter !default;
-$--alert-warning-color: $--color-warning-lighter !default;
-$--alert-danger-color: $--color-danger-lighter !default;
+$--alert-success-color: $--color-success-lighter;
+$--alert-info-color: $--color-info-lighter;
+$--alert-warning-color: $--color-warning-lighter;
+$--alert-danger-color: $--color-danger-lighter;
 
 /// height||Other|4
-$--alert-icon-size: 16px !default;
+$--alert-icon-size: 16px;
 /// height||Other|4
-$--alert-icon-large-size: 28px !default;
+$--alert-icon-large-size: 28px;
 
 /* MessageBox
 -------------------------- */
 /// color||Color|0
-$--messagebox-title-color: $--color-text-primary !default;
-$--msgbox-width: 420px !default;
-$--msgbox-border-radius: 4px !default;
+$--messagebox-title-color: $--color-text-primary;
+$--msgbox-width: 420px;
+$--msgbox-border-radius: $--border-radius-base;
 /// fontSize||Font|1
-$--messagebox-font-size: $--font-size-large !default;
+$--messagebox-font-size: $--font-size-large;
 /// fontSize||Font|1
-$--messagebox-content-font-size: $--font-size-base !default;
+$--messagebox-content-font-size: $--font-size-base;
 /// color||Color|0
-$--messagebox-content-color: $--color-text-regular !default;
+$--messagebox-content-color: $--color-text-regular;
 /// fontSize||Font|1
-$--messagebox-error-font-size: 12px !default;
-$--msgbox-padding-primary: 15px !default;
+$--messagebox-error-font-size: 12px;
+$--msgbox-padding-primary: 15px;
 /// color||Color|0
-$--messagebox-success-color: $--color-success !default;
+$--messagebox-success-color: $--color-success;
 /// color||Color|0
-$--messagebox-info-color: $--color-info !default;
+$--messagebox-info-color: $--color-info;
 /// color||Color|0
-$--messagebox-warning-color: $--color-warning !default;
+$--messagebox-warning-color: $--color-warning;
 /// color||Color|0
-$--messagebox-danger-color: $--color-danger !default;
+$--messagebox-danger-color: $--color-danger;
 
 /* Message
 -------------------------- */
-$--message-shadow: $--box-shadow-base !default;
-$--message-min-width: 380px !default;
-$--message-background-color: #edf2fc !default;
-$--message-padding: 15px 15px 15px 20px !default;
+$--message-shadow: $--box-shadow-base;
+$--message-min-width: 380px;
+$--message-background-color: $Growatt-gray-3;
+$--message-padding: 15px 15px 15px 20px;
 /// color||Color|0
-$--message-close-icon-color: $--color-text-placeholder !default;
+$--message-close-icon-color: $--color-text-placeholder;
 /// height||Other|4
-$--message-close-size: 16px !default;
+$--message-close-size: 16px;
 /// color||Color|0
-$--message-close-hover-color: $--color-text-secondary !default;
+$--message-close-hover-color: $--color-text-secondary;
 
 /// color||Color|0
-$--message-success-font-color: $--color-success !default;
+$--message-success-font-color: $--color-success;
 /// color||Color|0
-$--message-info-font-color: $--color-info !default;
+$--message-info-font-color: $--color-info;
 /// color||Color|0
-$--message-warning-font-color: $--color-warning !default;
+$--message-warning-font-color: $--color-warning;
 /// color||Color|0
-$--message-danger-font-color: $--color-danger !default;
+$--message-danger-font-color: $--color-danger;
 
 /* Notification
 -------------------------- */
-$--notification-width: 330px !default;
+$--notification-width: 330px;
 /// padding||Spacing|3
-$--notification-padding: 14px 26px 14px 13px !default;
-$--notification-radius: 8px !default;
-$--notification-shadow: $--box-shadow-light !default;
+$--notification-padding: 14px 26px 14px 13px;
+$--notification-radius: 8px;
+$--notification-shadow: $--box-shadow-light;
 /// color||Color|0
-$--notification-border-color: $--border-color-lighter !default;
-$--notification-icon-size: 24px !default;
-$--notification-close-font-size: $--message-close-size !default;
-$--notification-group-margin-left: 13px !default;
-$--notification-group-margin-right: 8px !default;
+$--notification-border-color: $--border-color-lighter;
+$--notification-icon-size: 24px;
+$--notification-close-font-size: $--message-close-size;
+$--notification-group-margin-left: 13px;
+$--notification-group-margin-right: 8px;
 /// fontSize||Font|1
-$--notification-content-font-size: $--font-size-base !default;
+$--notification-content-font-size: $--font-size-base;
 /// color||Color|0
-$--notification-content-color: $--color-text-regular !default;
+$--notification-content-color: $--color-text-regular;
 /// fontSize||Font|1
-$--notification-title-font-size: 16px !default;
+$--notification-title-font-size: 16px;
 /// color||Color|0
-$--notification-title-color: $--color-text-primary !default;
+$--notification-title-color: $--color-text-primary;
 
 /// color||Color|0
-$--notification-close-color: $--color-text-secondary !default;
+$--notification-close-color: $--color-text-secondary;
 /// color||Color|0
-$--notification-close-hover-color: $--color-text-regular !default;
+$--notification-close-hover-color: $--color-text-regular;
 
 /// color||Color|0
-$--notification-success-icon-color: $--color-success !default;
+$--notification-success-icon-color: $--color-success;
 /// color||Color|0
-$--notification-info-icon-color: $--color-info !default;
+$--notification-info-icon-color: $--color-info;
 /// color||Color|0
-$--notification-warning-icon-color: $--color-warning !default;
+$--notification-warning-icon-color: $--color-warning;
 /// color||Color|0
-$--notification-danger-icon-color: $--color-danger !default;
+$--notification-danger-icon-color: $--color-danger;
 
 /* Input
 -------------------------- */
-$--input-font-size: $--font-size-base !default;
+$--input-font-size: $--font-size-base;
 /// color||Color|0
-$--input-font-color: $--color-text-regular !default;
+$--input-font-color: $--color-text-regular;
 /// height||Other|4
-$--input-height: 40px !default;
-$--input-border: $--border-base !default;
-$--input-border-color: $--border-color-base !default;
+$--input-width: 140px;
+/// height||Other|4
+$--input-height: 40px;
+$--input-border: $--border-base;
+$--input-border-color: $--border-color-base;
 /// borderRadius||Border|2
-$--input-border-radius: $--border-radius-base !default;
-$--input-border-color-hover: $--border-color-hover !default;
+$--input-border-radius: $--border-radius-base;
+$--input-border-color-hover: $--border-color-hover;
 /// color||Color|0
-$--input-background-color: $--color-white !default;
-$--input-fill-disabled: $--disabled-fill-base !default;
-$--input-color-disabled: $--font-color-disabled-base !default;
+$--input-background-color: $--color-white;
+$--input-fill-disabled: $--disabled-fill-base;
+$--input-color-disabled: $--font-color-disabled-base;
 /// color||Color|0
-$--input-icon-color: $--color-text-placeholder !default;
+$--input-icon-color: $--color-text-placeholder;
 /// color||Color|0
-$--input-placeholder-color: $--color-text-placeholder !default;
-$--input-max-width: 314px !default;
+$--input-placeholder-color: $--color-text-placeholder;
+$--input-max-width: 314px;
 
-$--input-hover-border: $--border-color-hover !default;
-$--input-clear-hover-color: $--color-text-secondary !default;
+$--input-hover-border: $--border-color-hover;
+$--input-clear-hover-color: $--color-text-secondary;
 
-$--input-focus-border: $--color-primary !default;
-$--input-focus-fill: $--color-white !default;
+$--input-focus-border: $--color-primary;
+$--input-focus-fill: $--color-white;
 
-$--input-disabled-fill: $--disabled-fill-base !default;
-$--input-disabled-border: $--disabled-border-base !default;
-$--input-disabled-color: $--disabled-color-base !default;
-$--input-disabled-placeholder-color: $--color-text-placeholder !default;
+$--input-disabled-fill: $--disabled-fill-base;
+$--input-disabled-border: $--disabled-border-base;
+$--input-disabled-color: $--disabled-color-base;
+$--input-disabled-placeholder-color: $--color-text-placeholder;
 
 /// fontSize||Font|1
-$--input-medium-font-size: 14px !default;
+$--input-medium-font-size: 14px;
 /// height||Other|4
-$--input-medium-height: 36px !default;
+$--input-medium-height: 36px;
 /// fontSize||Font|1
-$--input-small-font-size: 13px !default;
+$--input-small-font-size: 13px;
 /// height||Other|4
-$--input-small-height: 32px !default;
+$--input-small-height: 32px;
 /// fontSize||Font|1
-$--input-mini-font-size: 12px !default;
+$--input-mini-font-size: 12px;
 /// height||Other|4
-$--input-mini-height: 28px !default;
+$--input-mini-height: 28px;
 
 /* Cascader
 -------------------------- */
 /// color||Color|0
-$--cascader-menu-font-color: $--color-text-regular !default;
+$--cascader-menu-font-color: $--color-text-regular;
 /// color||Color|0
-$--cascader-menu-selected-font-color: $--color-primary !default;
-$--cascader-menu-fill: $--fill-base !default;
-$--cascader-menu-font-size: $--font-size-base !default;
-$--cascader-menu-radius: $--border-radius-base !default;
-$--cascader-menu-border: solid 1px $--border-color-light !default;
-$--cascader-menu-shadow: $--box-shadow-light !default;
-$--cascader-node-background-hover: $--background-color-base !default;
-$--cascader-node-color-disabled:$--color-text-placeholder !default;
-$--cascader-color-empty:$--color-text-placeholder !default;
-$--cascader-tag-background: #f0f2f5;
+$--cascader-menu-selected-font-color: $--color-primary;
+$--cascader-menu-fill: $--fill-base;
+$--cascader-menu-font-size: $--font-size-base;
+$--cascader-menu-radius: $--border-radius-base;
+$--cascader-menu-border: solid 1px $--border-color-light;
+$--cascader-menu-shadow: $--box-shadow-light;
+$--cascader-node-background-hover: $--background-color-base;
+$--cascader-node-color-disabled: $--color-text-placeholder;
+$--cascader-color-empty: $--color-text-placeholder;
+$--cascader-tag-background: $Growatt-gray-1;
 
 /* Group
 -------------------------- */
-$--group-option-flex: 0 0 (1/5) * 100% !default;
-$--group-option-offset-bottom: 12px !default;
-$--group-option-fill-hover: rgba($--color-black, 0.06) !default;
-$--group-title-color: $--color-black !default;
-$--group-title-font-size: $--font-size-base !default;
-$--group-title-width: 66px !default;
+$--group-option-flex: 0 0 (1/5) * 100%;
+$--group-option-offset-bottom: 12px;
+$--group-option-fill-hover: rgba($--color-black, 0.06);
+$--group-title-color: $--color-black;
+$--group-title-font-size: $--font-size-base;
+$--group-title-width: 66px;
 
 /* Tab
 -------------------------- */
-$--tab-font-size: $--font-size-base !default;
-$--tab-border-line: 1px solid #e4e4e4 !default;
-$--tab-header-color-active: $--color-text-secondary !default;
-$--tab-header-color-hover: $--color-text-regular !default;
-$--tab-header-color: $--color-text-regular !default;
-$--tab-header-fill-active: rgba($--color-black, 0.06) !default;
-$--tab-header-fill-hover: rgba($--color-black, 0.06) !default;
-$--tab-vertical-header-width: 90px !default;
-$--tab-vertical-header-count-color: $--color-white !default;
-$--tab-vertical-header-count-fill: $--color-text-secondary !default;
+$--tab-font-size: $--font-size-base;
+$--tab-border-line: 1px solid $Gray-5;
+$--tab-header-color-active: $--color-text-secondary;
+$--tab-header-color-hover: $--color-text-regular;
+$--tab-header-color: $--color-text-regular;
+$--tab-header-fill-active: rgba($--color-black, 0.06);
+$--tab-header-fill-hover: rgba($--color-black, 0.06);
+$--tab-vertical-header-width: 90px;
+$--tab-vertical-header-count-color: $--color-white;
+$--tab-vertical-header-count-fill: $--color-text-secondary;
 
 /* Button
 -------------------------- */
 /// fontSize||Font|1
-$--button-font-size: $--font-size-base !default;
+$--button-font-size: $--font-size-base;
 /// fontWeight||Font|1
-$--button-font-weight: $--font-weight-primary !default;
+$--button-font-weight: $--font-weight-primary;
 /// borderRadius||Border|2
-$--button-border-radius: $--border-radius-base !default;
+$--button-border-radius: $--border-radius-base;
 /// padding||Spacing|3
-$--button-padding-vertical: 12px !default;
+$--button-padding-vertical: 12px;
 /// padding||Spacing|3
-$--button-padding-horizontal: 20px !default;
+$--button-padding-horizontal: 20px;
 
 /// fontSize||Font|1
-$--button-medium-font-size: $--font-size-base !default;
+$--button-medium-font-size: $--font-size-base;
 /// borderRadius||Border|2
-$--button-medium-border-radius: $--border-radius-base !default;
+$--button-medium-border-radius: $--border-radius-base;
 /// padding||Spacing|3
-$--button-medium-padding-vertical: 10px !default;
+$--button-medium-padding-vertical: 10px;
 /// padding||Spacing|3
-$--button-medium-padding-horizontal: 20px !default;
+$--button-medium-padding-horizontal: 20px;
 
 /// fontSize||Font|1
-$--button-small-font-size: 12px !default;
-$--button-small-border-radius: #{$--border-radius-base - 1} !default;
+$--button-small-font-size: 12px;
+$--button-small-border-radius: $--border-radius-base;
 /// padding||Spacing|3
-$--button-small-padding-vertical: 9px !default;
+$--button-small-padding-vertical: 9px;
 /// padding||Spacing|3
-$--button-small-padding-horizontal: 15px !default;
+$--button-small-padding-horizontal: 15px;
 /// fontSize||Font|1
-$--button-mini-font-size: 12px !default;
-$--button-mini-border-radius: #{$--border-radius-base - 1} !default;
+$--button-mini-font-size: 12px;
+$--button-mini-border-radius: $--border-radius-base;
 /// padding||Spacing|3
-$--button-mini-padding-vertical: 7px !default;
+$--button-mini-padding-vertical: 7px;
 /// padding||Spacing|3
-$--button-mini-padding-horizontal: 15px !default;
+$--button-mini-padding-horizontal: 15px;
 
 /// color||Color|0
-$--button-default-font-color: $--color-text-regular !default;
+$--button-default-font-color: $--color-text-regular;
 /// color||Color|0
-$--button-default-background-color: $--color-white !default;
+$--button-default-background-color: $--color-white;
 /// color||Color|0
-$--button-default-border-color: $--border-color-base !default;
+$--button-default-border-color: $--border-color-base;
 
 /// color||Color|0
-$--button-disabled-font-color: $--color-text-placeholder !default;
+$--button-disabled-font-color: $--color-text-placeholder;
 /// color||Color|0
-$--button-disabled-background-color: $--color-white !default;
+$--button-disabled-background-color: $--color-white;
 /// color||Color|0
-$--button-disabled-border-color: $--border-color-lighter !default;
+$--button-disabled-border-color: $--border-color-lighter;
 
 /// color||Color|0
-$--button-primary-border-color: $--color-primary !default;
+$--button-primary-border-color: $--color-primary;
 /// color||Color|0
-$--button-primary-font-color: $--color-white !default;
+$--button-primary-font-color: $--color-white;
 /// color||Color|0
-$--button-primary-background-color: $--color-primary !default;
+$--button-primary-background-color: $--color-primary;
 /// color||Color|0
-$--button-success-border-color: $--color-success !default;
+$--button-success-border-color: $--color-success;
 /// color||Color|0
-$--button-success-font-color: $--color-white !default;
+$--button-success-font-color: $--color-white;
 /// color||Color|0
-$--button-success-background-color: $--color-success !default;
+$--button-success-background-color: $--color-success;
 /// color||Color|0
-$--button-warning-border-color: $--color-warning !default;
+$--button-warning-border-color: $--color-warning;
 /// color||Color|0
-$--button-warning-font-color: $--color-white !default;
+$--button-warning-font-color: $--color-white;
 /// color||Color|0
-$--button-warning-background-color: $--color-warning !default;
+$--button-warning-background-color: $--color-warning;
 /// color||Color|0
-$--button-danger-border-color: $--color-danger !default;
+$--button-danger-border-color: $--color-danger;
 /// color||Color|0
-$--button-danger-font-color: $--color-white !default;
+$--button-danger-font-color: $--color-white;
 /// color||Color|0
-$--button-danger-background-color: $--color-danger !default;
+$--button-danger-background-color: $--color-danger;
 /// color||Color|0
-$--button-info-border-color: $--color-info !default;
+$--button-info-border-color: $--color-info;
 /// color||Color|0
-$--button-info-font-color: $--color-white !default;
+$--button-info-font-color: $--color-white;
 /// color||Color|0
-$--button-info-background-color: $--color-info !default;
+$--button-info-background-color: $--color-info;
 
-$--button-hover-tint-percent: 20% !default;
-$--button-active-shade-percent: 10% !default;
-
+$--button-hover-tint-percent: 20%;
+$--button-active-shade-percent: 10%;
 
 /* cascader
 -------------------------- */
-$--cascader-height: 200px !default;
+$--cascader-height: 200px;
 
 /* Switch
 -------------------------- */
 /// color||Color|0
-$--switch-on-color: $--color-primary !default;
+$--switch-on-color: $--color-primary;
 /// color||Color|0
-$--switch-off-color: $--border-color-base !default;
+$--switch-off-color: $--border-color-base;
 /// fontSize||Font|1
-$--switch-font-size: $--font-size-base !default;
-$--switch-core-border-radius: 10px !default;
+$--switch-font-size: $--font-size-base;
+$--switch-core-border-radius: 10px;
 // height||Other|4 TODO: width 代码写死的40px 所以下面这三个属性都没意义
-$--switch-width: 40px !default;
+$--switch-width: 40px;
 // height||Other|4
-$--switch-height: 20px !default;
+$--switch-height: 20px;
 // height||Other|4
-$--switch-button-size: 16px !default;
+$--switch-button-size: 16px;
 
 /* Dialog
 -------------------------- */
-$--dialog-background-color: $--color-white !default;
-$--dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !default;
+$--dialog-background-color: $--color-white;
+$--dialog-box-shadow: 0 1px 3px $--color-font-30;
 /// fontSize||Font|1
-$--dialog-title-font-size: $--font-size-large !default;
+$--dialog-title-font-size: $--font-size-large;
 /// fontSize||Font|1
-$--dialog-content-font-size: 14px !default;
+$--dialog-content-font-size: 14px;
 /// fontLineHeight||LineHeight|2
-$--dialog-font-line-height: $--font-line-height-primary !default;
+$--dialog-font-line-height: $--font-line-height-primary;
 /// padding||Spacing|3
-$--dialog-padding-primary: 20px !default;
+$--dialog-padding-primary: 20px;
 
 /* Table
 -------------------------- */
 /// color||Color|0
-$--table-border-color: $--border-color-lighter !default;
-$--table-border: 1px solid $--table-border-color !default;
+$--table-border-color: $--border-color-lighter;
+$--table-border: 1px solid $--table-border-color;
 /// color||Color|0
-$--table-font-color: $--color-text-regular !default;
+$--table-font-color: $--color-text-regular;
 /// color||Color|0
-$--table-header-font-color: $--color-text-secondary !default;
+$--table-header-font-color: $--color-text-secondary;
 /// color||Color|0
-$--table-row-hover-background-color: $--background-color-base !default;
-$--table-current-row-background-color: $--color-primary-light-9 !default;
+$--table-row-hover-background-color: $--background-color-base;
+$--table-current-row-background-color: $--color-primary-light-9;
 /// color||Color|0
-$--table-header-background-color: $--color-white !default;
-$--table-fixed-box-shadow: 0 0 10px rgba(0, 0, 0, .12) !default;
+$--table-header-background-color: $--color-white;
+$--table-fixed-box-shadow: 0 0 10px $--color-font-10;
 
 /* Pagination
 -------------------------- */
 /// fontSize||Font|1
-$--pagination-font-size: 13px !default;
+$--pagination-font-size: 13px;
 /// color||Color|0
-$--pagination-background-color: $--color-white !default;
+$--pagination-background-color: $--color-white;
 /// color||Color|0
-$--pagination-font-color: $--color-text-primary !default;
-$--pagination-border-radius: 3px !default;
+$--pagination-font-color: $--color-text-primary;
+$--pagination-border-radius: $--border-radius-base;
 /// color||Color|0
-$--pagination-button-color: $--color-text-primary !default;
+$--pagination-button-color: $--color-text-primary;
 /// height||Other|4
-$--pagination-button-width: 35.5px !default;
+$--pagination-button-width: 35.5px;
 /// height||Other|4
-$--pagination-button-height: 28px !default;
+$--pagination-button-height: 28px;
 /// color||Color|0
-$--pagination-button-disabled-color: $--color-text-placeholder !default;
+$--pagination-button-disabled-color: $--color-text-placeholder;
 /// color||Color|0
-$--pagination-button-disabled-background-color: $--color-white !default;
+$--pagination-button-disabled-background-color: $--color-white;
 /// color||Color|0
-$--pagination-hover-color: $--color-primary !default;
+$--pagination-hover-color: $--color-primary;
 
 /* Popup
 -------------------------- */
 /// color||Color|0
-$--popup-modal-background-color: $--color-black !default;
+$--popup-modal-background-color: $--color-black;
 /// opacity||Other|1
-$--popup-modal-opacity: 0.5 !default;
+$--popup-modal-opacity: 0.5;
 
 /* Popover
 -------------------------- */
 /// color||Color|0
-$--popover-background-color: $--color-white !default;
+$--popover-background-color: $--color-white;
 /// fontSize||Font|1
-$--popover-font-size: $--font-size-base !default;
+$--popover-font-size: $--font-size-base;
 /// color||Color|0
-$--popover-border-color: $--border-color-lighter !default;
-$--popover-arrow-size: 6px !default;
+$--popover-border-color: $--border-color-lighter;
+$--popover-arrow-size: 6px;
 /// padding||Spacing|3
-$--popover-padding: 12px !default;
-$--popover-padding-large: 18px 20px !default;
+$--popover-padding: 12px;
+$--popover-padding-large: 18px 20px;
 /// fontSize||Font|1
-$--popover-title-font-size: 16px !default;
+$--popover-title-font-size: 16px;
 /// color||Color|0
-$--popover-title-font-color: $--color-text-primary !default;
+$--popover-title-font-color: $--color-text-primary;
 
 /* Tooltip
 -------------------------- */
 /// color|1|Color|0
-$--tooltip-fill: $--color-text-primary !default;
+$--tooltip-fill: $--color-text-primary;
+// $--tooltip-fill: $--border-color-base;
 /// color|1|Color|0
-$--tooltip-color: $--color-white !default;
+$--tooltip-color: $--color-white;
 /// fontSize||Font|1
-$--tooltip-font-size: 12px !default;
+$--tooltip-font-size: 12px;
 /// color||Color|0
-$--tooltip-border-color: $--color-text-primary !default;
-$--tooltip-arrow-size: 6px !default;
+$--tooltip-border-color: $--color-text-primary;
+// $--tooltip-border-color: $--border-color-base;
+$--tooltip-arrow-size: 6px;
 /// padding||Spacing|3
-$--tooltip-padding: 10px !default;
+$--tooltip-padding: 10px;
 
 /* Tag
 -------------------------- */
 /// color||Color|0
-$--tag-info-color: $--color-info !default;
+$--tag-info-color: $--color-info;
 /// color||Color|0
-$--tag-primary-color: $--color-primary !default;
+$--tag-primary-color: $--color-primary;
 /// color||Color|0
-$--tag-success-color: $--color-success !default;
+$--tag-success-color: $--color-success;
 /// color||Color|0
-$--tag-warning-color: $--color-warning !default;
+$--tag-warning-color: $--color-warning;
 /// color||Color|0
-$--tag-danger-color: $--color-danger !default;
+$--tag-danger-color: $--color-danger;
 /// fontSize||Font|1
-$--tag-font-size: 12px !default;
-$--tag-border-radius: 4px !default;
-$--tag-padding: 0 10px !default;
+$--tag-font-size: 12px;
+$--tag-border-radius: $--border-radius-base;
+$--tag-padding: 0 10px;
 
 /* Tree
 -------------------------- */
 /// color||Color|0
-$--tree-node-hover-background-color: $--background-color-base !default;
+$--tree-node-hover-background-color: $--background-color-base;
 /// color||Color|0
-$--tree-font-color: $--color-text-regular !default;
+$--tree-font-color: $--color-text-regular;
 /// color||Color|0
-$--tree-expand-icon-color: $--color-text-placeholder !default;
+$--tree-expand-icon-color: $--color-text-placeholder;
 
 /* Dropdown
 -------------------------- */
-$--dropdown-menu-box-shadow: $--box-shadow-light !default;
-$--dropdown-menuItem-hover-fill: $--color-primary-light-9 !default;
-$--dropdown-menuItem-hover-color: $--link-color !default;
+$--dropdown-menu-box-shadow: $--box-shadow-light;
+$--dropdown-menuItem-hover-fill: $--color-primary-light-9;
+$--dropdown-menuItem-hover-color: $--link-color;
 
 /* Badge
 -------------------------- */
 /// color||Color|0
-$--badge-background-color: $--color-danger !default;
-$--badge-radius: 10px !default;
+$--badge-background-color: $--color-danger;
+$--badge-radius: 10px;
 /// fontSize||Font|1
-$--badge-font-size: 12px !default;
+$--badge-font-size: 12px;
 /// padding||Spacing|3
-$--badge-padding: 6px !default;
+$--badge-padding: 6px;
 /// height||Other|4
-$--badge-size: 18px !default;
+$--badge-size: 18px;
 
 /* Card
---------------------------*/
+-------------------------- */
 /// color||Color|0
-$--card-border-color: $--border-color-lighter !default;
-$--card-border-radius: 4px !default;
+$--card-border-color: $--border-color-lighter;
+$--card-border-radius: $--border-radius-base;
 /// padding||Spacing|3
-$--card-padding: 20px !default;
+$--card-padding: 20px;
 
 /* Slider
---------------------------*/
+-------------------------- */
 /// color||Color|0
-$--slider-main-background-color: $--color-primary !default;
+$--slider-main-background-color: $--color-primary;
 /// color||Color|0
-$--slider-runway-background-color: $--border-color-light !default;
-$--slider-button-hover-color: mix($--color-primary, black, 97%) !default;
-$--slider-stop-background-color: $--color-white !default;
-$--slider-disable-color: $--color-text-placeholder !default;
-$--slider-margin: 16px 0 !default;
-$--slider-border-radius: 3px !default;
+$--slider-runway-background-color: $--border-color-light;
+$--slider-button-hover-color: mix($--color-primary, $--color-black, 97%);
+$--slider-stop-background-color: $--color-white;
+$--slider-disable-color: $--color-text-placeholder;
+$--slider-margin: 16px 0;
+$--slider-border-radius: $--border-radius-base;
 /// height|1|Other|4
-$--slider-height: 6px !default;
+$--slider-height: 6px;
 /// height||Other|4
-$--slider-button-size: 16px !default;
-$--slider-button-wrapper-size: 36px !default;
-$--slider-button-wrapper-offset: -15px !default;
+$--slider-button-size: 16px;
+$--slider-button-wrapper-size: 36px;
+$--slider-button-wrapper-offset: -15px;
 
 /* Steps
---------------------------*/
-$--steps-border-color: $--disabled-border-base !default;
-$--steps-border-radius: 4px !default;
-$--steps-padding: 20px !default;
+-------------------------- */
+$--steps-border-color: $--disabled-border-base;
+$--steps-border-radius: $--border-radius-base;
+$--steps-padding: 20px;
 
 /* Menu
---------------------------*/
+-------------------------- */
 /// fontSize||Font|1
-$--menu-item-font-size: $--font-size-base !default;
+$--menu-item-font-size: $--font-size-base;
 /// color||Color|0
-$--menu-item-font-color: $--color-text-primary !default;
+$--menu-item-font-color: $--color-text-primary;
 /// color||Color|0
-$--menu-background-color: $--color-white !default;
-$--menu-item-hover-fill: $--color-primary-light-9 !default;
+$--menu-background-color: $--color-white;
+$--menu-item-hover-fill: $--color-primary-light-9;
 
 /* Rate
---------------------------*/
-$--rate-height: 20px !default;
+-------------------------- */
+$--rate-height: 20px;
 /// fontSize||Font|1
-$--rate-font-size: $--font-size-base !default;
+$--rate-font-size: $--font-size-base;
 /// height||Other|3
-$--rate-icon-size: 18px !default;
+$--rate-icon-size: 18px;
 /// margin||Spacing|2
-$--rate-icon-margin: 6px !default;
-$--rate-icon-color: $--color-text-placeholder !default;
+$--rate-icon-margin: 6px;
+$--rate-icon-color: $--color-text-placeholder;
 
 /* DatePicker
---------------------------*/
-$--datepicker-font-color: $--color-text-regular !default;
+-------------------------- */
+$--datepicker-font-color: $--color-text-regular;
 /// color|1|Color|0
-$--datepicker-off-font-color: $--color-text-placeholder !default;
+$--datepicker-off-font-color: $--color-text-placeholder;
 /// color||Color|0
-$--datepicker-header-font-color: $--color-text-regular !default;
-$--datepicker-icon-color: $--color-text-primary !default;
-$--datepicker-border-color: $--disabled-border-base !default;
-$--datepicker-inner-border-color: #e4e4e4 !default;
+$--datepicker-header-font-color: $--color-text-regular;
+$--datepicker-icon-color: $--color-text-primary;
+$--datepicker-border-color: $--disabled-border-base;
+$--datepicker-inner-border-color: $Gray-5;
 /// color||Color|0
-$--datepicker-inrange-background-color: $--border-color-extra-light !default;
+$--datepicker-inrange-background-color: $--border-color-extra-light;
 /// color||Color|0
-$--datepicker-inrange-hover-background-color: $--border-color-extra-light !default;
+$--datepicker-inrange-hover-background-color: $--border-color-extra-light;
 /// color||Color|0
-$--datepicker-active-color: $--color-primary !default;
+$--datepicker-active-color: $--color-primary;
 /// color||Color|0
-$--datepicker-hover-font-color: $--color-primary !default;
-$--datepicker-cell-hover-color: #fff !default;
+$--datepicker-hover-font-color: $--color-primary;
+$--datepicker-cell-hover-color: $--color-white;
 
 /* Loading
---------------------------*/
+-------------------------- */
 /// height||Other|4
-$--loading-spinner-size: 42px !default;
+$--loading-spinner-size: 42px;
 /// height||Other|4
-$--loading-fullscreen-spinner-size: 50px !default;
+$--loading-fullscreen-spinner-size: 50px;
 
 /* Scrollbar
---------------------------*/
-$--scrollbar-background-color: rgba($--color-text-secondary, .3) !default;
-$--scrollbar-hover-background-color: rgba($--color-text-secondary, .5) !default;
+-------------------------- */
+$--scrollbar-background-color: rgba($--color-text-secondary, 0.3);
+$--scrollbar-hover-background-color: rgba($--color-text-secondary, 0.5);
 
 /* Carousel
---------------------------*/
+-------------------------- */
 /// fontSize||Font|1
-$--carousel-arrow-font-size: 12px !default;
-$--carousel-arrow-size: 36px !default;
-$--carousel-arrow-background: rgba(31, 45, 61, 0.11) !default;
-$--carousel-arrow-hover-background: rgba(31, 45, 61, 0.23) !default;
+$--carousel-arrow-font-size: 12px;
+$--carousel-arrow-size: 36px;
+// $--carousel-arrow-background: rgba(31, 45, 61, 0.11);
+// $--carousel-arrow-hover-background: rgba(31, 45, 61, 0.23);
 /// width||Other|4
-$--carousel-indicator-width: 30px !default;
+$--carousel-indicator-width: 30px;
 /// height||Other|4
-$--carousel-indicator-height: 2px !default;
-$--carousel-indicator-padding-horizontal: 4px !default;
-$--carousel-indicator-padding-vertical: 12px !default;
-$--carousel-indicator-out-color: $--border-color-hover !default;
+$--carousel-indicator-height: 2px;
+$--carousel-indicator-padding-horizontal: 4px;
+$--carousel-indicator-padding-vertical: 12px;
+$--carousel-indicator-out-color: $--border-color-hover;
 
 /* Collapse
---------------------------*/
+-------------------------- */
 /// color||Color|0
-$--collapse-border-color: $--border-color-lighter !default;
+$--collapse-border-color: $--border-color-lighter;
 /// height||Other|4
-$--collapse-header-height: 48px !default;
+$--collapse-header-height: 48px;
 /// color||Color|0
-$--collapse-header-background-color: $--color-white !default;
+$--collapse-header-background-color: $--color-white;
 /// color||Color|0
-$--collapse-header-font-color: $--color-text-primary !default;
+$--collapse-header-font-color: $--color-text-primary;
 /// fontSize||Font|1
-$--collapse-header-font-size: 13px !default;
+$--collapse-header-font-size: 13px;
 /// color||Color|0
-$--collapse-content-background-color: $--color-white !default;
+$--collapse-content-background-color: $--color-white;
 /// fontSize||Font|1
-$--collapse-content-font-size: 13px !default;
+$--collapse-content-font-size: 13px;
 /// color||Color|0
-$--collapse-content-font-color: $--color-text-primary !default;
+$--collapse-content-font-color: $--color-text-primary;
 
 /* Transfer
---------------------------*/
-$--transfer-border-color: $--border-color-lighter !default;
-$--transfer-border-radius: $--border-radius-base !default;
+-------------------------- */
+$--transfer-border-color: $--border-color-lighter;
+$--transfer-border-radius: $--border-radius-base;
 /// height||Other|4
-$--transfer-panel-width: 200px !default;
+$--transfer-panel-width: 200px;
 /// height||Other|4
-$--transfer-panel-header-height: 40px !default;
+$--transfer-panel-header-height: 40px;
 /// color||Color|0
-$--transfer-panel-header-background-color: $--background-color-base !default;
+$--transfer-panel-header-background-color: $--background-color-base;
 /// height||Other|4
-$--transfer-panel-footer-height: 40px !default;
+$--transfer-panel-footer-height: 40px;
 /// height||Other|4
-$--transfer-panel-body-height: 246px !default;
+$--transfer-panel-body-height: 246px;
 /// height||Other|4
-$--transfer-item-height: 30px !default;
+$--transfer-item-height: 30px;
 /// height||Other|4
-$--transfer-filter-height: 32px !default;
+$--transfer-filter-height: 32px;
 
 /* Header
-  --------------------------*/
-$--header-padding: 0 20px !default;
+  -------------------------- */
+$--header-padding: 0 20px;
 
 /* Footer
---------------------------*/
-$--footer-padding: 0 20px !default;
+-------------------------- */
+$--footer-padding: 0 20px;
 
 /* Main
---------------------------*/
-$--main-padding: 20px !default;
+-------------------------- */
+$--main-padding: 20px;
 
 /* Timeline
---------------------------*/
-$--timeline-node-size-normal: 12px !default;
-$--timeline-node-size-large: 14px !default;
-$--timeline-node-color: $--border-color-light !default;
+-------------------------- */
+$--timeline-node-size-normal: 12px;
+$--timeline-node-size-large: 14px;
+$--timeline-node-color: $--border-color-light;
 
 /* Backtop
---------------------------*/
+-------------------------- */
 /// color||Color|0
-$--backtop-background-color: $--color-white !default;
+$--backtop-background-color: $--color-white;
 /// color||Color|0
-$--backtop-font-color: $--color-primary !default;
+$--backtop-font-color: $--color-primary;
 /// color||Color|0
-$--backtop-hover-background-color: $--border-color-extra-light !default;
+$--backtop-hover-background-color: $--border-color-extra-light;
 
 /* Link
---------------------------*/
+-------------------------- */
 /// fontSize||Font|1
-$--link-font-size: $--font-size-base !default;
+$--link-font-size: $--font-size-base;
 /// fontWeight||Font|1
-$--link-font-weight: $--font-weight-primary !default;
+$--link-font-weight: $--font-weight-primary;
 /// color||Color|0
-$--link-default-font-color: $--color-text-regular !default;
+$--link-default-font-color: $--color-text-regular;
 /// color||Color|0
-$--link-default-active-color: $--color-primary !default;
+$--link-default-active-color: $--color-primary;
 /// color||Color|0
-$--link-disabled-font-color: $--color-text-placeholder !default;
+$--link-disabled-font-color: $--color-text-placeholder;
 /// color||Color|0
-$--link-primary-font-color: $--color-primary !default;
+$--link-primary-font-color: $--color-primary;
 /// color||Color|0
-$--link-success-font-color: $--color-success !default;
+$--link-success-font-color: $--color-success;
 /// color||Color|0
-$--link-warning-font-color: $--color-warning !default;
+$--link-warning-font-color: $--color-warning;
 /// color||Color|0
-$--link-danger-font-color: $--color-danger !default;
+$--link-danger-font-color: $--color-danger;
 /// color||Color|0
-$--link-info-font-color: $--color-info !default;
+$--link-info-font-color: $--color-info;
+
 /* Calendar
---------------------------*/
+-------------------------- */
 /// border||Other|4
-$--calendar-border: $--table-border !default;
+$--calendar-border: $--table-border;
 /// color||Other|4
-$--calendar-selected-background-color: #F2F8FE !default;
-$--calendar-cell-width: 85px !default;
+$--calendar-selected-background-color: $Growatt-gray-2;
+$--calendar-cell-width: 85px;
 
 /* Form
 -------------------------- */
 /// fontSize||Font|1
-$--form-label-font-size: $--font-size-base !default;
+$--form-label-font-size: $--font-size-base;
 
 /* Avatar
---------------------------*/
+-------------------------- */
 /// color||Color|0
-$--avatar-font-color: #fff !default;
+$--avatar-font-color: $--color-white;
 /// color||Color|0
-$--avatar-background-color: #C0C4CC !default;
+$--avatar-background-color: $Growatt-gray-7;
 /// fontSize||Font Size|1
-$--avatar-text-font-size: 14px !default;
+$--avatar-text-font-size: 14px;
 /// fontSize||Font Size|1
-$--avatar-icon-font-size: 18px !default;
+$--avatar-icon-font-size: 18px;
 /// borderRadius||Border|2
-$--avatar-border-radius: $--border-radius-base !default;
+$--avatar-border-radius: $--border-radius-base;
 /// size|1|Avatar Size|3
-$--avatar-large-size: 40px !default;
+$--avatar-large-size: 40px;
 /// size|1|Avatar Size|3
-$--avatar-medium-size: 36px !default;
+$--avatar-medium-size: 36px;
 /// size|1|Avatar Size|3
-$--avatar-small-size: 28px !default;
+$--avatar-small-size: 28px;
 
 /* Empty
 -------------------------- */
@@ -999,30 +1019,298 @@ $--result-warning-color: $--color-warning !default;
 $--result-danger-color: $--color-danger !default;
 
 /* Break-point
---------------------------*/
-$--sm: 768px !default;
-$--md: 992px !default;
-$--lg: 1200px !default;
-$--xl: 1920px !default;
+-------------------------- */
+$--sm: 768px;
+$--md: 992px;
+$--lg: 1200px;
+$--xl: 1920px;
 
 $--breakpoints: (
-  'xs' : (max-width: $--sm - 1),
-  'sm' : (min-width: $--sm),
-  'md' : (min-width: $--md),
-  'lg' : (min-width: $--lg),
-  'xl' : (min-width: $--xl)
+  'xs': (
+    max-width: $--sm - 1,
+  ),
+  'sm': (
+    min-width: $--sm,
+  ),
+  'md': (
+    min-width: $--md,
+  ),
+  'lg': (
+    min-width: $--lg,
+  ),
+  'xl': (
+    min-width: $--xl,
+  ),
 );
 
 $--breakpoints-spec: (
-  'xs-only' : (max-width: $--sm - 1),
-  'sm-and-up' : (min-width: $--sm),
-  'sm-only': "(min-width: #{$--sm}) and (max-width: #{$--md - 1})",
-  'sm-and-down': (max-width: $--md - 1),
-  'md-and-up' : (min-width: $--md),
-  'md-only': "(min-width: #{$--md}) and (max-width: #{$--lg - 1})",
-  'md-and-down': (max-width: $--lg - 1),
-  'lg-and-up' : (min-width: $--lg),
-  'lg-only': "(min-width: #{$--lg}) and (max-width: #{$--xl - 1})",
-  'lg-and-down': (max-width: $--xl - 1),
-  'xl-only' : (min-width: $--xl),
+  'xs-only': (
+    max-width: $--sm - 1,
+  ),
+  'sm-and-up': (
+    min-width: $--sm,
+  ),
+  'sm-only': '(min-width: #{$--sm}) and (max-width: #{$--md - 1})',
+  'sm-and-down': (
+    max-width: $--md - 1,
+  ),
+  'md-and-up': (
+    min-width: $--md,
+  ),
+  'md-only': '(min-width: #{$--md}) and (max-width: #{$--lg - 1})',
+  'md-and-down': (
+    max-width: $--lg - 1,
+  ),
+  'lg-and-up': (
+    min-width: $--lg,
+  ),
+  'lg-only': '(min-width: #{$--lg}) and (max-width: #{$--xl - 1})',
+  'lg-and-down': (
+    max-width: $--xl - 1,
+  ),
+  'xl-only': (
+    min-width: $--xl,
+  ),
 );
+
+
+// @import '~element-ui/packages/theme-chalk/src/index';
+
+body .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: $base-tree-curr-node-background-active;
+  font-weight: 700;
+}
+body .el-table-column--selection .cell {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+body .el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: transparent;
+  color: $--color-primary;
+  border: 1px solid $--color-primary;
+  font-weight: bold;
+}
+body .el-year-table td.current:not(.disabled) .cell,
+body .el-month-table td.current:not(.disabled) .cell {
+  color: $--color-white;
+  background-color: $--color-primary;
+  border-radius: 8px;
+}
+body .el-year-table td.disabled .cell,
+body .el-month-table td.disabled .cell {
+  border-radius: 8px;
+}
+body .el-pagination.is-background .btn-prev:disabled,
+body .el-pagination.is-background .btn-next:disabled {
+  color: inherit;
+  background-color: transparent;
+}
+// 表格底部分割线
+body .el-table::before,
+body .el-table__fixed-right::before {
+  background-color: $Gray-3;
+}
+html body .el-table {
+  border-radius: 5px;
+}
+// 总览弹框表格底部分割线
+body .popover-table.el-table::before,
+body .popover-table.el-table__fixed-right::before {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+body .popover-table.el-table th .cell {
+  padding: 0;
+  white-space: nowrap;
+  overflow: visible;
+}
+body .el-empty__description p {
+  font-size: 16px;
+  color: $--color-black;
+  margin-top: 10px;
+}
+
+// 修改下拉框箭头颜色
+// .el-popper[x-placement^=bottom] .popper__arrow{
+//   border-bottom-color: $--border-color-base !important;
+// }
+
+// 自定义tooltip样式
+.diy-my-popper.el-tooltip__popper.is-light {
+  // /*调整tooltip边框样式*/
+  filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.36));
+  opacity: 1;
+  // border: none;
+  max-width: 560px;
+  position: relative;
+
+  border-color:$--color-white;
+
+  //三角形颜色修改
+// 循环四个三角形箭头
+  @each $i in (top, bottom, left ,right) {
+    &[x-placement^=#{$i}] .popper__arrow {
+      border-#{$i}-color: $--border-color-base;
+    }
+   
+  }
+  
+}
+
+// 针对黑色主题，向上箭头出现虚线问题，将箭头调大覆盖
+@each $i in (top, bottom, left ,right) {
+  .el-tooltip__popper.is-dark[x-placement^=#{$i}] .popper__arrow::after{
+    transform: scale(1.4);
+  }
+ 
+}
+
+// 自定义el-popover样式
+.diy-my-popover{
+  @each $i in (top, bottom, left ,right) {
+    &.el-popover[x-placement^=#{$i}] .popper__arrow{
+      border-#{$i}-color: $--border-color-base;
+    };
+    &.el-popover[x-placement^=#{$i}] .popper__arrow::after{
+      border-#{$i}-color: $--color-white;
+    }
+   
+  }
+  
+ 
+  &.el-popover{
+    // background-color: $--border-color-base;
+    border-color: $--border-color-base;
+  }
+}
+
+// body .el-submenu.is-active .el-submenu__title > span {
+//   position: relative;
+//   top: 2px;
+// }
+
+body .el-button.is-plain {
+  background-color: transparent;
+}
+
+// 定义颜色类型Map
+$colorType: (
+  'primary': $--color-primary,
+  'success': $--color-success,
+  'warning': $--color-warning,
+  'danger': $--color-danger,
+  'info': $--color-info,
+);
+
+//重新设置按钮边框颜色样式
+@mixin button-border-color-responsive-styles($map) {
+  @each $key, $value in $map {
+    .el-button--#{$key}.is-plain {
+      border-color: $value;
+      font-weight: 600;
+      [class^='el-icon-'] {
+        font-weight: 600;
+      }
+      &.diy-plain {
+        border-width: 2px;
+      }
+    }
+  }
+}
+body {
+  @include button-border-color-responsive-styles($colorType);
+}
+
+/*菜单子项hover不再背景高亮*/
+body .el-menu .el-menu-item:hover,
+body .el-menu .el-submenu:hover .el-submenu__title {
+  background-color: $base-menu-background !important;
+}
+
+/*重定义表格排序图标*/
+body .el-table .is-sortable {
+  .caret-wrapper {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    background: url('~@/assets/element/table-sort-default.png');
+    background-size: 100% 100%;
+    .sort-caret {
+      display: none;
+    }
+  }
+  &.ascending {
+    .caret-wrapper {
+      background: url('~@/assets/element/table-sort-ascending.png');
+      background-size: 100% 100%;
+    }
+  }
+  &.descending {
+    .caret-wrapper {
+      background: url('~@/assets/element/table-sort-descending.png');
+      background-size: 100% 100%;
+    }
+  }
+}
+
+/*重定义下拉框箭头图标*/ 
+body .el-select__caret.el-input__icon.el-icon-arrow-up{
+  background: url('~@/assets/element/xiangshangjiantou.png');
+  background-size: 100% 100%;
+  height: 16px;
+  width: 16px;
+  margin-top: 8px;
+  &:before{display: none;}
+  &:after{display: none;}
+}
+
+
+
+//数字输入框句左对齐
+body .el-input-number.is-without-controls .el-input__inner {
+  text-align: left;
+}
+
+// tab组件选中字体加粗
+body .el-tabs__item.is-active {
+  font-weight: bold;
+}
+
+// body .el-form-item--small.el-form-item{margin-bottom: 22px;box-sizing: border-box;}
+body .el-message-box__status.el-icon-warning {
+  color: $red-color-default;
+}
+
+body .el-table__fixed-right-patch {
+  border-bottom: none;
+  top: 0;
+}
+body .el-table::before {
+  width: calc(100% - 13px);
+}
+body .el-tabs__nav-wrap::after{
+  height: 1px;
+}
+body .iconpark-icon.el-tooltip-normal-icon{color: $Growatt-gray-8;}
+body .el-form-item-no-star.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap > .el-form-item__label:before{
+  display: none;
+}
+// 针对移动端适配日期插件样式
+@media (max-width:768px) {
+  body .el-date-range-picker .el-picker-panel__body{
+    min-width: 100%;
+  }
+  body .el-date-range-picker__content{width: 100%;}
+  body .el-date-range-picker__content.is-left{
+    .el-picker-panel__icon-btn.el-icon-d-arrow-left,.el-picker-panel__icon-btn.el-icon-arrow-left{
+      float: right;
+    }
+  }
+  .intelligent-date-picker{
+    width: 90%;
+  }
+}
+
+body .el-button--primary.is-plain{
+  color:$base-color--10;
+}

@@ -1,0 +1,37 @@
+---
+description: 表单设计器核心引擎（generator/render/parser）开发规则
+globs: src/components/{generator,render,parser}/**/*
+alwaysApply: false
+---
+
+# Generator / Render / Parser 引擎规则
+
+## 新增组件 checklist
+
+1. `config.js` → `inputComponents` / `selectComponents` / `layoutComponents` 添加配置
+2. `render/slots/{tag}.js` → 有插槽时添加渲染函数（文件名 = `__config__.tag`）
+3. `RightPanel.vue` → 按 `typeCode` 补充属性编辑项
+4. `generator/html.js` + `js.js` → 补充代码导出逻辑
+5. `parser/Parser.vue` → `ruleTrigger` 映射（需校验的组件）
+
+## render.js 约定
+
+- `conf` 对象经 `buildDataObject` 转为 VNode data
+- `__config__`、`__slot__`、`__vModel__` 在 `clearAttrs` 中被剥离，不传给 DOM
+- 自定义事件通过 `emitEvents` 将字符串事件名转为 `$emit`
+
+## Parser 约定
+
+- `layouts.colFormItem` / `layouts.rowFormItem` 递归渲染
+- `showByPrependFieldFn` 控制前置字段联动显隐
+- `regList` + `required` 自动合成 `el-form` rules
+
+## 子库打包
+
+```bash
+npm run build:render   # form-gen-render
+npm run build:parser   # form-gen-parser
+npm run build:tinymce  # form-gen-tinymce
+```
+
+产物输出到各模块 `lib/`，勿手动编辑打包文件。

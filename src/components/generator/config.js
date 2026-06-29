@@ -1,4 +1,5 @@
 import i18n from '@/i18n'
+import Vue from 'vue'
 
 // 表单属性【右面板】
 export const formConf = {
@@ -16,7 +17,7 @@ export const formConf = {
 /**
  * 其中__config__和__slot__是本项目自定义的属性，自定义属性的格式均为__XXX__；
     其余属性与element ui组件属性对应；
- * 
+ *
 */
 
 // 输入型组件 【左面板】typeCode 0~99
@@ -24,7 +25,7 @@ export const inputComponents = [
     {
     // 组件的自定义配置
         __config__: {
-            label: i18n.messages[i18n.locale].singleLineOfText,//'单行文本',
+            label: '输入框',
             labelWidth: null,
             showLabel: true,
             changeTag: true,
@@ -58,7 +59,7 @@ export const inputComponents = [
         readonly: false,
         disabled: false
     },
-  
+
     //-----------------------------------------------------------------------------------------------------------
     {
         "__config__": {
@@ -149,7 +150,7 @@ export const inputComponents = [
     //-------------------------------------------------------------------------------------------------------
     {
         __config__: {
-            label: '多行文本',
+            label: '文本域',
             labelWidth: null,
             showLabel: true,
             tag: 'el-input',
@@ -177,7 +178,7 @@ export const inputComponents = [
         'show-word-limit': false,
         readonly: false,
         disabled: false
-    },    
+    },
     {
         __config__: {
             label: '是否选择',
@@ -211,6 +212,11 @@ export const inputComponents = [
         size: 'medium',
         disabled: false,
         dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        on:{
+            "change":function(res,c){
+                console.info(res,c,"change单选选择",this)
+            },
+        }
     },
     {
         __config__: {
@@ -312,11 +318,19 @@ export const inputComponents = [
         filterable: false,
         multiple: false,
         dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        on:{
+            "change":function(res,c){
+                console.info(res,c,"下拉时间")
+            },
+            "diy":function(res,c){
+                console.info(res,c,"自定义事件")
+            },
+        }
     },
     {
     // 组件的自定义配置
         __config__: {
-            label: '展示文本',
+            label: '只读输入框',
             labelWidth: null,
             showLabel: true,
             changeTag: true,
@@ -329,7 +343,7 @@ export const inputComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/input',
             // 正则校验规则
             regList: [],
-            typeText: '展示文本',
+            typeText: '只读输入框',
             typeCode: 8,
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
@@ -383,7 +397,7 @@ export const inputComponents = [
         'auto-upload': true,
         'list-type': 'text',
         multiple: false,
-        
+
     },
     {
         __diyComponentsName__: 'diy-text',//自定义组件名
@@ -406,12 +420,12 @@ export const inputComponents = [
 	    __slot__: {
 	        // default: '随便输入什么2.0',
             text: '随便输入什么'
-	    },        
+	    },
 	    type: undefined,
 	    underline: false,
-        
-    }, 
-   
+
+    },
+
 ]
 
 // 选择型组件 【左面板】typeCode 100~200
@@ -498,7 +512,7 @@ export const selectComponents = [
         height: 300, // 编辑器高度
         branding: false // 隐藏右下角品牌烙印
     },
-    
+
     {
         __config__: {
             label: '级联选择',
@@ -585,7 +599,7 @@ export const selectComponents = [
     },
     {
         __config__: {
-            label: '多选框组',
+            label: '复选框组',
             tag: 'el-checkbox-group',
             tagIcon: 'checkbox',
             defaultValue: [],
@@ -868,7 +882,7 @@ export const selectComponents = [
 
 // 布局型组件 【左面板】typeCode 200~300
 export const layoutComponents = [
-    
+
     {
         __config__: {
             layout: 'rowFormItem',
@@ -905,7 +919,7 @@ export const layoutComponents = [
         plain: false,
         circle: false,
         disabled: false
-    },    
+    },
     {
         __config__: {
             layout: 'colFormItem',

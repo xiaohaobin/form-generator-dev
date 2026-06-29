@@ -1546,7 +1546,7 @@ export default {
     },
     //是否展示正则规则
     isShowRegListByTypeCode(){      
-      const noPropTypeCode = [7, 4,5,6,8,9];//不需要默认值的组件类型：7、下拉框;4,是否选择；5,时间选择组件；6，日期选择组件;8,展示文本;9,附件上传；
+      const noPropTypeCode = [7, 4,5,6,8,9];//不需要默认值的组件类型：7、下拉框;4,是否选择；5,时间选择组件；6，日期选择组件;8,只读输入框;9,附件上传；
       if(Array.isArray(this.activeData.__config__.regList) && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
       return false;
     },
