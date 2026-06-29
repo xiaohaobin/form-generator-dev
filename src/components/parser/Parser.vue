@@ -39,9 +39,10 @@ const layouts = {
     /*字段说明组件部分属性配置*/  
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
 
-    const renderNode = <render conf={scheme} on={listeners} />
+    const formData = this[this.formConf.formModel]
+    const renderNode = <render conf={scheme} formData={formData} on={listeners} />
     const formControl = isInputNumberComponent(scheme)
-      ? wrapInputNumberField(h, scheme, renderNode)
+      ? wrapInputNumberField(h, scheme, renderNode, formData)
       : renderNode
 
     return (

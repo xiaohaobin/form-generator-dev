@@ -357,6 +357,24 @@
           <el-form-item v-if="isShowMax" label="最大值">
             <el-input-number v-model="activeData.max" placeholder="最大值" />
           </el-form-item>
+          <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="最小值动态函数">
+            <el-input
+              type="textarea"
+              :rows="5"
+              :value="activeData.min_set_fn || ''"
+              placeholder="(formData) => { return 40 }，留空则使用上方最小值"
+              @input="onInputNumberSetFnInput('min_set_fn', $event)"
+            />
+          </el-form-item>
+          <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="最大值动态函数">
+            <el-input
+              type="textarea"
+              :rows="5"
+              :value="activeData.max_set_fn || ''"
+              placeholder="(formData) => { if (formData.syn === 0) return 200; return 150 }，留空则使用上方最大值"
+              @input="onInputNumberSetFnInput('max_set_fn', $event)"
+            />
+          </el-form-item>
           <el-form-item v-if="activeData.height!==undefined" label="组件高度">
             <el-input-number v-model="activeData.height" placeholder="高度" @input="changeRenderKey" />
           </el-form-item>
@@ -1367,7 +1385,11 @@ export default {
       if (needRerenderList.includes(this.activeData.__config__.tag)) {
         this.activeData.__config__.renderKey = +new Date()
       }
-    },   
+    },
+    onInputNumberSetFnInput(key, value) {
+      this.$set(this.activeData, key, value)
+      this.changeRenderKey()
+    },
      //返回组件类型文本
     getTxtByCurrCom(){
       let list = this.tagList;

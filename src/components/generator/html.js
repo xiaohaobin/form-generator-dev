@@ -3,6 +3,7 @@ import ruleTrigger from './ruleTrigger'
 import {
   showByPrependFieldFn, setStringClassByTypeCodeTo2,set_noOverCurrDate_by_typeCode6
 } from '@/utils/index'
+import { hasSetFnCode, buildInputNumberRangeHtml } from '@/utils/inputNumberWrap'
 
 let confGlobal
 let someSpanIsNot24
@@ -201,17 +202,26 @@ const tags = {
     const {
       tag, disabled, vModel, placeholder
     } = attrBuilder(el)
+    const formModel = confGlobal?.formModel || 'formData'
     const controlsPosition = el['controls-position'] ? `controls-position=${el['controls-position']}` : ''
     const controls = el.controls === false ? ':controls="false"' : ''
-    const min = el.min !== undefined && el.min !== null && el.min !== '' ? `:min='${el.min}'` : ''
-    const max = el.max !== undefined && el.max !== null && el.max !== '' ? `:max='${el.max}'` : ''
+    let min = ''
+    if (hasSetFnCode(el.min_set_fn)) {
+      min = `:min="(${String(el.min_set_fn).trim()})(${formModel})"`
+    } else if (el.min !== undefined && el.min !== null && el.min !== '') {
+      min = `:min='${el.min}'`
+    }
+    let max = ''
+    if (hasSetFnCode(el.max_set_fn)) {
+      max = `:max="(${String(el.max_set_fn).trim()})(${formModel})"`
+    } else if (el.max !== undefined && el.max !== null && el.max !== '') {
+      max = `:max='${el.max}'`
+    }
     const step = el.step ? `:step='${el.step}'` : ''
     const stepStrictly = el['step-strictly'] ? 'step-strictly' : ''
     const precision = el.precision !== undefined && el.precision !== null && el.precision !== '' ? `:precision='${el.precision}'` : ''
     const unitHtml = el.unit ? `<span class="fg-input-number-unit">${el.unit}</span>` : ''
-    const hasRange = el.min !== undefined && el.min !== null && el.min !== ''
-      && el.max !== undefined && el.max !== null && el.max !== ''
-    const rangeHtml = hasRange ? `<span class="fg-input-number-range">[${el.min},${el.max}]</span>` : ''
+    const rangeHtml = buildInputNumberRangeHtml(el, formModel)
     const inner = `<${tag} ${vModel} ${placeholder} ${step} ${stepStrictly} ${precision} ${controls} ${controlsPosition} ${min} ${max} ${disabled}></${tag}>`
 
     return `<div class="fg-input-number-wrap"><div class="fg-input-number-inner">${inner}${unitHtml}</div>${rangeHtml}</div>`

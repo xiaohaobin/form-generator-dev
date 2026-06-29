@@ -1,4 +1,5 @@
 import { deepClone } from '@/utils/index'
+import { applyInputNumberMinMax } from '@/utils/inputNumberWrap'
 
 const componentChild = {}
 /**
@@ -81,6 +82,8 @@ function clearAttrs(dataObject) {
   delete dataObject.attrs.__slot__
   delete dataObject.attrs.__methods__
   delete dataObject.attrs.unit
+  delete dataObject.attrs.min_set_fn
+  delete dataObject.attrs.max_set_fn
 }
 
 function makeDataObject() {
@@ -108,6 +111,10 @@ export default {
     conf: {
       type: Object,
       required: true
+    },
+    formData: {
+      type: Object,
+      default: null
     }
   },
   render(h) {
@@ -123,6 +130,8 @@ export default {
 
      //上传组件成功之后 on-success 属性，监听事件
      confClone = this.set_onSuccess_by_typeCode9(confClone)
+
+     confClone = applyInputNumberMinMax(confClone, this.formData)
 
     // console.log(confClone,"confClone")
     // console.log(dataObject,"dataObject")

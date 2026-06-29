@@ -43,6 +43,8 @@ export const inputComponents = [
         placeholder: '',
         min: undefined,
         max: undefined,
+        min_set_fn: '',
+        max_set_fn: '',
         step: 1,
         'step-strictly': false,
         precision: undefined,

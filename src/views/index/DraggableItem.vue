@@ -4,7 +4,7 @@ import render from '@/components/render/render'
 import {
   showToolByCurrentItem, showByPrependFieldFn, setActiveByTypeCodeTo2, setStringClassByTypeCodeTo2,setStringWrapperClassByTypeCodeTo2
 } from '@/utils/index'
-import { isInputNumberComponent, wrapInputNumberField } from '@/utils/inputNumberWrap'
+import { isInputNumberComponent, wrapInputNumberField, buildFormDataFromDrawingList } from '@/utils/inputNumberWrap'
 
 const components = {
   itemBtns(h, currentItem, index, list) {
@@ -55,15 +55,17 @@ const layouts = {
     /*字段说明组件部分属性配置*/  
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
 
+    const formData = buildFormDataFromDrawingList(list)
+
     const renderNode = (
-      <render key={config.renderKey} conf={currentItem} onInput={ event => {
+      <render key={config.renderKey} conf={currentItem} formData={formData} onInput={ event => {
         this.$set(config, 'defaultValue', event)
       }} onDiy={(a,b)=>{console.log('diydiy',a,b)} }>
         {child}
       </render>
     )
     const formControl = isInputNumberComponent(currentItem)
-      ? wrapInputNumberField(h, currentItem, renderNode)
+      ? wrapInputNumberField(h, currentItem, renderNode, formData)
       : renderNode
 
     return (
@@ -138,7 +140,8 @@ const layouts = {
   raw(h, currentItem, index, list) {
     const config = currentItem.__config__
     const child = renderChildren.apply(this, arguments)
-    return <render key={config.renderKey} conf={currentItem} onInput={ event => {
+    const formData = buildFormDataFromDrawingList(list)
+    return <render key={config.renderKey} conf={currentItem} formData={formData} onInput={ event => {
       this.$set(config, 'defaultValue', event)
     }}>
       {child}
