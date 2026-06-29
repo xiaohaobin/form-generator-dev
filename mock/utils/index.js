@@ -38,7 +38,48 @@ function handleMockArray() {
   return mockArray
 }
 
+/**
+ * 解析请求体（支持 JSON 与 application/x-www-form-urlencoded）
+ * @param {object|string|undefined} body
+ * @returns {object}
+ */
+function parseRequestBody(body) {
+  if (!body) return {}
+  if (typeof body === 'object') return body
+  try {
+    return JSON.parse(body)
+  } catch (e) {
+    const params = {}
+    String(body).split('&').forEach((pair) => {
+      const eqIndex = pair.indexOf('=')
+      if (eqIndex === -1) return
+      const key = decodeURIComponent(pair.slice(0, eqIndex))
+      const val = decodeURIComponent(pair.slice(eqIndex + 1))
+      if (key) params[key] = val
+    })
+    return params
+  }
+}
+
+/**
+ * 列表分页（page/size 强制转为数字，避免字符串拼接导致 slice 异常）
+ * @param {Array} list
+ * @param {object} query
+ * @returns {{ totalCount: number, data: Array }}
+ */
+function paginateList(list, query = {}) {
+  const page = Math.max(parseInt(query.page, 10) || 1, 1)
+  const size = Math.max(parseInt(query.size, 10) || 10, 1)
+  const start = size * (page - 1)
+  return {
+    totalCount: list.length,
+    data: list.slice(start, start + size),
+  }
+}
+
 module.exports = {
   handleRandomImage,
   handleMockArray,
+  parseRequestBody,
+  paginateList,
 }

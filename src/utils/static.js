@@ -17,6 +17,24 @@ function paramObj(url) {
   return JSON.parse(`{"${decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"').replace(/\+/g, ' ')}"}`)
 }
 
+function parseRequestBody(body) {
+  if (!body) return {}
+  if (typeof body === 'object') return body
+  try {
+    return JSON.parse(body)
+  } catch (e) {
+    const params = {}
+    String(body).split('&').forEach((pair) => {
+      const eqIndex = pair.indexOf('=')
+      if (eqIndex === -1) return
+      const key = decodeURIComponent(pair.slice(0, eqIndex))
+      const val = decodeURIComponent(pair.slice(eqIndex + 1))
+      if (key) params[key] = val
+    })
+    return params
+  }
+}
+
 const mocks = []
 const files = require.context('../../mock/controller', false, /\.js$/)
 
@@ -44,7 +62,7 @@ export function mockXHR() {
         const { body, type, url } = options
         result = respond({
           method: type,
-          body: JSON.parse(body),
+          body: parseRequestBody(body),
           query: paramObj(url),
         })
       } else {

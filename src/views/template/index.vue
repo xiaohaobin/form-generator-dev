@@ -301,7 +301,7 @@
         }],
         tempType:1,
         tempTypeOptions:[///发送配件模板/客诉链接模板/工单补录模板/工单转换机模板/Call Log模板
-          {value:1, label:"建站表单模板"},
+          // {value:1, label:"建站表单模板"},
           {value:2, label:"设备设置项通用模板"},
           {value:3, label:"逆变器设置项模板"},
           {value:4, label:"采集器设置项模板"},

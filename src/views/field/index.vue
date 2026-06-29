@@ -184,9 +184,9 @@
 
       return {
         formInline: {
-          tableField: '',          
+          tableField: '',
           fieldAlias: '',
-          tableName:undefined
+          tableName: 'tlx_setting',
         },
         tableNameOptions:[
           // {label:'用户表',value:'user_tbl'},
@@ -197,9 +197,7 @@
           thead:{padding:'6px 0',backgroundColor:'#ebf7ff',borderColor:'#d5e7f2'},
           tbody:{border:'none'}
         },       
-        tableList:[
-          {tableField:"userName", fieldAlias:"用户名称", tableName:"server_function",creator:"admin",createdDate:'2024-01-08',lastUpdatePeople:'admin',lastUpdateDate:'2024-01-09',remark:'用户表下的用户名',id:1},          
-        ],
+        tableList: [],
         pageConfig:{
           total:0,
           page:1,
@@ -249,8 +247,9 @@
       //重置查询条件
       resetFormInline(){
         this.formInline.fieldAlias = '';
-        this.formInline.tableField = undefined;
-        this.formInline.tableName = undefined;
+        this.formInline.tableField = '';
+        this.formInline.tableName = 'tlx_setting';
+        this.getMainList();
       },      
       //打开添加模板弹层动画结束
       openedAddDialog(){
@@ -370,6 +369,7 @@
             if(res.code*1 === 200){
               res.data.forEach((item)=>{
                 item.value = item.name;
+                item.label = item.label || item.name;
               });
               this.tableNameOptions = res.data;
             }
