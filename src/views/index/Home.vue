@@ -241,7 +241,7 @@ export default {
             saveIdGlobalDebounce: debounce(340, saveIdGlobal),
             leftComponents: [
                 {
-                    title: '换机模板所需组件',
+                    title: '常用组件',
                     list: inputComponents
                 },
                 {

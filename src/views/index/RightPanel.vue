@@ -508,13 +508,8 @@
             />
           </el-form-item>
 
-          <el-form-item label="" v-show="activeData.__config__.typeCode === 9">
-            <div class="flex-space-between w-100 mb-5">
-              <div><span>上传说明</span></div>              
-              <!-- <el-button size="mini" @click="confirmUploadDes">确定</el-button> -->
-            </div>            
-            <textarea id="uploadDesEditer" ></textarea>
-            <!-- tinymce.get(0).getContent() -->
+          <el-form-item v-if="isUploadComponent" label="上传说明">
+            <textarea :key="uploadDesEditorKey" id="uploadDesEditer"></textarea>
           </el-form-item>
 
           
@@ -892,8 +887,7 @@ import { getDrawingList, saveFormConf } from '@/utils/db'
 import {getCountryListApi, getCityListApi} from '@/utils/api.js'
 //加载富文本编辑器操作
 import loadTinymce from '@/utils/loadTinymce'
-import { debounce } from 'throttle-debounce'
-import { plugins, toolbar } from '@/components/tinymce/config'
+import { toolbar } from '@/components/tinymce/config'
 
 const dateTimeFormat = {
   date: 'yyyy-MM-dd',
@@ -1135,6 +1129,13 @@ export default {
     tableFieldOptions2() {
       return this.tableFieldOptions
     },
+    isUploadComponent() {
+      return this.activeData?.__config__?.typeCode === 9
+    },
+    uploadDesEditorKey() {
+      const config = this.activeData?.__config__ || {}
+      return `upload-des-${config.formId || config.renderKey || 'default'}`
+    },
   },
   watch: {
     formConf: {
@@ -1142,42 +1143,32 @@ export default {
         saveFormConf(val)
       },
       deep: true
-    }, 
-    // 'activeData.__config__.typeCode':function(n,o){
-    //   this.$nextTick(()=>{
-    //     console.log(n,o,"变化")
-    //     if(o !== undefined){
-    //       if(n === 9){
-    //         //附件上传--上传说明初始化插件
-    //         this.uploadDesEditerInit();
-    //       }else{
-    //         //销毁--附件上传--上传说明编辑器
-    //         this.destroyTinymce();
-    //       }
-    //     }
-    //   });
-    // },   
-    'activeData.__vModel__':function(n,o){
-      this.$nextTick(async ()=>{
-        if(o !== undefined){
-          if(this.activeData.__config__.typeCode === 9){
-             //销毁--附件上传--上传说明编辑器
-            await this.destroyTinymce();
-             //附件上传--上传说明初始化插件
-            await this.uploadDesEditerInit();
-          }
+    },
+    activeData: {
+      async handler(newVal, oldVal) {
+        const wasUpload = oldVal?.__config__?.typeCode === 9
+        const isUpload = newVal?.__config__?.typeCode === 9
+
+        if (wasUpload) {
+          this.syncUploadDesFromEditor(oldVal)
+          await this.destroyTinymce()
         }
-      });
-    }
+        if (isUpload) {
+          await this.$nextTick()
+          await this.uploadDesEditerInit()
+        }
+      },
+    },
   },
   created(){
     console.log("正则列表",this.$store.getters.getRegList)
     console.log("字段列表",this.$store.getters.getFieldList)
   },
-  mounted(){
-    
-    //附件上传--上传说明初始化插件
-    this.uploadDesEditerInit()
+  beforeDestroy() {
+    if (this.isUploadComponent) {
+      this.syncUploadDesFromEditor(this.activeData)
+    }
+    this.destroyTinymce()
   },
   methods: {
     addSelectItem() {
@@ -1586,74 +1577,66 @@ export default {
       this.$set(this.activeData, 'value-format', this.activeData.format)
     },
     /**********************************************日期时间选择器处理eee************************************************************************************************/
+    syncUploadDesFromEditor(target) {
+      if (target?.__config__?.typeCode !== 9) return
+      const editor = window.tinymce?.get('uploadDesEditer')
+      if (editor) {
+        target.__config__.uploadDes = editor.getContent()
+      }
+    },
     //附件上传--上传说明初始化插件
-    async uploadDesEditerInit(){
-      const _this = this;
-      loadTinymce(tinymce => {
-        // eslint-disable-next-line global-require         
+    async uploadDesEditerInit() {
+      if (!this.isUploadComponent) return
+      await this.destroyTinymce()
+      await this.$nextTick()
+      if (!document.getElementById('uploadDesEditer')) return
+
+      loadTinymce((tinymce) => {
+        // eslint-disable-next-line global-require
         require('@/components/tinymce/zh_CN')
         tinymce.init({
-            selector: '#uploadDesEditer', //容器，可使用css选择器
-            language:'zh_CN', //调用放在langs文件夹内的语言包
-            menubar:false,
-            plugins:[],
-            // menubar: 'file edit insert view format table',
-            // plugins,
-            toolbar,
-            height: 300,
-            branding: false,
-            object_resizing: false,
-            end_container_on_empty_block: true,
-            powerpaste_word_import: 'clean',
-            code_dialog_height: 450,
-            code_dialog_width: 1000,
-            advlist_bullet_styles: 'square',
-            advlist_number_styles: 'default',
-            default_link_target: '_blank',
-            link_title: false,
-            nonbreaking_force_tab: true,
-            init_instance_callback: (editor) => {
-              console.log("初始化之后的回调")
-              editor.setContent( this.activeData.__config__.uploadDes || '<p></p>' )
-              this.vModel(editor)
-            }
-        });
-
+          selector: '#uploadDesEditer',
+          language: 'zh_CN',
+          menubar: false,
+          plugins: [],
+          toolbar,
+          height: 300,
+          branding: false,
+          object_resizing: false,
+          end_container_on_empty_block: true,
+          powerpaste_word_import: 'clean',
+          code_dialog_height: 450,
+          code_dialog_width: 1000,
+          advlist_bullet_styles: 'square',
+          advlist_number_styles: 'default',
+          default_link_target: '_blank',
+          link_title: false,
+          nonbreaking_force_tab: true,
+          init_instance_callback: (editor) => {
+            editor.setContent(this.activeData.__config__.uploadDes || '<p></p>')
+            this.bindUploadDesEditor(editor)
+          },
+        })
       })
-
     },
-    //销毁--附件上传，上传说明初始化插件
-    async destroyTinymce() {
-      if (!window.tinymce) return
-      const _tinymce = window.tinymce.get('uploadDesEditer')
-      if (_tinymce) {
-        _tinymce.destroy()
+    //销毁--附件上传，上传说明编辑器
+    destroyTinymce() {
+      if (!window.tinymce) return Promise.resolve()
+      const instance = window.tinymce.get('uploadDesEditer')
+      if (instance) {
+        instance.destroy()
       }
+      return Promise.resolve()
     },
     //确定上传说明,设置到组件
-    confirmUploadDes(content){
-      const _tinymce = tinymce.get('uploadDesEditer');
-      if (_tinymce) {
-        if(this.activeData.__config__.typeCode === 9) this.activeData.__config__.uploadDes = _tinymce.getContent();      
-      }
-      
+    confirmUploadDes() {
+      this.syncUploadDesFromEditor(this.activeData)
     },
-    //监听写入上传附件说明编辑器，更新配置的
-    vModel(editor) {
-      // 控制连续写入时setContent的触发频率
-      const debounceSetContent = debounce(250, editor.setContent)
-      this.$watch('value', (val, prevVal) => {
-        if (editor && val !== prevVal && val !== editor.getContent()) {
-          if (typeof val !== 'string') val = val.toString()
-          debounceSetContent.call(editor, val)
-        }
+    //监听编辑器内容变化，回写 uploadDes
+    bindUploadDesEditor(editor) {
+      editor.on('change keyup undo redo', () => {
+        this.syncUploadDesFromEditor(this.activeData)
       })
-      //监听编辑器变化
-      editor.on('change', () => {
-        this.$nextTick(()=>{
-          this.confirmUploadDes()
-        })
-      });
     },
   }
 }

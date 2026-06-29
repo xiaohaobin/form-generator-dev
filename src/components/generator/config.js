@@ -23,6 +23,102 @@ export const formConf = {
 // 输入型组件 【左面板】typeCode 0~99
 export const inputComponents = [
     {
+        __config__: {
+            label: '计数器',
+            showLabel: true,
+            changeTag: true,
+            labelWidth: null,
+            tag: 'el-input-number',
+            tagIcon: 'number',
+            defaultValue: undefined,
+            span: 24,
+            layout: 'colFormItem',
+            required: true,
+            regList: [],
+            document: 'https://element.eleme.cn/#/zh-CN/component/input-number',
+            typeCode: 105,
+            fieldDescription:'',//字段说明,
+            showByPrependField:undefined,//前值字段
+        },
+        placeholder: '',
+        min: undefined,
+        max: undefined,
+        step: 1,
+        'step-strictly': false,
+        precision: undefined,
+        'controls-position': '',
+        disabled: false
+    },
+    {
+        __config__: {
+            label: '开关',
+            tag: 'el-switch',
+            tagIcon: 'switch',
+            defaultValue: false,
+            span: 24,
+            showLabel: true,
+            labelWidth: null,
+            layout: 'colFormItem',
+            required: true,
+            regList: [],
+            changeTag: true,
+            document: 'https://element.eleme.cn/#/zh-CN/component/switch',
+            fieldDescription:'',//字段说明
+            showByPrependField:undefined,//前值字段
+            typeCode:101,
+        },
+        style: {},
+        disabled: false,
+        'active-text': '',
+        'inactive-text': '',
+        'active-color': null,
+        'inactive-color': null,
+        'active-value': true,
+        'inactive-value': false
+    },
+    {
+        __config__: {
+            label: '下拉选择',
+            showLabel: true,
+            labelWidth: null,
+            tag: 'el-select',
+            tagIcon: 'select',
+            layout: 'colFormItem',
+            span: 24,
+            required: true,
+            regList: [],
+            changeTag: true,
+            document: 'https://element.eleme.cn/#/zh-CN/component/select',
+            typeCode: 7,
+            fieldDescription:'',//字段说明
+            showByPrependField:undefined,//前值字段
+        },
+        __slot__: {
+            options: [{
+                label: '选项一',
+                value: 1
+            }, {
+                label: '选项二',
+                value: 2
+            }]
+        },
+        placeholder: '请选择',
+        style: { width: '100%' },
+        clearable: true,
+        disabled: false,
+        filterable: false,
+        multiple: false,
+        dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        on:{
+            "change":function(res,c){
+                console.info(res,c,"下拉时间")
+            },
+            "diy":function(res,c){
+                console.info(res,c,"自定义事件")
+            },
+        }
+    },
+    {
     // 组件的自定义配置
         __config__: {
             label: '输入框',
@@ -285,48 +381,7 @@ export const inputComponents = [
         readonly: false,
         editable:false
     },
-    {
-        __config__: {
-            label: '下拉选择',
-            showLabel: true,
-            labelWidth: null,
-            tag: 'el-select',
-            tagIcon: 'select',
-            layout: 'colFormItem',
-            span: 24,
-            required: true,
-            regList: [],
-            changeTag: true,
-            document: 'https://element.eleme.cn/#/zh-CN/component/select',
-            typeCode: 7,
-            fieldDescription:'',//字段说明
-            showByPrependField:undefined,//前值字段
-        },
-        __slot__: {
-            options: [{
-                label: '选项一',
-                value: 1
-            }, {
-                label: '选项二',
-                value: 2
-            }]
-        },
-        placeholder: '请选择',
-        style: { width: '100%' },
-        clearable: true,
-        disabled: false,
-        filterable: false,
-        multiple: false,
-        dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
-        on:{
-            "change":function(res,c){
-                console.info(res,c,"下拉时间")
-            },
-            "diy":function(res,c){
-                console.info(res,c,"自定义事件")
-            },
-        }
-    },
+   
     {
     // 组件的自定义配置
         __config__: {
@@ -463,33 +518,7 @@ export const selectComponents = [
         readonly: false,
         disabled: false
     },
-    {
-        __config__: {
-            label: '计数器',
-            showLabel: true,
-            changeTag: true,
-            labelWidth: null,
-            tag: 'el-input-number',
-            tagIcon: 'number',
-            defaultValue: undefined,
-            span: 24,
-            layout: 'colFormItem',
-            required: true,
-            regList: [],
-            document: 'https://element.eleme.cn/#/zh-CN/component/input-number',
-            typeCode: 105,
-            fieldDescription:'',//字段说明,
-            showByPrependField:undefined,//前值字段
-        },
-        placeholder: '',
-        min: undefined,
-        max: undefined,
-        step: 1,
-        'step-strictly': false,
-        precision: undefined,
-        'controls-position': '',
-        disabled: false
-    },
+   
     {
         __config__: {
             label: '编辑器',
@@ -633,33 +662,7 @@ export const selectComponents = [
         disabled: false,
         dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
     },
-    {
-        __config__: {
-            label: '开关',
-            tag: 'el-switch',
-            tagIcon: 'switch',
-            defaultValue: false,
-            span: 24,
-            showLabel: true,
-            labelWidth: null,
-            layout: 'colFormItem',
-            required: true,
-            regList: [],
-            changeTag: true,
-            document: 'https://element.eleme.cn/#/zh-CN/component/switch',
-            fieldDescription:'',//字段说明
-            showByPrependField:undefined,//前值字段
-            typeCode:101,
-        },
-        style: {},
-        disabled: false,
-        'active-text': '',
-        'inactive-text': '',
-        'active-color': null,
-        'inactive-color': null,
-        'active-value': true,
-        'inactive-value': false
-    },
+    
     {
         __config__: {
             label: '滑块',
