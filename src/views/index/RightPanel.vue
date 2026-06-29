@@ -79,6 +79,17 @@
             </el-select>
           </el-form-item>
 
+          <el-form-item v-if="activeData.__config__.typeCode !== 10" label="动态隐藏函数">
+            <el-input
+              type="textarea"
+              :rows="5"
+              :value="activeData.__config__.hide_set_fn || ''"
+              placeholder="(formData) => { return formData.syn === 0 }，返回 true 隐藏；配置后优先于前置字段，留空则仅用前置字段"
+              @input="onConfigSetFnInput('hide_set_fn', $event)"
+              @blur="onConfigSetFnBlur('hide_set_fn', '动态隐藏函数')"
+            />
+          </el-form-item>
+
           <el-form-item v-if="activeData.__config__.span!==undefined && activeData.__config__.typeCode !== 10" label="组件所占宽度">
             <div class="diy-el-slider">
               <el-slider v-model="activeData.__config__.span" :max="24" :min="0" :step="6" :marks="slideMarks" @change="spanChange" :show-tooltip="false" class="diy-el-slider-main"/>
@@ -948,6 +959,7 @@ import {getCountryListApi, getCityListApi} from '@/utils/api.js'
 //加载富文本编辑器操作
 import loadTinymce from '@/utils/loadTinymce'
 import { toolbar } from '@/components/tinymce/config'
+import { validateSetFn } from '@/utils/setFn'
 import { validateInputNumberSetFn } from '@/utils/inputNumberWrap'
 
 const dateTimeFormat = {
@@ -1396,6 +1408,21 @@ export default {
     onInputNumberSetFnBlur(key, label) {
       const code = this.activeData[key] || ''
       const { valid, message } = validateInputNumberSetFn(code, label)
+      if (!valid) {
+        this.$alert(message, `${label}校验失败`, {
+          type: 'error',
+          confirmButtonText: '我知道了',
+        })
+      }
+    },
+    onConfigSetFnInput(key, value) {
+      if (!this.activeData.__config__) return
+      this.$set(this.activeData.__config__, key, value)
+      this.changeRenderKey()
+    },
+    onConfigSetFnBlur(key, label) {
+      const code = this.activeData.__config__?.[key] || ''
+      const { valid, message } = validateSetFn(code, label)
       if (!valid) {
         this.$alert(message, `${label}校验失败`, {
           type: 'error',

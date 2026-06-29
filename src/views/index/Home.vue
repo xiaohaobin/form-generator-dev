@@ -659,6 +659,7 @@ export default {
                     let first__vModel__ = firstItem.__vModel__;
 
                     currentItem.__config__.showByPrependField = firstItem.__config__.showByPrependField;//父节点的前置字段也跟第一子节点一致
+                    currentItem.__config__.hide_set_fn = firstItem.__config__.hide_set_fn;//父节点的动态隐藏函数也跟第一子节点一致
 
                     childrenList.forEach((item,index)=>{
                         if(index > 0){        

@@ -2,8 +2,9 @@
 import draggable from 'vuedraggable'
 import render from '@/components/render/render'
 import {
-  showToolByCurrentItem, showByPrependFieldFn, setActiveByTypeCodeTo2, setStringClassByTypeCodeTo2,setStringWrapperClassByTypeCodeTo2
+  showToolByCurrentItem, setActiveByTypeCodeTo2, setStringClassByTypeCodeTo2,setStringWrapperClassByTypeCodeTo2
 } from '@/utils/index'
+import { shouldRenderComponent } from '@/utils/setFn'
 import { isInputNumberComponent, wrapInputNumberField, buildFormDataFromDrawingList } from '@/utils/inputNumberWrap'
 
 const components = {
@@ -33,9 +34,9 @@ const layouts = {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
 
-    //根据前置字段是否显示
-    const showByPrependField = showByPrependFieldFn(list, config, currentItem);
-    if(!showByPrependField.show){
+    const formData = buildFormDataFromDrawingList(list)
+    const componentVisible = shouldRenderComponent(list, config, currentItem, formData)
+    if(!componentVisible.show){
       return (
         <el-col></el-col>
       )
@@ -54,8 +55,6 @@ const layouts = {
 
     /*字段说明组件部分属性配置*/  
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
-
-    const formData = buildFormDataFromDrawingList(list)
 
     const renderNode = (
       <render key={config.renderKey} conf={currentItem} formData={formData} onInput={ event => {
@@ -89,9 +88,9 @@ const layouts = {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
 
-     //根据前置字段是否显示
-     const showByPrependField = showByPrependFieldFn(list, config, currentItem);
-     if(!showByPrependField.show){
+    const formData = buildFormDataFromDrawingList(list)
+    const componentVisible = shouldRenderComponent(list, config, currentItem, formData)
+    if(!componentVisible.show){
       return (
         <el-col></el-col>
       )

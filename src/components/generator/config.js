@@ -39,6 +39,7 @@ export const inputComponents = [
             typeCode: 105,
             fieldDescription:'',//字段说明,
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         placeholder: '',
         min: undefined,
@@ -69,6 +70,7 @@ export const inputComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/switch',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:101,
         },
         style: {},
@@ -96,6 +98,7 @@ export const inputComponents = [
             typeCode: 7,
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         __slot__: {
             options: [{
@@ -142,6 +145,7 @@ export const inputComponents = [
             typeCode: 1,
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         // 组件的插槽属性
         __slot__: {
@@ -189,6 +193,7 @@ export const inputComponents = [
               "groupNum": 2,
               fieldDescription: "",
               showByPrependField:undefined,//前值字段
+              hide_set_fn:'',//动态隐藏函数
             },
             "__slot__": {
               "prepend": "",
@@ -224,6 +229,7 @@ export const inputComponents = [
               "groupNum": 2,
               fieldDescription: "",
               showByPrependField:undefined,//前值字段
+              hide_set_fn:'',//动态隐藏函数
             },
             "__slot__": {
               "prepend": "",
@@ -266,6 +272,7 @@ export const inputComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/input',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         type: 'textarea',
         placeholder: '请输入',
@@ -297,6 +304,7 @@ export const inputComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/radio',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:4,
         },
         __slot__: {
@@ -334,6 +342,7 @@ export const inputComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/time-picker',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:5,
             isRange: false,
         },
@@ -367,6 +376,7 @@ export const inputComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/date-picker',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:6,
             isRange: false,
             noOverCurrDate:true,//最大日期不超过当前日期
@@ -406,6 +416,7 @@ export const inputComponents = [
             typeCode: 8,
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         // 组件的插槽属性
         __slot__: {
@@ -443,6 +454,7 @@ export const inputComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/upload',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:9,
             uploadDes:'',//上传说明
         },
@@ -506,6 +518,7 @@ export const selectComponents = [
             typeCode: 104,
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         __slot__: {
             prepend: '',
@@ -540,6 +553,7 @@ export const selectComponents = [
             typeCode: 106,
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         placeholder: '请输入',
         height: 300, // 编辑器高度
@@ -568,6 +582,7 @@ export const selectComponents = [
             typeCode:108,
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
         },
         options: [{
             id: 1,
@@ -614,6 +629,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/radio',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:109,
         },
         __slot__: {
@@ -648,6 +664,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/checkbox',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:100,
         },
         __slot__: {
@@ -683,6 +700,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/slider',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:102,
         },
         disabled: false,
@@ -708,6 +726,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/time-picker',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:103,
         },
         placeholder: '请选择',
@@ -736,6 +755,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/time-picker',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:104,
         },
         style: { width: '100%' },
@@ -764,6 +784,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/date-picker',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:105,
         },
         placeholder: '请选择',
@@ -791,6 +812,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/date-picker',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:106,
         },
         style: { width: '100%' },
@@ -820,6 +842,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/rate',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:107,
         },
         style: {},
@@ -845,6 +868,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/color-picker',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:108,
         },
         'show-alpha': false,
@@ -872,6 +896,7 @@ export const selectComponents = [
             document: 'https://element.eleme.cn/#/zh-CN/component/upload',
             fieldDescription:'',//字段说明
             showByPrependField:undefined,//前值字段
+            hide_set_fn:'',//动态隐藏函数
             typeCode:109,
         },
         __slot__: {
@@ -898,6 +923,7 @@ export const layoutComponents = [
             layoutTree: true,
             document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes',
             typeCode:200,
+            hide_set_fn:'',//动态隐藏函数
         },
         type: 'default',
         justify: 'start',
@@ -915,6 +941,7 @@ export const layoutComponents = [
             layout: 'colFormItem',
             document: 'https://element.eleme.cn/#/zh-CN/component/button',
             typeCode:201,
+            hide_set_fn:'',//动态隐藏函数
         },
         __slot__: {
             default: '主要按钮'
@@ -946,6 +973,7 @@ export const layoutComponents = [
             dataPath: 'list',
             dataConsumer: 'data',
             url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
+            hide_set_fn:'',//动态隐藏函数
             children: [{
                 __config__: {
                     layout: 'raw',

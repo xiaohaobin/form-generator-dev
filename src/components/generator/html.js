@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
 import ruleTrigger from './ruleTrigger'
 import {
-  showByPrependFieldFn, setStringClassByTypeCodeTo2,set_noOverCurrDate_by_typeCode6
+  setStringClassByTypeCodeTo2,set_noOverCurrDate_by_typeCode6
 } from '@/utils/index'
+import { buildComponentVisibleAttr } from '@/utils/setFn'
 import { hasSetFnCode, buildInputNumberRangeHtml } from '@/utils/inputNumberWrap'
 
 let confGlobal
@@ -122,9 +123,9 @@ const layouts = {
                       </span>`;
      /**字段说明eeee***/
 
-    //前值字段判断
-    const showByPrependField = showByPrependFieldFn(fieldsList, config, scheme);
-    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required} v-if="${showByPrependField.show}" type-code="${config.typeCode}">
+    //前值字段 + 动态隐藏判断
+    const visibleAttr = buildComponentVisibleAttr(config, fieldsList, scheme, confGlobal?.formModel || 'formData')
+    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required} ${visibleAttr} type-code="${config.typeCode}">
         ${fieldDescriptionLabelDom}
         ${tagDom}
       </el-form-item>`
@@ -139,9 +140,9 @@ const layouts = {
     const gutter = scheme.gutter ? `:gutter="${scheme.gutter}"` : ''
     const children = config.children.map(el => layouts[el.__config__.layout](el))
 
-    //前值字段判断
-    const showByPrependField = showByPrependFieldFn(fieldsList, config, scheme);
-    let str = `<el-row ${type} ${justify} ${align} ${gutter} class="${setStringClassByTypeCodeTo2(scheme)}" v-if="${showByPrependField.show}">
+    //前值字段 + 动态隐藏判断
+    const visibleAttr = buildComponentVisibleAttr(config, fieldsList, scheme, confGlobal?.formModel || 'formData')
+    let str = `<el-row ${type} ${justify} ${align} ${gutter} class="${setStringClassByTypeCodeTo2(scheme)}" ${visibleAttr}>
       ${children.join('\n')}
     </el-row>`
     str = colWrapper(scheme, str)

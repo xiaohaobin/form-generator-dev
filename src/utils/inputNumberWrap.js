@@ -1,46 +1,12 @@
+import {
+  hasSetFnCode, compileSetFn, validateSetFn
+} from '@/utils/setFn'
+
+export { hasSetFnCode, compileSetFn, validateSetFn }
+export const validateInputNumberSetFn = validateSetFn
+
 export function isInputNumberComponent(scheme) {
   return scheme?.__config__?.tag === 'el-input-number'
-}
-
-export function hasSetFnCode(code) {
-  if (code === undefined || code === null) return false
-  return String(code).trim().length > 0
-}
-
-export function compileSetFn(code) {
-  if (!hasSetFnCode(code)) return null
-  if (typeof code === 'function') return code
-  try {
-    const fn = eval(`(${String(code).trim()})`)
-    return typeof fn === 'function' ? fn : null
-  } catch (e) {
-    console.warn('inputNumber set_fn compile failed:', e)
-    return null
-  }
-}
-
-/** 校验计数器 min_set_fn / max_set_fn 代码；空值视为未配置，直接通过 */
-export function validateInputNumberSetFn(code, label = '动态函数') {
-  if (!hasSetFnCode(code)) {
-    return { valid: true }
-  }
-  const trimmed = String(code).trim()
-  try {
-    const fn = eval(`(${trimmed})`)
-    if (typeof fn !== 'function') {
-      return {
-        valid: false,
-        message: `${label}必须是函数，示例：(formData) => { return 40 }`,
-      }
-    }
-    return { valid: true }
-  } catch (e) {
-    const errMsg = e && e.message ? e.message : String(e)
-    return {
-      valid: false,
-      message: `${label}代码语法错误：${errMsg}`,
-    }
-  }
 }
 
 export function buildFormDataFromDrawingList(list, formData = {}) {

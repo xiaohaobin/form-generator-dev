@@ -1,7 +1,8 @@
 <script>
 import {
-  deepClone, setClassNameForTypeCode2, showByPrependFieldFn
+  deepClone, setClassNameForTypeCode2
 } from '@/utils/index'
+import { shouldRenderComponent } from '@/utils/setFn'
 import { isInputNumberComponent, wrapInputNumberField } from '@/utils/inputNumberWrap'
 import render from '@/components/render/render.js'
 
@@ -23,9 +24,9 @@ const layouts = {
   colFormItem(h, scheme, list) {
     const config = scheme.__config__
 
-    //根据前置字段是否显示
-    const showByPrependField = showByPrependFieldFn(list, config, scheme);
-    if(!showByPrependField.show){
+    const formData = this[this.formConf.formModel]
+    const componentVisible = shouldRenderComponent(list, config, scheme, formData)
+    if(!componentVisible.show){
       return (
         <el-col></el-col>
       )
@@ -39,7 +40,6 @@ const layouts = {
     /*字段说明组件部分属性配置*/  
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
 
-    const formData = this[this.formConf.formModel]
     const renderNode = <render conf={scheme} formData={formData} on={listeners} />
     const formControl = isInputNumberComponent(scheme)
       ? wrapInputNumberField(h, scheme, renderNode, formData)
@@ -61,9 +61,9 @@ const layouts = {
     )
   },
   rowFormItem(h, scheme, list) {
-    //根据前置字段是否显示
-    const showByPrependField = showByPrependFieldFn(list, scheme.__config__, scheme);
-    if(!showByPrependField.show){
+    const formData = this[this.formConf.formModel]
+    const componentVisible = shouldRenderComponent(list, scheme.__config__, scheme, formData)
+    if(!componentVisible.show){
       return (
         <el-col></el-col>
       )
