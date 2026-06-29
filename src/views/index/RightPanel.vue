@@ -364,6 +364,7 @@
               :value="activeData.min_set_fn || ''"
               placeholder="(formData) => { return 40 }，留空则使用上方最小值"
               @input="onInputNumberSetFnInput('min_set_fn', $event)"
+              @blur="onInputNumberSetFnBlur('min_set_fn', '最小值动态函数')"
             />
           </el-form-item>
           <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="最大值动态函数">
@@ -373,6 +374,7 @@
               :value="activeData.max_set_fn || ''"
               placeholder="(formData) => { if (formData.syn === 0) return 200; return 150 }，留空则使用上方最大值"
               @input="onInputNumberSetFnInput('max_set_fn', $event)"
+              @blur="onInputNumberSetFnBlur('max_set_fn', '最大值动态函数')"
             />
           </el-form-item>
           <el-form-item v-if="activeData.height!==undefined" label="组件高度">
@@ -946,6 +948,7 @@ import {getCountryListApi, getCityListApi} from '@/utils/api.js'
 //加载富文本编辑器操作
 import loadTinymce from '@/utils/loadTinymce'
 import { toolbar } from '@/components/tinymce/config'
+import { validateInputNumberSetFn } from '@/utils/inputNumberWrap'
 
 const dateTimeFormat = {
   date: 'yyyy-MM-dd',
@@ -1389,6 +1392,16 @@ export default {
     onInputNumberSetFnInput(key, value) {
       this.$set(this.activeData, key, value)
       this.changeRenderKey()
+    },
+    onInputNumberSetFnBlur(key, label) {
+      const code = this.activeData[key] || ''
+      const { valid, message } = validateInputNumberSetFn(code, label)
+      if (!valid) {
+        this.$alert(message, `${label}校验失败`, {
+          type: 'error',
+          confirmButtonText: '我知道了',
+        })
+      }
     },
      //返回组件类型文本
     getTxtByCurrCom(){

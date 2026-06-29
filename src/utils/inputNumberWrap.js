@@ -19,6 +19,30 @@ export function compileSetFn(code) {
   }
 }
 
+/** 校验计数器 min_set_fn / max_set_fn 代码；空值视为未配置，直接通过 */
+export function validateInputNumberSetFn(code, label = '动态函数') {
+  if (!hasSetFnCode(code)) {
+    return { valid: true }
+  }
+  const trimmed = String(code).trim()
+  try {
+    const fn = eval(`(${trimmed})`)
+    if (typeof fn !== 'function') {
+      return {
+        valid: false,
+        message: `${label}必须是函数，示例：(formData) => { return 40 }`,
+      }
+    }
+    return { valid: true }
+  } catch (e) {
+    const errMsg = e && e.message ? e.message : String(e)
+    return {
+      valid: false,
+      message: `${label}代码语法错误：${errMsg}`,
+    }
+  }
+}
+
 export function buildFormDataFromDrawingList(list, formData = {}) {
   if (!Array.isArray(list)) return formData
   list.forEach((item) => {
