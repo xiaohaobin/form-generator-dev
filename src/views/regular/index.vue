@@ -199,7 +199,7 @@
         formInline: {
           regularName: '',          
           regularOrFunction: '',
-          checkType:undefined
+          checkType:1
         },
         checkTypeOptions:[
           {label:'输入校验',value:1},

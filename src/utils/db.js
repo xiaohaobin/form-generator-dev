@@ -45,7 +45,7 @@ export async function getDrawingList() {
   if (version !== DRAWING_ITEMS_VERSION) {
     localStorage.setItem(DRAWING_ITEMS_VERSION_KEY, DRAWING_ITEMS_VERSION)
     saveDrawingList([])
-    return null
+    return []
   }
 
   const str = localStorage.getItem(DRAWING_ITEMS);
@@ -53,9 +53,9 @@ export async function getDrawingList() {
   if(str){
     let res = JSON.parse(str);
     res = await resetConfigEvent(res);
-    return res
-  }    
-  return null
+    return Array.isArray(res) ? res : []
+  }
+  return []
 }
 
 export function saveDrawingList(list) {

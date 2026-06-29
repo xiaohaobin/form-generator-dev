@@ -916,9 +916,6 @@ export default {
   },
   props: ['showField', 'activeData', 'formConf'],
   data() {
-    // console.log("字段列表",this.$store.getters.getFieldList)
-    
-    const _tableFieldOptions = this.$store.getters.getFieldList;//字段表
     const _regList = this.$store.getters.getRegList;//正则表
 
     return {
@@ -1058,9 +1055,7 @@ export default {
         12: '', 
         18: ''
       },
-      tableFieldOptions:JSON.parse(JSON.stringify(_tableFieldOptions)),//表字段数据
       hasSelectedFieldList:[],//已选字段池，元素为字段名
-      tableFieldOptions2:JSON.parse(JSON.stringify(_tableFieldOptions)),//前置字段表
       dataSources:undefined,//数据来源
       dataSourcesOptions:[
         {label:'自行录入',value:'1', disabled:false},
@@ -1130,7 +1125,16 @@ export default {
     },
     isShowStep() {
       return ['el-input-number', 'el-slider'].indexOf(this.activeTag) > -1
-    }
+    },
+    tableFieldOptions() {
+      return (this.$store.getters.getFieldList || []).map((item) => ({
+        label: item.label || `${item.tableField}(${item.fieldAlias})`,
+        value: item.value || item.tableField,
+      }))
+    },
+    tableFieldOptions2() {
+      return this.tableFieldOptions
+    },
   },
   watch: {
     formConf: {
@@ -1362,30 +1366,23 @@ export default {
         this.activeData.__config__.showByPrependField = undefined;
       }
     },
-    //根据字段池设置字段列表disabled状态
-    async setTableFieldOptionStatusByHasSelectedFieldList(){
-      this.$nextTick(()=>{
-        this.tableFieldOptions.forEach((item)=>{
-          item.disabled = this.hasSelectedFieldList.includes(item.value);
-        })
-      });
-      
-    },
     //根据存储数据，更新字段池内容
     async updateHasSelectedFieldListByLocalDB(){
-      this.$nextTick(()=>{
-        let resetHasSelectedFieldLis = [];
-        const drawingListInDB = getDrawingList();
-        drawingListInDB.forEach((item)=>{
-          if(item.__config__.layout == "rowFormItem" && item.__config__.typeCode === 2){//组串类组件
-            resetHasSelectedFieldLis.push( item.__config__.children[0].__vModel__ )
-          }
-          if(item.__config__.layout == "colFormItem" && item.__config__.typeCode !== 2){
-            resetHasSelectedFieldLis.push( item.__vModel__ )
-          }
-        });
-        this.hasSelectedFieldList = resetHasSelectedFieldLis;
-      });
+      const drawingListInDB = await getDrawingList()
+      if (!Array.isArray(drawingListInDB)) {
+        this.hasSelectedFieldList = []
+        return
+      }
+      const resetHasSelectedFieldLis = []
+      drawingListInDB.forEach((item) => {
+        if(item.__config__.layout === 'rowFormItem' && item.__config__.typeCode === 2){
+          resetHasSelectedFieldLis.push(item.__config__.children[0].__vModel__)
+        }
+        if(item.__config__.layout === 'colFormItem' && item.__config__.typeCode !== 2){
+          resetHasSelectedFieldLis.push(item.__vModel__)
+        }
+      })
+      this.hasSelectedFieldList = resetHasSelectedFieldLis
     },
     /****************************************************************************字段属性处理 eee************************************************ */
 

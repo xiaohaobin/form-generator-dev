@@ -275,6 +275,7 @@ const store = new Vuex.Store({
          *
         */
         updateRegList(state, serverData){
+          if (!Array.isArray(serverData)) return
           serverData.forEach((item)=>{
             item.pattern = item.webRegular;
             item.message = item.remark;
@@ -288,9 +289,9 @@ const store = new Vuex.Store({
          *
         */
         updateFieldList(state, serverData){
-          //{label:'用户名称',value:'userName', disabled:false},
+          if (!Array.isArray(serverData)) return
           serverData.forEach((item)=>{
-            item.label = item.fieldAlias;
+            item.label = `${item.tableField}(${item.fieldAlias})`;
             item.value = item.tableField;
             item.disabled = false
           })

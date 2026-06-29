@@ -79,19 +79,23 @@ Vue.use(ElementUI, {
 
 
 //初始化所有字典数据
+function resolveApiList(res) {
+  if (Array.isArray(res.obj)) return res.obj
+  if (Array.isArray(res.data)) return res.data
+  return []
+}
+
 async function initAllLibData(){ 
   try {
-    //使用await同步操作代替then回调异步操作，直接输出数据
-    
-    const regularListRes = await getRegularListApi( com.resetDataType({lang:'cn'}) );// com.resetDataType设置输入数据类型（参数1，为要传输的数据，参数2位数据类型,'json','formData',不传为键值对）
-    if(regularListRes.code === 200) Vue.prototype.$store.commit('updateRegList', regularListRes.obj);
-    // console.log(regularListRes,"regularListRes")
+    const regularListRes = await getRegularListApi( com.resetDataType({lang:'cn'}) );
+    if(regularListRes.code === 200) {
+      Vue.prototype.$store.commit('updateRegList', resolveApiList(regularListRes));
+    }
 
-    //getFieldListApi
-    //使用await同步操作代替then回调异步操作，直接输出数据
-    const fieldListRes = await getFieldListApi();//直接接受一个对象，是传递json格式
-    if(fieldListRes.code === 200) Vue.prototype.$store.commit('updateFieldList', fieldListRes.obj);
-    // console.log(fieldListRes,"fieldListRes")
+    const fieldListRes = await getFieldListApi( com.resetDataType({}) );
+    if(fieldListRes.code === 200) {
+      Vue.prototype.$store.commit('updateFieldList', resolveApiList(fieldListRes));
+    }
   } catch (error) {
     console.warn('request请求后报错', error);
   }

@@ -204,7 +204,6 @@ let beautifier
 const emptyActiveData = { style: {}, autosize: {} }
 let oldActiveId
 let tempActiveData
-const drawingListInDB = getDrawingList()
 const formConfInDB = getFormConf()
 const idGlobal = getIdGlobal()
 
@@ -343,9 +342,10 @@ export default {
         //     if(_this.$route.name == 'home') event.returnValue = "重载页面提示弹窗";            
         // };
     },
-    mounted() {
+    async mounted() {
         console.log(this.$store.getters.getCurrTempInfo,"当前所选模板信息",this.$com.localStorage.getItem('currTempInfo'))
-        
+
+        const drawingListInDB = await getDrawingList()
         if (Array.isArray(drawingListInDB) && drawingListInDB.length > 0) {
             this.drawingList = drawingListInDB
         } else {
