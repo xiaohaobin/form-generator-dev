@@ -26,10 +26,17 @@ let stringComStyle = `.type-code-2{
 }
 `;
 
+const inputNumberStyle = `.fg-input-number-wrap{display:inline-flex;align-items:center;width:100%;}
+.fg-input-number-inner{position:relative;flex:1;}
+.fg-input-number-inner .el-input-number{width:100%;}
+.fg-input-number-unit{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#909399;font-size:12px;pointer-events:none;z-index:1;}
+.fg-input-number-range{margin-left:8px;color:#f56c6c;font-size:12px;white-space:nowrap;}`
+
 const styles = {
   'el-rate': '.el-rate{display: inline-block; vertical-align: text-top;}',
   'el-upload': '.el-upload__tip{line-height: 1.2;}',
   'el-input': '.type-code-2-children .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before{visibility: hidden;}' + stringComStyle,
+  'el-input-number': inputNumberStyle,
   'el-link': `.el-form-item[type-code="10"] label {
                 display: none;
             }`

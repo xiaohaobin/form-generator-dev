@@ -47,6 +47,8 @@ export const inputComponents = [
         'step-strictly': false,
         precision: undefined,
         'controls-position': '',
+        controls: false,
+        unit: 'W',
         disabled: false
     },
     {

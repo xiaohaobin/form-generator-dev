@@ -2,6 +2,7 @@
 import {
   deepClone, setClassNameForTypeCode2, showByPrependFieldFn
 } from '@/utils/index'
+import { isInputNumberComponent, wrapInputNumberField } from '@/utils/inputNumberWrap'
 import render from '@/components/render/render.js'
 
 const ruleTrigger = {
@@ -37,7 +38,12 @@ const layouts = {
 
     /*字段说明组件部分属性配置*/  
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
-    
+
+    const renderNode = <render conf={scheme} on={listeners} />
+    const formControl = isInputNumberComponent(scheme)
+      ? wrapInputNumberField(h, scheme, renderNode)
+      : renderNode
+
     return (
       <el-col span={config.span} class={setClassNameForTypeCode2(scheme)}>
         <el-form-item label-width={labelWidth} prop={scheme.__vModel__}
@@ -48,7 +54,7 @@ const layouts = {
                 <i class={'el-icon-warning-outline'}></i>
             </el-tooltip>
           </span>
-          <render conf={scheme} on={listeners} />
+          {formControl}
         </el-form-item>
       </el-col>
     )

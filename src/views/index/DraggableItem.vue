@@ -4,6 +4,7 @@ import render from '@/components/render/render'
 import {
   showToolByCurrentItem, showByPrependFieldFn, setActiveByTypeCodeTo2, setStringClassByTypeCodeTo2,setStringWrapperClassByTypeCodeTo2
 } from '@/utils/index'
+import { isInputNumberComponent, wrapInputNumberField } from '@/utils/inputNumberWrap'
 
 const components = {
   itemBtns(h, currentItem, index, list) {
@@ -54,6 +55,17 @@ const layouts = {
     /*字段说明组件部分属性配置*/  
     const fieldDescriptionStyle = 'display:' + (config.fieldDescription !== undefined && config.fieldDescription.length > 0 ? 'inline-block;' : 'none;');
 
+    const renderNode = (
+      <render key={config.renderKey} conf={currentItem} onInput={ event => {
+        this.$set(config, 'defaultValue', event)
+      }} onDiy={(a,b)=>{console.log('diydiy',a,b)} }>
+        {child}
+      </render>
+    )
+    const formControl = isInputNumberComponent(currentItem)
+      ? wrapInputNumberField(h, currentItem, renderNode)
+      : renderNode
+
     return (
       <el-col span={config.span} class={className} 
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
@@ -65,11 +77,7 @@ const layouts = {
                 <i class={'el-icon-warning-outline'}></i>
             </el-tooltip>
           </span>
-          <render key={config.renderKey} conf={currentItem} onInput={ event => {
-            this.$set(config, 'defaultValue', event)
-          }}  onDiy={(a,b)=>{console.log('diydiy',a,b)} }>
-            {child}
-          </render>
+          {formControl}
         </el-form-item>
         {components.itemBtns.apply(this, arguments)}
       </el-col>

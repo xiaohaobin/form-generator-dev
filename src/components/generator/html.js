@@ -202,13 +202,19 @@ const tags = {
       tag, disabled, vModel, placeholder
     } = attrBuilder(el)
     const controlsPosition = el['controls-position'] ? `controls-position=${el['controls-position']}` : ''
-    const min = el.min ? `:min='${el.min}'` : ''
-    const max = el.max ? `:max='${el.max}'` : ''
+    const controls = el.controls === false ? ':controls="false"' : ''
+    const min = el.min !== undefined && el.min !== null && el.min !== '' ? `:min='${el.min}'` : ''
+    const max = el.max !== undefined && el.max !== null && el.max !== '' ? `:max='${el.max}'` : ''
     const step = el.step ? `:step='${el.step}'` : ''
     const stepStrictly = el['step-strictly'] ? 'step-strictly' : ''
-    const precision = el.precision ? `:precision='${el.precision}'` : ''
+    const precision = el.precision !== undefined && el.precision !== null && el.precision !== '' ? `:precision='${el.precision}'` : ''
+    const unitHtml = el.unit ? `<span class="fg-input-number-unit">${el.unit}</span>` : ''
+    const hasRange = el.min !== undefined && el.min !== null && el.min !== ''
+      && el.max !== undefined && el.max !== null && el.max !== ''
+    const rangeHtml = hasRange ? `<span class="fg-input-number-range">[${el.min},${el.max}]</span>` : ''
+    const inner = `<${tag} ${vModel} ${placeholder} ${step} ${stepStrictly} ${precision} ${controls} ${controlsPosition} ${min} ${max} ${disabled}></${tag}>`
 
-    return `<${tag} ${vModel} ${placeholder} ${step} ${stepStrictly} ${precision} ${controlsPosition} ${min} ${max} ${disabled}></${tag}>`
+    return `<div class="fg-input-number-wrap"><div class="fg-input-number-inner">${inner}${unitHtml}</div>${rangeHtml}</div>`
   },
   'el-select': el => {
     const {

@@ -61,4 +61,33 @@
 }
 .el-form-item[type-code="10"]{
   label{display: none;}
-} 
+}
+
+.fg-input-number-wrap {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+.fg-input-number-inner {
+  position: relative;
+  flex: 1;
+  .el-input-number {
+    width: 100%;
+  }
+}
+.fg-input-number-unit {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #909399;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1;
+}
+.fg-input-number-range {
+  margin-left: 8px;
+  color: #f56c6c;
+  font-size: 12px;
+  white-space: nowrap;
+}

@@ -363,6 +363,12 @@
           <el-form-item v-if="isShowStep" label="步长">
             <el-input-number v-model="activeData.step" placeholder="步数" />
           </el-form-item>
+          <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="是否使用控制按钮">
+            <el-switch v-model="activeData.controls" />
+          </el-form-item>
+          <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="单位">
+            <el-input v-model="activeData.unit" placeholder="请输入单位，如 W" @input="changeRenderKey" />
+          </el-form-item>
           <el-form-item v-if="activeData.__config__.tag === 'el-input-number'" label="精度">
             <el-input-number v-model="activeData.precision" :min="0" placeholder="精度" />
           </el-form-item>
@@ -1564,7 +1570,7 @@ export default {
     },
     //是否展示正则规则
     isShowRegListByTypeCode(){      
-      const noPropTypeCode = [7, 4,5,6,8,9];//不需要默认值的组件类型：7、下拉框;4,是否选择；5,时间选择组件；6，日期选择组件;8,只读输入框;9,附件上传；
+      const noPropTypeCode = [7, 4, 5, 6, 8, 9, 105];//计数器(105)等不需要正则校验
       if(Array.isArray(this.activeData.__config__.regList) && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
       return false;
     },
