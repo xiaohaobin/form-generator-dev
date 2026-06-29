@@ -73,9 +73,9 @@
             <el-input v-model="activeData.__config__.fieldDescription" placeholder="请输入字段说明" @input="changeRenderKey" />
           </el-form-item>
 
-          <el-form-item label="前置字段" v-if="activeData.__config__.typeCode !== 10">
+          <el-form-item label="前置字段（依赖其他字段显示，不填则没有依赖）" v-if="activeData.__config__.typeCode !== 10">
             <el-select v-model="activeData.__config__.showByPrependField" placeholder="请选择" filterable clearable :style="{width: '100%'}" @change="showByPrependFieldChangeEvent">
-              <el-option v-for="(item, index) in tableFieldOptions2" :key="index" :label="item.label" :value="item.value" ></el-option>
+              <el-option v-for="(item, index) in tableFieldOptions2" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
             </el-select>
           </el-form-item>
 
@@ -1167,7 +1167,11 @@ export default {
       }))
     },
     tableFieldOptions2() {
-      return this.tableFieldOptions
+      const currentField = this.activeData?.__vModel__
+      return this.tableFieldOptions.map((item) => ({
+        ...item,
+        disabled: !!currentField && item.value === currentField,
+      }))
     },
     isUploadComponent() {
       return this.activeData?.__config__?.typeCode === 9
@@ -1193,6 +1197,10 @@ export default {
     },
     activeData: {
       async handler(newVal, oldVal) {
+        if (newVal?.__vModel__ && newVal.__config__?.showByPrependField === newVal.__vModel__) {
+          newVal.__config__.showByPrependField = undefined
+        }
+
         const wasUpload = oldVal?.__config__?.typeCode === 9
         const isUpload = newVal?.__config__?.typeCode === 9
 
