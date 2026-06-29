@@ -196,11 +196,6 @@
                 <span slot="label">输入校验（前端）</span>
                 <el-button icon="el-icon-circle-plus-outline" type="text" @click="addReg">添加正则</el-button>
               </div>
-
-              <el-select v-model="activeData.__config__.regVal" placeholder="请选择" filterable :style="{width: '100%'}" 
-              @change="regValChangeEvent">
-                <el-option v-for="(item, index) in regList" :key="index" :label="item.regularName" :value="item.id" :disabled="item.disabled"></el-option>
-              </el-select>
             </el-form-item>
 
             <div class="web-reg-box scroll-effect" ref="webRegBox">
@@ -210,18 +205,21 @@
                 :class="item.active ? 'reg-item-active reg-item' : 'reg-item' "
                 @click="clickRegItem(item, index)"
               >
-                <span class="close-btn" @click="delRegItem(item, index)">
+                <span class="close-btn" @click.stop="delRegItem(item, index)">
                   <i class="el-icon-close" />
-                </span>              
+                </span>
 
                 <el-form-item class="flex-flex-start" style="margin-bottom:0" size="mini">
                   <span slot="label" class="reg-item-diy-label">表达式</span>
-                  <el-input v-model="item.pattern" placeholder="请输入正则" />
+                  <el-input v-model="item.pattern" placeholder="请输入正则" @click.stop />
                 </el-form-item>
                 <el-form-item style="margin-bottom:0" class="flex-flex-start" size="mini">
                   <span slot="label" class="reg-item-diy-label">错误提示</span>
-                  <el-input v-model="item.message" placeholder="请输入错误提示" />
+                  <el-input v-model="item.message" placeholder="请输入错误提示" @click.stop />
                 </el-form-item>
+                <div class="reg-item-ref" @click.stop="openRegPicker(index)">
+                  <el-link type="primary" :underline="false" icon="el-icon-notebook-2">参考正则列表</el-link>
+                </div>
               </div>
             </div>
 
@@ -870,6 +868,42 @@
 
     <treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
     <icons-dialog :visible.sync="iconsVisible" :current="activeData[currentIconModel]" @select="setIcon" />
+
+    <el-dialog
+      title="引用校验规则"
+      :visible.sync="regPickerVisible"
+      width="520px"
+      append-to-body
+      @closed="resetRegPicker"
+    >
+      <el-select
+        v-model="regPickerSelectedId"
+        filterable
+        placeholder="请选择规则名称"
+        :style="{ width: '100%' }"
+      >
+        <el-option
+          v-for="item in frontendRegList"
+          :key="item.id"
+          :label="item.regularName"
+          :value="item.id"
+        />
+      </el-select>
+      <div v-if="regPickerPreview" class="reg-picker-preview">
+        <div class="reg-picker-preview__row">
+          <span class="reg-picker-preview__label">表达式</span>
+          <span class="reg-picker-preview__value">{{ regPickerPreview.pattern }}</span>
+        </div>
+        <div class="reg-picker-preview__row">
+          <span class="reg-picker-preview__label">错误提示</span>
+          <span class="reg-picker-preview__value">{{ regPickerPreview.message }}</span>
+        </div>
+      </div>
+      <span slot="footer">
+        <el-button size="small" @click="regPickerVisible = false">取消</el-button>
+        <el-button size="small" type="primary" @click="confirmRegPicker">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -910,8 +944,6 @@ export default {
   },
   props: ['showField', 'activeData', 'formConf'],
   data() {
-    const _regList = this.$store.getters.getRegList;//正则表
-
     return {
       currentTab: 'field',
       currentNode: null,
@@ -1060,7 +1092,9 @@ export default {
         {label:'国家列表数据',value:'getCountryList', disabled:false, requestType:'get', requestUrl:'', param:{}, },
         {label:'城市列表数据',value:'getCityList', disabled:false, requestType:'get', requestUrl:'', param:{},},
       ],
-      regList:_regList,//正则验证表
+      regPickerVisible: false,
+      regPickerTargetIndex: null,
+      regPickerSelectedId: undefined,
       serverRegMethodList:[//后端验证字段方法列表
         {label:'验证账号输入正确性',value:'methods_1',id:1},
         {label:'验证手机号',value:'methods_2',id:2},
@@ -1135,6 +1169,13 @@ export default {
     uploadDesEditorKey() {
       const config = this.activeData?.__config__ || {}
       return `upload-des-${config.formId || config.renderKey || 'default'}`
+    },
+    frontendRegList() {
+      return (this.$store.getters.getRegList || []).filter((item) => item.checkType === 1)
+    },
+    regPickerPreview() {
+      if (!this.regPickerSelectedId) return null
+      return this.frontendRegList.find((item) => item.id === this.regPickerSelectedId) || null
     },
   },
   watch: {
@@ -1378,62 +1419,51 @@ export default {
     /****************************************************************************字段属性处理 eee************************************************ */
 
     /****************************************************************************正则属性处理 ssss************************************************ */
-    //添加规则初始化
-    async addReg() {     
-     this.activeData.__config__.regList.push({
-       pattern: '',
-       message: '',
-       active: false
-     });
-     let len = this.activeData.__config__.regList.length-1;
-     this.clickRegItem(this.activeData.__config__.regList[len], len);
-     this.$nextTick(()=>{
-       //删除之后滚动条拉到底部
-       let h = this.$refs.webRegBox.offsetHeight
-       this.$refs.webRegBox.scrollTop = h;
-     })
-   },   
-    //正则下拉表变化
-    async regValChangeEvent(){
-      if(this.activeData.__config__.regList.length === 0){
-        this.$message({
-          message: '请先点击“添加正则” ，才能回写正则 ',
-          type: 'warning'
-        });
-        this.activeData.__config__.regVal = undefined;
-        return;
-      }
-      this.$nextTick(()=>{
-        let item = this.$xhb.getItemByProp(this.regList,'id', this.activeData.__config__.regVal);
-        // console.log(item,"iii")
-        this.activeData.__config__.regList.forEach((o,i)=>{
-          if(o.active){
-            o.message = item.message;
-            o.pattern = item.pattern;
-          }
-        });
+    addReg() {
+      this.activeData.__config__.regList.push({
+        pattern: '',
+        message: '',
+        active: false,
       })
-      
+      const len = this.activeData.__config__.regList.length - 1
+      this.clickRegItem(this.activeData.__config__.regList[len], len)
+      this.$nextTick(() => {
+        const box = this.$refs.webRegBox
+        if (box) box.scrollTop = box.scrollHeight
+      })
     },
-    delRegItem(item,index){
-      this.activeData.__config__.regList.splice(index, 1);
-      if(this.activeData.__config__.regList.length){
-        this.clickRegItem(this.activeData.__config__.regList[0], 0);
-      }else{
-        this.activeData.__config__.regVal = undefined;
-      }      
+    openRegPicker(index) {
+      this.clickRegItem(this.activeData.__config__.regList[index], index)
+      this.regPickerTargetIndex = index
+      this.regPickerSelectedId = undefined
+      this.regPickerVisible = true
     },
-    //点击选择正则item
-    clickRegItem(item,index){
-      this.activeData.__config__.regList.forEach((o,i)=>{
-        o.active = index === i;
-      });
-
-      this.activeData.__config__.regVal = undefined;
-      this.regList.forEach((v)=>{
-        if(v.message === item.message && v.pattern === item.pattern) this.activeData.__config__.regVal = v.id;
-      });
-      
+    confirmRegPicker() {
+      if (!this.regPickerSelectedId) {
+        this.$message.warning('请先选择一条校验规则')
+        return
+      }
+      const source = this.frontendRegList.find((item) => item.id === this.regPickerSelectedId)
+      const target = this.activeData.__config__.regList[this.regPickerTargetIndex]
+      if (!source || !target) return
+      target.pattern = source.pattern
+      target.message = source.message
+      this.regPickerVisible = false
+    },
+    resetRegPicker() {
+      this.regPickerTargetIndex = null
+      this.regPickerSelectedId = undefined
+    },
+    delRegItem(item, index) {
+      this.activeData.__config__.regList.splice(index, 1)
+      if (this.activeData.__config__.regList.length) {
+        this.clickRegItem(this.activeData.__config__.regList[0], 0)
+      }
+    },
+    clickRegItem(item, index) {
+      this.activeData.__config__.regList.forEach((o, i) => {
+        o.active = index === i
+      })
     },
     /****************************************************************************正则属性处理 eee************************************************ */
     /****************************************************************下拉框动态数据接口处理sss*********************************** ***************************************/
@@ -1754,5 +1784,34 @@ div.reg-item .close-btn{
 }
 .right-board .reg-item + .reg-item{
   margin-top: 10px;
+}
+.reg-item-ref{
+  margin-top: 6px;
+  text-align: right;
+}
+.reg-picker-preview{
+  margin-top: 12px;
+  padding: 10px;
+  background: #f5f7fa;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.reg-picker-preview__row{
+  display: flex;
+  margin-top: 4px;
+}
+.reg-picker-preview__row:first-child{
+  margin-top: 0;
+}
+.reg-picker-preview__label{
+  flex-shrink: 0;
+  width: 64px;
+  color: #909399;
+}
+.reg-picker-preview__value{
+  flex: 1;
+  color: #303133;
+  word-break: break-all;
 }
 </style>
