@@ -200,7 +200,7 @@
 
             <div class="web-reg-box scroll-effect" ref="webRegBox">
               <div
-                v-for="(item, index) in activeData.__config__.regList"
+                v-for="(item, index) in (activeData.__config__.regList || [])"
                 :key="index"
                 :class="item.active ? 'reg-item-active reg-item' : 'reg-item' "
                 @click="clickRegItem(item, index)"
@@ -1426,6 +1426,9 @@ export default {
 
     /****************************************************************************正则属性处理 ssss************************************************ */
     addReg() {
+      if (!Array.isArray(this.activeData.__config__.regList)) {
+        this.$set(this.activeData.__config__, 'regList', [])
+      }
       this.activeData.__config__.regList.push({
         pattern: '',
         message: '',
@@ -1568,11 +1571,10 @@ export default {
       if(this.activeData.__vModel__!==undefined && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
       return false;
     },
-    //是否展示正则规则
-    isShowRegListByTypeCode(){      
-      const noPropTypeCode = [7, 4, 5, 6, 8, 9, 105];//计数器(105)等不需要正则校验
-      if(Array.isArray(this.activeData.__config__.regList) && !noPropTypeCode.includes( this.activeData.__config__.typeCode )) return true;
-      return false;
+    //是否展示正则规则（仅：输入框1、多输入框组件2、文本域3）
+    isShowRegListByTypeCode(){
+      const allowRegTypeCode = [1, 2, 3]
+      return allowRegTypeCode.includes(this.activeData?.__config__?.typeCode)
     },
     //是否展示选项
     isShowOptionsByTypeCode(){      
