@@ -234,12 +234,6 @@
               </div>
             </div>
 
-            <el-form-item label="数据校验（后端）">              
-              <el-select v-model="activeData.serverRegMethod" placeholder="请选择" filterable :style="{width: '100%'}">
-                <el-option v-for="(item, index) in serverRegMethodList" :key="index" :label="item.label" :value="item.id" :disabled="item.disabled"></el-option>
-              </el-select>
-            </el-form-item>
-
           </div>
 
           
@@ -1134,10 +1128,6 @@ export default {
       expandedSelectOptionHideIndexes: [],
       regPickerTargetIndex: null,
       regPickerSelectedId: undefined,
-      serverRegMethodList:[//后端验证字段方法列表
-        {label:'验证账号输入正确性',value:'methods_1',id:1},
-        {label:'验证手机号',value:'methods_2',id:2},
-      ],
       trueOrFalseList:[//是否选择组列表
         {label: '是', value: 1},
         {label: '否', value: 0},
@@ -1243,6 +1233,9 @@ export default {
         }
         if (newVal?.__config__?.formId !== oldVal?.__config__?.formId) {
           this.expandedSelectOptionHideIndexes = []
+        }
+        if (newVal?.serverRegMethod !== undefined) {
+          this.$delete(newVal, 'serverRegMethod')
         }
 
         const wasUpload = oldVal?.__config__?.typeCode === 9
