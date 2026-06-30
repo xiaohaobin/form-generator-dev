@@ -103,10 +103,12 @@ export const inputComponents = [
         __slot__: {
             options: [{
                 label: '选项一',
-                value: 1
+                value: 1,
+                hide: ''
             }, {
                 label: '选项二',
-                value: 2
+                value: 2,
+                hide: ''
             }]
         },
         placeholder: '请选择',

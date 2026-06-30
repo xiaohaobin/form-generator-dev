@@ -58,6 +58,27 @@ export function isHiddenBySetFn(config, formData) {
   }
 }
 
+/** el-option.hide 返回 true 时隐藏该选项 */
+export function isOptionHiddenByHideFn(option, formData) {
+  if (!hasSetFnCode(option?.hide)) return false
+  const fn = compileSetFn(option.hide)
+  if (!fn || !formData) return false
+  try {
+    return fn(formData) === true
+  } catch (e) {
+    console.warn('option hide execute failed:', e)
+    return false
+  }
+}
+
+/** 下拉选项是否配置了有效的 hide 函数 */
+export function hasSelectOptionHideFn(scheme) {
+  return scheme?.__config__?.tag === 'el-select'
+    && scheme?.dataSources === '1'
+    && Array.isArray(scheme?.__slot__?.options)
+    && scheme.__slot__.options.some((opt) => hasSetFnCode(opt.hide))
+}
+
 /**
  * 判断组件是否应渲染
  * hide_set_fn 有效时优先于 showByPrependField；未配置或无效时回退前置字段逻辑

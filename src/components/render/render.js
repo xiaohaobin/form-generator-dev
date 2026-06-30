@@ -23,13 +23,13 @@ function vModel(dataObject, defaultValue, _formConfig_) {
   }
 }
 
-function mountSlotFiles(h, confClone, children) {
+function mountSlotFiles(h, confClone, children, formData) {
   const childObjs = componentChild[confClone.__config__.tag]
   if (childObjs) {
     Object.keys(childObjs).forEach(key => {
       const childFunc = childObjs[key]
       if (confClone.__slot__ && confClone.__slot__[key]) {
-        children.push(childFunc(h, confClone, key))
+        children.push(childFunc(h, confClone, key, formData))
       }
     })
   }
@@ -136,7 +136,7 @@ export default {
     // console.log(confClone,"confClone")
     // console.log(dataObject,"dataObject")
     // 如果slots文件夹存在与当前tag同名的文件，则执行文件中的代码
-    mountSlotFiles.call(this, h, confClone, children)
+    mountSlotFiles.call(this, h, confClone, children, this.formData)
 
     // 将字符串类型的事件，发送为消息
     emitEvents.call(this, confClone)

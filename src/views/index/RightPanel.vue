@@ -598,19 +598,31 @@
                 class="select-option-draggable-box scroll-effect"
               >
                 <div v-for="(item, index) in activeData.__slot__.options" :key="index" class="select-item">
-                  <div class="close-btn select-line-icon" @click="activeData.__slot__.options.splice(index, 1)">
-                    <i class="el-icon-remove-outline" />
+                  <div class="select-item-row">
+                    <div class="close-btn select-line-icon" @click="activeData.__slot__.options.splice(index, 1)">
+                      <i class="el-icon-remove-outline" />
+                    </div>
+                    <el-input v-model="item.label" placeholder="选项名" size="small" />
+                    <el-input
+                      placeholder="选项值"
+                      size="small"
+                      :value="item.value"
+                      @input="setOptionValue(item, $event)"
+                    />
+                    <div class="select-line-icon option-drag">
+                      <i class="el-icon-s-operation" />
+                    </div>
                   </div>
-                  <el-input v-model="item.label" placeholder="选项名" size="small" />
                   <el-input
-                    placeholder="选项值"
-                    size="small"
-                    :value="item.value"
-                    @input="setOptionValue(item, $event)"
-                  />                  
-                  <div class="select-line-icon option-drag">
-                    <i class="el-icon-s-operation" />
-                  </div>
+                    v-if="isShowSelectOptionHide()"
+                    type="textarea"
+                    :rows="3"
+                    class="select-item-hide-fn"
+                    :value="item.hide || ''"
+                    placeholder="配置子项是否显示函数，(formData) => { return false }，返回 true 隐藏该选项"
+                    @input="onSelectOptionHideInput(item, $event)"
+                    @blur="onSelectOptionHideBlur(item)"
+                  />
                 </div>
               </draggable>
               <div class="flex-space-between">
@@ -1260,10 +1272,11 @@ export default {
   },
   methods: {
     addSelectItem() {
-      this.activeData.__slot__.options.push({
-        label: '',
-        value: ''
-      })
+      const item = { label: '', value: '' }
+      if (this.isShowSelectOptionHide()) {
+        item.hide = ''
+      }
+      this.activeData.__slot__.options.push(item)
     },
     addTreeItem() {
       ++this.idGlobal
@@ -1425,6 +1438,24 @@ export default {
       const { valid, message } = validateSetFn(code, label)
       if (!valid) {
         this.$alert(message, `${label}校验失败`, {
+          type: 'error',
+          confirmButtonText: '我知道了',
+        })
+      }
+    },
+    isShowSelectOptionHide() {
+      return this.activeData?.__config__?.tag === 'el-select'
+        && this.activeData.dataSources === '1'
+    },
+    onSelectOptionHideInput(item, value) {
+      this.$set(item, 'hide', value)
+      this.changeRenderKey()
+    },
+    onSelectOptionHideBlur(item) {
+      const code = item.hide || ''
+      const { valid, message } = validateSetFn(code, '子项显示函数')
+      if (!valid) {
+        this.$alert(message, '子项显示函数校验失败', {
           type: 'error',
           confirmButtonText: '我知道了',
         })
@@ -1769,8 +1800,17 @@ export default {
 }
 .select-item {
   display: flex;
+  flex-direction: column;
   border: 1px dashed #fff;
   box-sizing: border-box;
+  & .select-item-row {
+    display: flex;
+    width: 100%;
+  }
+  & .select-item-hide-fn {
+    margin-top: 4px;
+    width: 100%;
+  }
   & .close-btn {
     cursor: pointer;
     color: #f56c6c;

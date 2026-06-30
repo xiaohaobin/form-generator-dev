@@ -3,7 +3,7 @@ import ruleTrigger from './ruleTrigger'
 import {
   setStringClassByTypeCodeTo2,set_noOverCurrDate_by_typeCode6
 } from '@/utils/index'
-import { buildComponentVisibleAttr } from '@/utils/setFn'
+import { buildComponentVisibleAttr, hasSelectOptionHideFn } from '@/utils/setFn'
 import { hasSetFnCode, buildInputNumberRangeHtml } from '@/utils/inputNumberWrap'
 
 let confGlobal
@@ -413,7 +413,11 @@ function buildElSelectChild(scheme) {
   const children = []
   const slot = scheme.__slot__
   if (slot && slot.options && slot.options.length) {
-    children.push(`<el-option v-for="(item, index) in ${scheme.__vModel__}Options" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>`)
+    const formModel = confGlobal?.formModel || 'formData'
+    const optionHideVIf = hasSelectOptionHideFn(scheme)
+      ? ` v-if="!isSelectOptionHidden(item, ${formModel})"`
+      : ''
+    children.push(`<el-option v-for="(item, index) in ${scheme.__vModel__}Options" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"${optionHideVIf}></el-option>`)
   }
   return children.join('\n')
 }

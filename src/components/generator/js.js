@@ -1,5 +1,6 @@
 import { isArray } from 'util'
 import { exportDefault, titleCase, deepClone } from '@/utils/index'
+import { hasSelectOptionHideFn } from '@/utils/setFn'
 import ruleTrigger from './ruleTrigger'
 
 const units = {
@@ -31,6 +32,19 @@ export function makeUpJs(formConfig, type) {
   formConfig.fields.forEach(el => {
     buildAttributes(el, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created)
   })
+
+  if (needSelectOptionHideMethod(formConfig.fields)) {
+    methodList.push(`isSelectOptionHidden(item, formData) {
+  if (!item || !item.hide) return false
+  try {
+    const fn = eval('(' + item.hide + ')')
+    return fn(formData) === true
+  } catch (e) {
+    console.warn('option hide execute failed:', e)
+    return false
+  }
+},`)
+  }
 
   const script = buildexport(
     formConfig,
@@ -139,6 +153,18 @@ function mixinMethod(type) {
   }
 
   return list
+}
+
+function needSelectOptionHideMethod(fields) {
+  let needed = false
+  const traverse = (list) => {
+    list.forEach((scheme) => {
+      if (hasSelectOptionHideFn(scheme)) needed = true
+      if (scheme.__config__?.children) traverse(scheme.__config__.children)
+    })
+  }
+  traverse(fields)
+  return needed
 }
 
 // 构建data
