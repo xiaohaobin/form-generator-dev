@@ -117,7 +117,7 @@ export const inputComponents = [
         disabled: false,
         filterable: false,
         multiple: false,
-        dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        dataSources:'1',//数据来源：仅自行录入
         on:{
             "change":function(res,c){
                 console.info(res,c,"下拉时间")
@@ -321,7 +321,7 @@ export const inputComponents = [
         style: {},
         size: 'medium',
         disabled: false,
-        dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        dataSources:'1',//数据来源：仅自行录入
         on:{
             "change":function(res,c){
                 console.info(res,c,"change单选选择",this)
@@ -611,7 +611,7 @@ export const selectComponents = [
         clearable: true,
         filterable: false,
         separator: '/',
-        dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        dataSources:'1',//数据来源：仅自行录入
     },
     {
         __config__: {
@@ -646,7 +646,7 @@ export const selectComponents = [
         style: {},
         size: 'medium',
         disabled: false,
-        dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        dataSources:'1',//数据来源：仅自行录入
     },
     {
         __config__: {
@@ -683,7 +683,7 @@ export const selectComponents = [
         min: null,
         max: null,
         disabled: false,
-        dataSources:'1',//数据来源：1，自行录入，2，通过服务器端
+        dataSources:'1',//数据来源：仅自行录入
     },
     
     {

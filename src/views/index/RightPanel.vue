@@ -576,18 +576,6 @@
           <template v-if="isShowOptionsByTypeCode()">
             <el-divider>选项</el-divider>
 
-            <el-form-item label="数据来源">
-              <el-select v-model="activeData.dataSources" :style="{ width: '100%' }">
-                <el-option v-for="(item,index) in dataSourcesOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled" />
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="数据接口选择" v-if="activeData.dataSources == '2'">
-              <el-select v-model="activeData.serverFunction" :style="{ width: '100%' }" @change="serverFunctionOptionsEvent" clearable @clear="serverFunctionOptionsClearEvent">
-                <el-option v-for="(item,index) in serverFunctionOptions" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"  />
-              </el-select>
-            </el-form-item>
-
             <!-- 下拉框，单选框，复选框操作子项组件sss -->
             <div>
               <draggable
@@ -613,16 +601,26 @@
                       <i class="el-icon-s-operation" />
                     </div>
                   </div>
-                  <el-input
-                    v-if="isShowSelectOptionHide()"
-                    type="textarea"
-                    :rows="3"
-                    class="select-item-hide-fn"
-                    :value="item.hide || ''"
-                    placeholder="配置子项是否显示函数，(formData) => { return false }，返回 true 隐藏该选项"
-                    @input="onSelectOptionHideInput(item, $event)"
-                    @blur="onSelectOptionHideBlur(item)"
-                  />
+                  <template v-if="isShowSelectOptionHide()">
+                    <el-input
+                      v-if="isSelectOptionHideVisible(item, index)"
+                      type="textarea"
+                      :rows="3"
+                      class="select-item-hide-fn"
+                      :value="item.hide || ''"
+                      placeholder="(formData) => { return false }，返回 true 隐藏该选项"
+                      @input="onSelectOptionHideInput(item, $event)"
+                      @blur="onSelectOptionHideBlur(item)"
+                    />
+                    <el-button
+                      v-else
+                      type="text"
+                      class="select-item-hide-trigger"
+                      @click="openSelectOptionHide(index)"
+                    >
+                      配置子项是否显示函数
+                    </el-button>
+                  </template>
                 </div>
               </draggable>
               <div class="flex-space-between">
@@ -967,7 +965,6 @@ import {
   inputComponents, selectComponents, layoutComponents
 } from '@/components/generator/config'
 import { getDrawingList, saveFormConf } from '@/utils/db'
-import {getCountryListApi, getCityListApi} from '@/utils/api.js'
 //加载富文本编辑器操作
 import loadTinymce from '@/utils/loadTinymce'
 import { toolbar } from '@/components/tinymce/config'
@@ -1133,17 +1130,8 @@ export default {
         18: ''
       },
       hasSelectedFieldList:[],//已选字段池，元素为字段名
-      dataSources:undefined,//数据来源
-      dataSourcesOptions:[
-        {label:'自行录入',value:'1', disabled:false},
-        {label:'获取数据',value:'2', disabled:false},
-      ],
-      serverFunction:undefined,//获取数据方法体
-      serverFunctionOptions:[
-        {label:'国家列表数据',value:'getCountryList', disabled:false, requestType:'get', requestUrl:'', param:{}, },
-        {label:'城市列表数据',value:'getCityList', disabled:false, requestType:'get', requestUrl:'', param:{},},
-      ],
       regPickerVisible: false,
+      expandedSelectOptionHideIndexes: [],
       regPickerTargetIndex: null,
       regPickerSelectedId: undefined,
       serverRegMethodList:[//后端验证字段方法列表
@@ -1244,6 +1232,17 @@ export default {
       async handler(newVal, oldVal) {
         if (newVal?.__vModel__ && newVal.__config__?.showByPrependField === newVal.__vModel__) {
           newVal.__config__.showByPrependField = undefined
+        }
+        if (newVal && ['el-select', 'el-radio-group', 'el-checkbox-group'].includes(newVal.__config__?.tag)) {
+          if (newVal.dataSources !== '1') {
+            this.$set(newVal, 'dataSources', '1')
+          }
+          if (newVal.serverFunction !== undefined) {
+            this.$set(newVal, 'serverFunction', undefined)
+          }
+        }
+        if (newVal?.__config__?.formId !== oldVal?.__config__?.formId) {
+          this.expandedSelectOptionHideIndexes = []
         }
 
         const wasUpload = oldVal?.__config__?.typeCode === 9
@@ -1445,7 +1444,17 @@ export default {
     },
     isShowSelectOptionHide() {
       return this.activeData?.__config__?.tag === 'el-select'
-        && this.activeData.dataSources === '1'
+    },
+    hasSelectOptionHideValue(item) {
+      return !!(item.hide && String(item.hide).trim())
+    },
+    isSelectOptionHideVisible(item, index) {
+      return this.hasSelectOptionHideValue(item) || this.expandedSelectOptionHideIndexes.includes(index)
+    },
+    openSelectOptionHide(index) {
+      if (!this.expandedSelectOptionHideIndexes.includes(index)) {
+        this.expandedSelectOptionHideIndexes = [...this.expandedSelectOptionHideIndexes, index]
+      }
     },
     onSelectOptionHideInput(item, value) {
       this.$set(item, 'hide', value)
@@ -1576,56 +1585,6 @@ export default {
       })
     },
     /****************************************************************************正则属性处理 eee************************************************ */
-    /****************************************************************下拉框动态数据接口处理sss*********************************** ***************************************/
-    //获取公共接口国家数据====定义函数名字：getCountryList
-    async getCountryList(){
-      const typeCodeList = [7];//需要使用动态数据进行引入到slot 的option中的组件类型码      
-      if(typeCodeList.includes(this.activeData.__config__.typeCode)){
-        let _countryList = this.$store.getters.getCountryList;
-        if(_countryList.length === 0){          
-          try {
-            _countryList = await getCountryListApi();//直接接受一个对象，是传递json格式
-            // console.log(_countryList,"国家数据");
-            this.$store.commit('updateCountryList', _countryList);
-           
-          } catch (error) {
-            console.warn("错误请求:" + error)
-          }
-        }
-        let selectOptionData = this.$com.countryListTranslate(_countryList);
-        this.activeData.__slot__.options = selectOptionData
-      }      
-    },
-    //获取公共接口城市数据====定义函数名字：getCityList
-    async getCityList(){     
-      const typeCodeList = [7];//需要使用动态数据进行引入到slot 的option中的组件类型码      
-      if(typeCodeList.includes(this.activeData.__config__.typeCode)){
-        let _cityList = this.$store.getters.getCityList;
-        if(_cityList.length === 0){          
-          try {
-            _cityList = await getCityListApi();//直接接受一个对象，是传递json格式
-            // console.log(_cityList,"城市数据");
-            this.$store.commit('updateCityList', _cityList);            
-          } catch (error) {
-            console.warn("错误请求:" + error)
-          }
-        }
-        let selectOptionData = this.$com.cityListTranslate(_cityList);
-        this.activeData.__slot__.options = selectOptionData
-      }
-    },
-      //切换选择数据接口事件
-    serverFunctionOptionsEvent(){
-      console.log(this.activeData.serverFunction,"this.activeData.serverFunction")
-      if(this.activeData.serverFunction){
-        let apiName = this.activeData.serverFunction;
-        this[apiName]()
-      }
-    },
-    //下拉组件获取动态数据接口选项清空数据事件
-    serverFunctionOptionsClearEvent(){
-      this.activeData.__slot__.options = [];
-    },
     //点击导入Excel
     clickExcelHandler(){
       this.$refs.excelUpload.click()
@@ -1654,7 +1613,6 @@ export default {
             });
           }
           that.activeData.__slot__.options = ws;
-          that.activeData.serverFunction = undefined;//清空数据选择值
           
         // eslint-disable-next-line no-shadow
         } catch (e) {
@@ -1664,7 +1622,6 @@ export default {
       };
       fileReader.readAsBinaryString(files[0]);
     },
-    /****************************************************************下拉框动态数据接口处理eee*********************************** ***************************************/
     /****************************************************************************部分属性开启禁用条件，--针对换机模板组件，部分属性屏蔽sss*******************************************/
     //是否展示默认值
     isShowDefaultValueByTypeCode(){
@@ -1810,6 +1767,12 @@ export default {
   & .select-item-hide-fn {
     margin-top: 4px;
     width: 100%;
+  }
+  & .select-item-hide-trigger {
+    margin-top: 4px;
+    padding: 0;
+    font-size: 12px;
+    color: #409eff;
   }
   & .close-btn {
     cursor: pointer;

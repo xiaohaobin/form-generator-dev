@@ -74,7 +74,6 @@ export function isOptionHiddenByHideFn(option, formData) {
 /** 下拉选项是否配置了有效的 hide 函数 */
 export function hasSelectOptionHideFn(scheme) {
   return scheme?.__config__?.tag === 'el-select'
-    && scheme?.dataSources === '1'
     && Array.isArray(scheme?.__slot__?.options)
     && scheme.__slot__.options.some((opt) => hasSetFnCode(opt.hide))
 }
